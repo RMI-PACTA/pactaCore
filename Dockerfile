@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.0.2
+FROM rocker/r-ver:latest
 
 USER root
 
