@@ -39,9 +39,9 @@ cd pactaCore
 * Create input/ and output/ directories, as siblings of your working directory
 
 * Populate the input directory with a portfolio file like
-[TestPortfolio_Input.csv](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
+[TestPortfolio_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
 and a parameters file like
-[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv)
+[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml)
 (here we use some test files).
 
 ```bash
