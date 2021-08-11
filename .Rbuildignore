@@ -1,5 +1,5 @@
 ^\.github$
-^PACTA_analysis\.Rproj$
+^pactaCore\.Rproj$
 ^\.Rproj\.user$
 
 ^0_fund_processing\.R$
