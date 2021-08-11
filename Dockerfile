@@ -1,7 +1,5 @@
 FROM rocker/r-ver:latest
 
-USER root
-
 RUN Rscript -e 'install.packages("remotes")'
 
 COPY DESCRIPTION /bound/DESCRIPTION
