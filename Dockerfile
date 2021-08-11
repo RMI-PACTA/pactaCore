@@ -7,6 +7,4 @@ RUN Rscript -e 'remotes::install_deps("/bound", dependencies = TRUE)'
 
 COPY . /bound
 
-WORKDIR /bound
-
-CMD ["./bin/run-pacta"]
+CMD ["/bound/bin/run-pacta", "/bound"]
