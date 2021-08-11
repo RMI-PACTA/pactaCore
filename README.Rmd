@@ -30,7 +30,7 @@ the experimental branch where we're "dockerizing" PACTA.
   
 ```bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
-git clone git@github.com:2DegreesInvesting/pactaCore -b 478-add_vanilla_pacta_dockerfile
+git clone git@github.com:2DegreesInvesting/pactaCore.git
 cd pactaCore
 ```
 
