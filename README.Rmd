@@ -13,12 +13,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# PACTA_analysis <a href='https://github.com/2DegreesInvesting/PACTA_analysis'><img src='https://imgur.com/A5ASZPE.png' align='right' height='43' /></a>
+# pactaCore <a href='https://github.com/2DegreesInvesting/pactaCore'><img src='https://imgur.com/A5ASZPE.png' align='right' height='43' /></a>
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The main goal of PACTA_analysis is to run
+The main goal of pactaCore is to run
 [PACTA](https://2degrees-investing.org/resource/pacta/).
 
 ## Usage
@@ -30,8 +30,8 @@ the experimental branch where we're "dockerizing" PACTA.
   
 ```bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
-git clone git@github.com:2DegreesInvesting/PACTA_analysis -b 478-add_vanilla_pacta_dockerfile
-cd PACTA_analysis
+git clone git@github.com:2DegreesInvesting/pactaCore -b 478-add_vanilla_pacta_dockerfile
+cd pactaCore
 ```
 
 2. Setup  directories for inputs and outputs (io):
@@ -39,9 +39,9 @@ cd PACTA_analysis
 * Create input/ and output/ directories, as siblings of your working directory
 
 * Populate the input directory with a portfolio file like
-[TestPortfolio_Input.csv](https://github.com/jdhoffa/PACTA_analysis/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
+[TestPortfolio_Input.csv](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
 and a parameters file like
-[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/jdhoffa/PACTA_analysis/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv)
+[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv)
 (here we use some test files).
 
 ```bash
