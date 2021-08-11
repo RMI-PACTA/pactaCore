@@ -1,5 +1,5 @@
 Package: PACTA.analysis
-Title: Helpers for 'pactaCore'
+Title: Run the Core 'PACTA' Methodology
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Jackson",
