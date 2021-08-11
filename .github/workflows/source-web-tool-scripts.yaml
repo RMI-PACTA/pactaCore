@@ -14,12 +14,12 @@ jobs:
       # When checking out the repository that triggered a workflow, `ref:`
       # defaults to the reference or SHA for that event. Otherwise, uses the
       # default branch --https://github.com/actions/checkout
-      - name: Checkout PACTA_analysis
+      - name: Checkout pactaCore
         uses: actions/checkout@v2
         with:
-          repository: 2DegreesInvesting/PACTA_analysis
+          repository: 2DegreesInvesting/pactaCore
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: PACTA_analysis
+          path: pactaCore
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
@@ -51,7 +51,7 @@ jobs:
         shell: Rscript {0}
       - name: Source web-tool scripts
         run: |
-          setwd("PACTA_analysis")
+          setwd("pactaCore")
           source("R/source_web_tool_scripts.R")
           source_web_tool_scripts()
         shell: Rscript {0}

@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# PACTA\_analysis <a href='https://github.com/2DegreesInvesting/PACTA_analysis'><img src='https://imgur.com/A5ASZPE.png' align='right' height='43' /></a>
+# pactaCore <a href='https://github.com/2DegreesInvesting/pactaCore'><img src='https://imgur.com/A5ASZPE.png' align='right' height='43' /></a>
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The main goal of PACTA\_analysis is to run
+The main goal of pactaCore is to run
 [PACTA](https://2degrees-investing.org/resource/pacta/).
 
 ## Usage
@@ -19,8 +19,8 @@ From a terminal (e.g. bash) running PACTA involves three steps:
 
 ``` bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
-git clone git@github.com:2DegreesInvesting/PACTA_analysis -b 478-add_vanilla_pacta_dockerfile
-cd PACTA_analysis
+git clone git@github.com:2DegreesInvesting/pactaCore -b 478-add_vanilla_pacta_dockerfile
+cd pactaCore
 ```
 
 2.  Setup directories for inputs and outputs (io):
@@ -29,9 +29,9 @@ cd PACTA_analysis
     directory
 
 -   Populate the input directory with a portfolio file like
-    [TestPortfolio\_Input.csv](https://github.com/jdhoffa/PACTA_analysis/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
+    [TestPortfolio\_Input.csv](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
     and a parameters file like
-    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/jdhoffa/PACTA_analysis/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv)
+    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv)
     (here we use some test files).
 
 ``` bash
@@ -65,7 +65,7 @@ USER root
 RUN Rscript -e 'install.packages("remotes")'
 
 COPY DESCRIPTION /bound/DESCRIPTION
-RUN Rscript -e 'remotes::install_deps("/bound")'
+RUN Rscript -e 'remotes::install_deps("/bound", dependencies = TRUE)'
 
 COPY . /bound
 
@@ -84,11 +84,12 @@ services:
 
 ``` bash
 cat docker-compose.override.yml
+version: "3.2"
 services: 
   app:
     volumes:
-      - ../pacta-data:/pacta-data
-      - ../input:/input
+      - ../pacta-data:/pacta-data:ro
+      - ../input:/input:ro
       - ../output:/output
 ```
 
