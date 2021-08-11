@@ -38,11 +38,36 @@ cd pactaCore
 
 * Create input/ and output/ directories, as siblings of your working directory
 
-* Populate the input directory with a portfolio file like
+* Populate the input directory with portfolio files like
 [TestPortfolio_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
-and a parameters file like
+and parameters files like
 [TestPortfolio_Input_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml)
 (here we use some test files).
+
+<details> 
+
+* Each corresponding `<pair-name>` the portolio and parameter files must be named `<pair-name>_Input.csv` and `<pair-name>_Input_PortfolioParameters.yml`,
+respectively. For example:
+  * This pair of files is valid: `a_Input.csv` and
+  `a_Input_PortfolioParameters.yml`
+  * This pair of files is invalid: `a_Input.csv` and
+  `b_Input_PortfolioParameters.yml`
+
+* In the parameter file, `portfolio_name_in` and `investor_name_in` can be
+whatever you like, it will populate the output files with columns
+`portfolio_name` and `investor_name` with the values provided.
+
+```{bash, comment="", echo = FALSE}
+cat working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml
+```
+
+
+```{r}
+fs::dir_ls("working_dir/40_Results/")
+```
+
+
+</details> 
 
 ```bash
 ./bin/setup-io
@@ -64,15 +89,15 @@ docker-compose run app bash
 
 These are the files used to create the Docker image and run the container:
 
-```{r engine="bash", comment=""}
+```{bash, comment=""}
 cat Dockerfile
 ```
 
-```{r engine="bash", comment=""}
+```{bash, comment=""}
 cat docker-compose.yml
 ```
 
-```{r engine="bash", comment=""}
+```{bash, comment=""}
 cat docker-compose.override.yml
 ```
 

@@ -19,7 +19,7 @@ From a terminal (e.g. bash) running PACTA involves three steps:
 
 ``` bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
-git clone git@github.com:2DegreesInvesting/pactaCore -b 478-add_vanilla_pacta_dockerfile
+git clone git@github.com:2DegreesInvesting/pactaCore.git
 cd pactaCore
 ```
 
@@ -28,11 +28,38 @@ cd pactaCore
 -   Create input/ and output/ directories, as siblings of your working
     directory
 
--   Populate the input directory with a portfolio file like
-    [TestPortfolio\_Input.csv](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
-    and a parameters file like
-    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/jdhoffa/pactaCore/blob/add_basic_dockerfile/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv)
+-   Populate the input directory with portfolio files like
+    [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
+    and parameters files like
+    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml)
     (here we use some test files).
+
+<details>
+
+-   Each corresponding “`<pair-name>`” the portolio and parameter files
+    must be named `<pair-name>_Input.csv` and
+    `<pair-name>_Input_PortfolioParameters.yml`, respectively. For
+    example:
+    -   This pair is valid: `a_Input.csv` and
+        `a_Input_PortfolioParameters.yml`
+    -   This pair is invalid: `a_Input.csv` and
+        `b_Input_PortfolioParameters.yml`
+
+</details>
+
+Each parameter file
+
+    default:
+        parameters:
+            portfolio_name_in: TestPortfolio_Input
+            investor_name_in: Test
+            peer_group: pensionfund
+            language: EN
+            project_code: CHPA2020
+
+portfolio\_name\_in, investor\_name\_in can be whatever you like, it
+will populate the output files with columns portfolio\_name and
+investor\_name with the values provided
 
 ``` bash
 ./bin/setup-io
