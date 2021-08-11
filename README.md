@@ -6,16 +6,15 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The main goal of pactaCore is to run
-[PACTA](https://2degrees-investing.org/resource/pacta/).
+The main goal of pactaCore is to run the core steps of the [PACTA
+methodology](https://2degrees-investing.org/resource/pacta/). This
+document helps you to install, setup, and run PACTA from a terminal
+(e.g. bash).
 
-## Usage
+### 1. Install
 
-From a terminal (e.g. bash) running PACTA involves three steps:
-
-1.  Clone the private data and the public source code from GitHub, and
-    work from the the experimental branch where we’re “dockerizing”
-    PACTA.
+Clone the private data and public source code from GitHub, then work
+from your local clone of the source code:
 
 ``` bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
@@ -23,31 +22,42 @@ git clone git@github.com:2DegreesInvesting/pactaCore.git
 cd pactaCore
 ```
 
-2.  Setup directories for inputs and outputs (io):
+### 2. Setup
+
+Setup directories for inputs and outputs (io):
 
 -   Create input/ and output/ directories, as siblings of your working
-    directory
+    directory.
 
 -   Populate the input directory with portfolio files like
     [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
     and parameters files like
-    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml)
-    (here we use some test files).
+    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
+
+``` bash
+# Setup input/ and output/ with example portfolio and parameter files
+./bin/setup-io
+```
 
 <details>
 
--   Each corresponding “`<pair-name>`” the portolio and parameter files
-    must be named `<pair-name>_Input.csv` and
-    `<pair-name>_Input_PortfolioParameters.yml`, respectively. For
-    example:
-    -   This pair is valid: `a_Input.csv` and
-        `a_Input_PortfolioParameters.yml`
-    -   This pair is invalid: `a_Input.csv` and
-        `b_Input_PortfolioParameters.yml`
+Each corresponding `<pair-name>` the portfolio and parameter files must
+be named `<pair-name>_Input.csv` and
+`<pair-name>_Input_PortfolioParameters.yml`, respectively. For example:
 
-</details>
+-   This pair is valid: `a_Input.csv`,
+    `a_Input_PortfolioParameters.yml`.
 
-Each parameter file
+-   This pair is invalid: `a_Input.csv`,
+    `b_Input_PortfolioParameters.yml`.
+
+In the parameter files, whatever values you give to `portfolio_name_in`
+and `investor_name_in` will populate the columns `portfolio_name` and
+`investor_name` of some output files. For example:
+
+-   A parameter file:
+
+<!-- -->
 
     default:
         parameters:
@@ -57,16 +67,18 @@ Each parameter file
             language: EN
             project_code: CHPA2020
 
-portfolio\_name\_in, investor\_name\_in can be whatever you like, it
-will populate the output files with columns portfolio\_name and
-investor\_name with the values provided
+-   A few rows of some relevant output files and columns:
 
-``` bash
-./bin/setup-io
-```
+<!-- -->
 
-3.  Run PACTA via
-    [`docker-compose`](https://docs.docker.com/compose/install/).
+    named list()
+
+</details>
+
+### 3. Run
+
+Run PACTA via
+[`docker-compose`](https://docs.docker.com/compose/install/).
 
 ``` bash
 docker-compose up
@@ -78,6 +90,12 @@ You may interact with the PACTA container with:
 
 ``` bash
 docker-compose run app bash
+```
+
+You may mount your local source code with:
+
+``` bash
+docker-compose run -v "$(pwd)":/pactaCore app bash
 ```
 
 These are the files used to create the Docker image and run the
@@ -120,13 +138,13 @@ services:
       - ../output:/output
 ```
 
-</details>
-
 You may remove the input/ and output/ directories and start again.
 
 ``` bash
-rm ../input ../output -ri
+sudo rm ../input ../output -ri
 ```
+
+</details>
 
 ## Funding
 

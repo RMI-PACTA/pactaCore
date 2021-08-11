@@ -18,62 +18,77 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The main goal of pactaCore is to run
-[PACTA](https://2degrees-investing.org/resource/pacta/).
+The main goal of pactaCore is to run the core steps of the [PACTA
+methodology](https://2degrees-investing.org/resource/pacta/). This document
+helps you to install, setup, and run PACTA from a terminal (e.g. bash).
 
-## Usage
+### 1. Install
 
-From a terminal (e.g. bash) running PACTA involves three steps:
+Clone the private data and public source code from GitHub, then work from
+your local clone of the source code:
 
-1. Clone the private data and the public source code from GitHub, and work from the
-the experimental branch where we're "dockerizing" PACTA.
-  
 ```bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
 git clone git@github.com:2DegreesInvesting/pactaCore.git
 cd pactaCore
 ```
 
-2. Setup  directories for inputs and outputs (io):
+### 2. Setup
 
-* Create input/ and output/ directories, as siblings of your working directory
+Setup  directories for inputs and outputs (io):
+
+* Create input/ and output/ directories, as siblings of your working directory.
 
 * Populate the input directory with portfolio files like
 [TestPortfolio_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
 and parameters files like
-[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml)
-(here we use some test files).
-
-<details> 
-
-* Each corresponding `<pair-name>` the portolio and parameter files must be named `<pair-name>_Input.csv` and `<pair-name>_Input_PortfolioParameters.yml`,
-respectively. For example:
-  * This pair of files is valid: `a_Input.csv` and
-  `a_Input_PortfolioParameters.yml`
-  * This pair of files is invalid: `a_Input.csv` and
-  `b_Input_PortfolioParameters.yml`
-
-* In the parameter file, `portfolio_name_in` and `investor_name_in` can be
-whatever you like, it will populate the output files with columns
-`portfolio_name` and `investor_name` with the values provided.
-
-```{bash, comment="", echo = FALSE}
-cat working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml
-```
-
-
-```{r}
-fs::dir_ls("working_dir/40_Results/")
-```
-
-
-</details> 
+[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
 
 ```bash
+# Setup input/ and output/ with example portfolio and parameter files
 ./bin/setup-io
 ```
 
-3. Run PACTA via [`docker-compose`](https://docs.docker.com/compose/install/).
+<details> 
+
+Each corresponding `<pair-name>` the portfolio and parameter files must be named
+`<pair-name>_Input.csv` and `<pair-name>_Input_PortfolioParameters.yml`,
+respectively. For example:
+
+  * This pair is valid: `a_Input.csv`, `a_Input_PortfolioParameters.yml`.
+  
+  * This pair is invalid: `a_Input.csv`, `b_Input_PortfolioParameters.yml`.
+
+In the parameter files, whatever values you give to `portfolio_name_in` and
+`investor_name_in` will populate the columns `portfolio_name` and
+`investor_name` of some output files. For example:
+
+* A parameter file:
+
+```{r echo = FALSE, comment=""}
+writeLines(readLines(
+  "working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml"
+))
+```
+
+* A few rows of some relevant output files and columns:
+
+```{r echo = FALSE, comment=""}
+output <- "../output/working_dir/40_Results/TestPortfolio_Input/"
+paths <- list.files(output, full.names = TRUE)
+datasets <- lapply(paths, readRDS)
+columns <- c("portfolio_name", "investor_name")
+
+out <- lapply(datasets, function(x) head(x[columns], 3))
+out <- setNames(out, basename(paths))
+head(out, 3)
+```
+
+</details>
+
+### 3. Run
+
+Run PACTA via [`docker-compose`](https://docs.docker.com/compose/install/).
 
 ```bash
 docker-compose up
@@ -85,6 +100,12 @@ You may interact with the PACTA container with:
 
 ```bash
 docker-compose run app bash
+```
+
+You may mount your local source code with:
+
+```bash
+docker-compose run -v "$(pwd)":/pactaCore app bash
 ```
 
 These are the files used to create the Docker image and run the container:
@@ -101,19 +122,20 @@ cat docker-compose.yml
 cat docker-compose.override.yml
 ```
 
-</details>
 
 You may remove the input/ and output/ directories and start again.
 
 ```bash
-rm ../input ../output -ri
+sudo rm ../input ../output -ri
 ```
+
+</details>
 
 ## Funding
 
 This project has received funding from the [European Union LIFE
-program](https://wayback.archive-it.org/12090/20210412123959/https://ec.europa.eu/easme/en/) and the [International Climate
-Initiative
+program](https://wayback.archive-it.org/12090/20210412123959/https://ec.europa.eu/easme/en/)
+and the [International Climate Initiative
 (IKI)](https://www.international-climate-initiative.com/en/details/project/measuring-paris-agreement-alignment-and-financial-risk-in-financial-markets-18_I_351-2982).
 The Federal Ministry for the Environment, Nature Conservation and Nuclear Safety
 (BMU) supports this initiative on the basis of a decision adopted by the German
