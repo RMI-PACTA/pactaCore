@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
-cp -r ../input/*.yml ./working_dir/10_Parameter_File
-cp -r ../input/*.csv ./working_dir/20_Raw_Inputs
 
-Rscript --vanilla -e "source('R/run_pacta.R'); run_pacta()"
-cp -r ./working_dir ../output
+here=$(pwd)
+pacta=${1:-$(pwd)}
+parent=$(dirname $pacta)
+
+cp -r "$parent"/input/*.yml "$pacta"/working_dir/10_Parameter_File
+cp -r "$parent"/input/*.csv "$pacta"/working_dir/20_Raw_Inputs
+
+Rscript --vanilla -e "setwd('""$pacta""'); source('R/run_pacta.R'); run_pacta()"
+cp -r "$pacta"/working_dir "$parent"/output
