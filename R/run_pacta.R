@@ -6,7 +6,10 @@
 #' @examples
 #' run_pacta()
 #' @noRd
-run_pacta <- function(path = "../input", regexp = "_Input[.]csv") {
+run_pacta <- function(wd = here::here(), regexp = "_Input[.]csv") {
+  withr::local_dir(wd)
+  path <- "../input"
+
   portfolios <- portfolios(path, regexp)
   pacta_source <- write_pacta_source()
   command <- glue::glue("Rscript --vanilla {pacta_source} {portfolios}")
