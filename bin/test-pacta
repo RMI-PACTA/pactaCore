@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+rm -rf ../output ../input
+bash bin/setup-io
+
+echo "IO tree at the start"
+tree ../input ../output
+echo
+docker-compose up --build
+echo
+
+echo "IO tree at the end"
+tree ../input ../output/working_dir/40_Results
