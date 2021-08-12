@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo rm -rf ../output ../input
+rm -rf ../output ../input
 bash bin/setup-io
 
 echo "IO tree at the start"
