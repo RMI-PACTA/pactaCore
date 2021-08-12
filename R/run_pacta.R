@@ -6,10 +6,24 @@
 #' @examples
 #' run_pacta()
 #' @noRd
-run_pacta <- function(wd = here::here()) {
+run_pacta <- function(wd = here::here(), input = "../input", output = "../output") {
   withr::local_dir(wd)
 
-  portfolios <- portfolios()
+  # FIXME: Should we also support ".yaml" (with an "a")?
+  yml <- fs::dir_ls(input, regexp = "[.]yml$")
+  fs::file_copy(
+    yml,
+    fs::path(wd, "working_dir", "10_Parameter_File", fs::path_file(yml)),
+    overwrite = TRUE
+  )
+  csv <- fs::dir_ls(input, regexp = "[.]csv$")
+  fs::file_copy(
+    csv,
+    fs::path(wd, "working_dir", "20_Raw_Inputs", fs::path_file(csv)),
+    overwrite = TRUE
+  )
+
+  portfolios <- portfolios(path = input)
   command <- glue::glue("Rscript --vanilla pacta_core.R {portfolios}")
 
   for (i in seq_along(command)) {
@@ -17,6 +31,8 @@ run_pacta <- function(wd = here::here()) {
     system(command[[i]])
     message("End portfolio: ", portfolios[[i]])
   }
+
+  fs::dir_copy(fs::path(wd, "working_dir"), fs::path(output, "working_dir"), overwrite = TRUE)
 }
 
 #' Get the name of the portfolios
