@@ -1,13 +1,44 @@
 #!/usr/bin/env bash
 
+red () {
+    printf "\033[31m${1}\033[0m\n"
+}
+
+yellow () {
+    printf "\033[33m${1}\033[0m\n"
+}
+
+green () {
+    printf "\033[32m${1}\033[0m\n"
+}
+
+yellow "* Setting up fresh test input/ and output/ directories"
 rm -rf ../output ../input
 bash bin/setup-io
 
-echo "IO tree at the start"
+yellow "* Ensuring working_dir/ has the expected file-system structure"
+bash bin/mkdir-working_dir
+
+yellow "* IO tree at the start"
 tree ../input ../output
 echo
 docker-compose up --build
 echo
 
-echo "IO tree at the end"
-tree ../input ../output/working_dir/40_Results
+yellow "* IO tree at the end"
+actual=$(tempfile)
+tree ../input ../output > "$actual"
+
+cat "$actual"
+echo
+
+difference=$(diff "$actual" tests/bash/snapshots/results-tree.txt)
+if [[ $difference != "" ]]
+then
+  red "* The output tree is NOT as expected. Difference:"
+  red $difference
+else
+  green "* Good to go."
+fi
+
+yellow "* Done"
