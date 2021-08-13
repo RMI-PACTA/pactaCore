@@ -4,6 +4,12 @@
 # pactaCore <a href='https://github.com/2DegreesInvesting/pactaCore'><img src='https://imgur.com/A5ASZPE.png' align='right' height='43' /></a>
 
 <!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/pactaCore)](https://CRAN.R-project.org/package=pactaCore)
+[![R-CMD-check](https://github.com/2DegreesInvesting/pactaCore/workflows/R-CMD-check/badge.svg)](https://github.com/2DegreesInvesting/pactaCore/actions)
 <!-- badges: end -->
 
 The main goal of pactaCore is to run the core steps of the [PACTA
@@ -71,7 +77,23 @@ and `investor_name_in` will populate the columns `portfolio_name` and
 
 <!-- -->
 
-    named list()
+    $Bonds_results_company.rda
+           portfolio_name investor_name
+    1 TestPortfolio_Input          Test
+    2 TestPortfolio_Input          Test
+    3 TestPortfolio_Input          Test
+
+    $Bonds_results_map.rda
+           portfolio_name investor_name
+    1 TestPortfolio_Input          Test
+    2 TestPortfolio_Input          Test
+    3 TestPortfolio_Input          Test
+
+    $Bonds_results_portfolio.rda
+           portfolio_name investor_name
+    1 TestPortfolio_Input          Test
+    2 TestPortfolio_Input          Test
+    3 TestPortfolio_Input          Test
 
 </details>
 
@@ -103,7 +125,7 @@ container:
 
 ``` bash
 cat Dockerfile
-FROM rocker/r-ver:4.0.2
+FROM rocker/r-ver:latest
 
 USER root
 
