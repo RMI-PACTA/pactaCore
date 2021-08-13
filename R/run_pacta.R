@@ -18,7 +18,7 @@ run_pacta <- function(wd = here::here(), input = "../input", output = "../output
     message("End portfolio: ", portfolios[[i]])
   }
 
-  fs::dir_copy(fs::path(wd, "working_dir"), fs::path(output, "working_dir"), overwrite = TRUE)
+  setup_output(wd, output)
 }
 
 setup_input <- function(wd, input) {
@@ -33,6 +33,15 @@ setup_input <- function(wd, input) {
   fs::file_copy(
     csv,
     fs::path(wd, "working_dir", "20_Raw_Inputs", fs::path_file(csv)),
+    overwrite = TRUE
+  )
+
+  invisible(wd)
+}
+
+setup_output <- function(wd, output) {
+  fs::dir_copy(
+    fs::path(wd, "working_dir"), fs::path(output, "working_dir"),
     overwrite = TRUE
   )
 
