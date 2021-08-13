@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pacta=${1:-$(pwd)}
+pacta=${1:-$PACTA_SOURCE}
 parent=$(dirname $pacta)
 
 Rscript --vanilla -e \

@@ -5,3 +5,5 @@ services:
       - ../pacta-data:/pacta-data:ro
       - ../input:/input:ro
       - ../output:/output
+    env_file:
+      - .env
