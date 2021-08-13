@@ -1,8 +1,2 @@
 #!/usr/bin/env bash
-
-pacta=${1:-$PACTA_SOURCE}
-parent=$(dirname $pacta)
-
-Rscript --vanilla -e \
-  "source('""$pacta""/R/run_pacta.R'); \
-   run_pacta(source = '""$pacta""', input = '""$parent""/input', output = '""$parent""/output')"
+Rscript --vanilla -e "source('""$PACTA_SOURCE""/R/run_pacta.R'); run_pacta()"
