@@ -5,4 +5,4 @@ parent=$(dirname $pacta)
 
 Rscript --vanilla -e \
   "source('""$pacta""/R/run_pacta.R'); \
-   run_pacta(wd = '""$pacta""', input = '""$parent""/input', output = '""$parent""/output')"
+   run_pacta(source = '""$pacta""', input = '""$parent""/input', output = '""$parent""/output')"

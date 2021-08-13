@@ -6,9 +6,12 @@
 #' @examples
 #' run_pacta()
 #' @noRd
-run_pacta <- function(wd = here::here(), input = "../input", output = "../output") {
-  withr::local_dir(wd)
-  setup_input(wd = wd, input = input)
+run_pacta <- function(source = pacta_envvar("SOURCE", unset = here::here()),
+                      input = pacta_envvar("INPUT", unset = "../input"),
+                      output = pacta_envvar("OUTPUT", unset = "../output")) {
+  withr::local_dir(source)
+
+  setup_input(wd = source, input = input)
 
   portfolios <- portfolios(path = input)
   command <- glue::glue("Rscript --vanilla pacta_core.R {portfolios}")
@@ -18,8 +21,19 @@ run_pacta <- function(wd = here::here(), input = "../input", output = "../output
     message("End portfolio: ", portfolios[[i]])
   }
 
-  setup_output(wd, output)
+  setup_output(source, output)
 }
+
+#' Help get environmental variables
+#' @examples
+#' pacta_envvar("SOURCE")
+#' pacta_envvar("SOURCE", unset = here::here())
+#' withr::with_envvar(new = c(PACTA_SOURCE = "/home"), pacta_envvar("SOURCE"))
+#' @noRd
+pacta_envvar <- function(suffix, unset = "") {
+  Sys.getenv(glue::glue("PACTA_{suffix}"), unset = unset)
+}
+
 
 setup_input <- function(wd, input) {
   # FIXME: Should we also support ".yaml" (with an "a")?
