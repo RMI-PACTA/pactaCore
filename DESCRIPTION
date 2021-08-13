@@ -26,7 +26,6 @@ Depends:
     R (>= 3.5)
 Imports: 
     assertthat,
-    bookdown,
     config,
     conflicted,
     dplyr,
@@ -38,23 +37,14 @@ Imports:
     magrittr,
     purrr,
     readr,
-    renv,
     rlang,
-    rmarkdown,
     tibble,
     withr
 Suggests:
-    countrycode,
-    data.table,
     devtools,
-    ggplot2,
     jsonlite,
-    readxl,
-    reshape2,
     rstudioapi,
-    testthat,
-    writexl,
-    zoo
+    testthat
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
