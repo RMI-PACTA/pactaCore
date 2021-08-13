@@ -1,2 +1,21 @@
 #!/usr/bin/env bash
-Rscript --vanilla -e "source('""$PACTA_SOURCE""/R/run_pacta.R'); run_pacta()"
+
+# Help call run_pacta() from the terminal
+#
+# run_pacta() is aware of environmental variables (see R/run_pacta.R)
+#
+# Example 1:
+# # 1. Use all values set in .env
+# # .env
+# # PACTA_SOURCE=/home/mauro/git/pactaCore
+# # PACTA_OUTPUT=/home/mauro/tmp/input
+# # PACTA_OUTPUT=/home/mauro/tmp/output
+# #
+# ./bin/run-pacta
+#
+# # Example 2: Pass PACTA_SOURCE explicitely, and *INPUT and *OUTPUT from .env
+# ./bin/run-pacta /home/mauro/git/pactaCore
+#
+#
+./bin/run-pacta
+Rscript --vanilla -e "source('""${1:-$PACTA_SOURCE}""/R/run_pacta.R'); run_pacta()"
