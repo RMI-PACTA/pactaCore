@@ -8,7 +8,20 @@
 #' @noRd
 run_pacta <- function(wd = here::here(), input = "../input", output = "../output") {
   withr::local_dir(wd)
+  setup_input(wd = wd, input = input)
 
+  portfolios <- portfolios(path = input)
+  command <- glue::glue("Rscript --vanilla pacta_core.R {portfolios}")
+  for (i in seq_along(command)) {
+    message("Start portfolio: ", portfolios[[i]])
+    system(command[[i]])
+    message("End portfolio: ", portfolios[[i]])
+  }
+
+  fs::dir_copy(fs::path(wd, "working_dir"), fs::path(output, "working_dir"), overwrite = TRUE)
+}
+
+setup_input <- function(wd, input) {
   # FIXME: Should we also support ".yaml" (with an "a")?
   yml <- fs::dir_ls(input, regexp = "[.]yml$")
   fs::file_copy(
@@ -23,16 +36,7 @@ run_pacta <- function(wd = here::here(), input = "../input", output = "../output
     overwrite = TRUE
   )
 
-  portfolios <- portfolios(path = input)
-  command <- glue::glue("Rscript --vanilla pacta_core.R {portfolios}")
-
-  for (i in seq_along(command)) {
-    message("Start portfolio: ", portfolios[[i]])
-    system(command[[i]])
-    message("End portfolio: ", portfolios[[i]])
-  }
-
-  fs::dir_copy(fs::path(wd, "working_dir"), fs::path(output, "working_dir"), overwrite = TRUE)
+  invisible(wd)
 }
 
 #' Get the name of the portfolios
