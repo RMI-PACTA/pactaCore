@@ -28,20 +28,14 @@ tree ../input ../output > "$actual"
 cat "$actual"
 echo
 
-yellow "Diff with snapshot"
 difference=$(diff "$actual" tests/bash/snapshots/results-tree.txt)
-if [ $difference -eq "" ];
+if [[ $difference != "" ]]
 then
-  echo "Good to go"
-fi
-
-if [[ $difference -eq "" ]]
-then
-  green "Good to go."
-else
   red "The output tree is NOT as expected:"
+  red $difference
+else
+  echo "Good to go."
+  echo
 fi
-echo $difference
-echo
 
 yellow "Done"
