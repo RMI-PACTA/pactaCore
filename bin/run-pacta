@@ -8,5 +8,5 @@ cp -r "$parent"/input/*.yml "$pacta"/working_dir/10_Parameter_File
 cp -r "$parent"/input/*.csv "$pacta"/working_dir/20_Raw_Inputs
 
 Rscript --vanilla -e "source('""$pacta""/R/run_pacta.R'); run_pacta(wd = '""$pacta""')"
-chmod -R 774 "$pacta"/working_dir "$parent"/output
+chmod -R 774 "$pacta"/working_dir
 cp -r "$pacta"/working_dir "$parent"/output
