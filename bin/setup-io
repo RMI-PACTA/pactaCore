@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-mkdir -p ../input
-mkdir -p ../output
-cp inst/extdata/TestPortfolio_Input_PortfolioParameters.yml ../input/
-cp inst/extdata/TestPortfolio_Input.csv ../input/
+source .env
+export PACTA_SOURCE PACTA_INPUT PACTA_OUTPUT
+mkdir -p "$PACTA_INPUT" "$PACTA_OUTPUT"
+cp inst/extdata/TestPortfolio_Input_PortfolioParameters.yml "$PACTA_INPUT"
+cp inst/extdata/TestPortfolio_Input.csv "$PACTA_INPUT"

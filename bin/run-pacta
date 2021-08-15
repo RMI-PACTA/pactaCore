@@ -15,7 +15,4 @@
 #
 # # Example 2: Pass PACTA_SOURCE explicitely, and *INPUT and *OUTPUT from .env
 # ./bin/run-pacta /home/mauro/git/pactaCore
-#
-#
-./bin/run-pacta
 Rscript --vanilla -e "source('""${1:-$PACTA_SOURCE}""/R/run_pacta.R'); run_pacta()"

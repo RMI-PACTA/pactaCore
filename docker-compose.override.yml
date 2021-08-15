@@ -1,9 +1,9 @@
 version: "3.2"
-services: 
+services:
   app:
     volumes:
       - ../pacta-data:/pacta-data:ro
-      - ../input:/input:ro
-      - ../output:/output
+      - /home/mauro/tmp/input:/input:ro
+      - /home/mauro/tmp/output:/output
     env_file:
       - .env
