@@ -27,7 +27,7 @@ yellow "* Ensuring working_dir/ has the expected file-system structure"
 bash bin/mkdir-working_dir
 
 yellow "* IO tree at the start"
-tree $PACTA_INPUT $PACTA_OUTPUT
+./bin/tree-io
 echo
 
 docker-compose up --build
@@ -35,9 +35,7 @@ echo
 
 yellow "* IO tree at the end"
 actual=$(tempfile)
-tree $PACTA_INPUT $PACTA_OUTPUT > "$actual"
-
-cat "$actual"
+./bin/tree-io > "$actual"
 echo
 
 difference=$(diff "$actual" tests/bash/snapshots/results-tree.txt)

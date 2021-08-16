@@ -1,8 +1,10 @@
+/home/mauro/tmp/input
 ├── TestPortfolio_Input.csv
 └── TestPortfolio_Input_PortfolioParameters.yml
 
 0 directories, 2 files
 
+/home/mauro/tmp/output
 └── working_dir
     ├── 00_Log_Files
     │   └── TestPortfolio_Input
