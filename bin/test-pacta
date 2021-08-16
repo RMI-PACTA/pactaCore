@@ -12,9 +12,10 @@ green () {
     printf "\033[32m${1}\033[0m\n"
 }
 
-yellow "* Reading .env"
+yellow "* Using environmental variables"
 source .env
-export PACTA_SOURCE PACTA_INPUT PACTA_OUTPUT
+export PACTA_DATA PACTA_SOURCE PACTA_INPUT PACTA_OUTPUT
+echo "PACTA_DATA: $PACTA_DATA"
 echo "PACTA_INPUT: $PACTA_SOURCE"
 echo "PACTA_INPUT: $PACTA_INPUT"
 echo "PACTA_OUTPUT: $PACTA_OUTPUT"
