@@ -1,7 +1,8 @@
-../input
 ├── TestPortfolio_Input.csv
 └── TestPortfolio_Input_PortfolioParameters.yml
-../output
+
+0 directories, 2 files
+
 └── working_dir
     ├── 00_Log_Files
     │   └── TestPortfolio_Input
@@ -36,4 +37,4 @@
     └── 50_Outputs
         └── TestPortfolio_Input
 
-11 directories, 24 files
+11 directories, 22 files
