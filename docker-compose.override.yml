@@ -1,9 +1,10 @@
 version: "3.2"
 services:
   app:
+    working_dir: ${PACTA_SOURCE}
     volumes:
-      - ../pacta-data:/pacta-data:ro
-      - /home/mauro/tmp/input:/input:ro
-      - /home/mauro/tmp/output:/output
+      - ${PACTA_DATA}:/pacta-data:ro
+      - ${PACTA_INPUT}:/input:ro
+      - ${PACTA_OUTPUT}:/output
     env_file:
       - .env
