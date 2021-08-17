@@ -1,7 +1,11 @@
 #' Run PACTA for all portfolios matching a pattern in an input directory
 #'
-#' @param wd String. Working directory pointing to pacta's source code
-#' @param regext String. Regular expression that defines a valid portfolio name.
+#' This function is designed to work inside the docker container created by
+#' Dockerfile in this repo.
+#'
+#' @param source String. Path to pacta's source code
+#' @param input,output String. Path to directories input/ and output/ inside the
+#'   docker container
 #'
 #' @examples
 #' run_pacta()
@@ -51,7 +55,8 @@ setup_output <- function(wd, output) {
   invisible(wd)
 }
 
-#' Get the name of the portfolios
+# Get the name of the portfolios, assuming /input is a sibling of /bound inside
+# a docker container from the image created by Dockerfile in this repo
 portfolios <- function(path = "../input", regexp = "_Input[.]csv") {
   csv <- fs::dir_ls(path, regexp = regexp)
   fs::path_ext_remove(fs::path_file(csv))
