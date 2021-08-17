@@ -47,9 +47,14 @@ Setup  directories for inputs and outputs (io):
 and parameters files like
 [TestPortfolio_Input_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
 
-```bash
-# Setup input/ and output/ with example portfolio and parameter files
-./bin/setup-io
+Add an .env file at the root of pactaCore, locating the directories pacta-data/,
+input/, and output/ in your computer. This is the interface where you as a user
+tell the application where to look for inputs and store outputs.
+
+For example, Mauro's .env file looks like this:
+
+```{bash comment="", echo=FALSE}
+cat .env
 ```
 
 <details> 
@@ -86,6 +91,13 @@ out <- lapply(datasets, function(x) head(x[columns], 3))
 out <- setNames(out, basename(paths))
 head(out, 3)
 ```
+
+* The tree of the input/ and output/ directories before running the application:
+
+```{bash comment=""}
+./bin/tree-io
+```
+
 
 </details>
 
@@ -125,6 +137,11 @@ cat docker-compose.yml
 cat docker-compose.override.yml
 ```
 
+This is the tree of input/ and output/ after running the application:
+
+```{bash comment=""}
+./bin/tree-io
+```
 
 You may remove the input/ and output/ directories and start again.
 
