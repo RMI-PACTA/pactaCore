@@ -6,7 +6,7 @@
 #' @examples
 #' run_pacta()
 #' @noRd
-run_pacta <- function(source = Sys.getenv("PACTA_SOURCE", unset = here::here()),
+run_pacta <- function(source = here::here(),
                       input = "../input",
                       output = "../output") {
   withr::local_dir(source)
