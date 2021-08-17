@@ -99,11 +99,10 @@ $Bonds_results_portfolio.rda
 3 TestPortfolio_Input          Test
 ```
 
-* The tree of the input/ and output/ directories before running the application:
-
+* The tree of the input/ and output/ directories before running the application
+should be similar to this:
 
 ```bash
-./bin/tree-io
 (input)
 ├── TestPortfolio_Input.csv
 └── TestPortfolio_Input_PortfolioParameters.yml
@@ -111,43 +110,9 @@ $Bonds_results_portfolio.rda
 0 directories, 2 files
 
 (output)
-└── working_dir
-    ├── 00_Log_Files
-    │   └── TestPortfolio_Input
-    ├── 10_Parameter_File
-    │   └── TestPortfolio_Input_PortfolioParameters.yml
-    ├── 20_Raw_Inputs
-    │   └── TestPortfolio_Input.csv
-    ├── 30_Processed_Inputs
-    │   └── TestPortfolio_Input
-    │       ├── audit_file.csv
-    │       ├── audit_file.rda
-    │       ├── bonds_portfolio.rda
-    │       ├── coveragegraph.json
-    │       ├── coveragegraphlegend.json
-    │       ├── coveragetextvar.json
-    │       ├── emissions.rda
-    │       ├── equity_portfolio.rda
-    │       ├── fund_coverage_summary.rda
-    │       ├── invalidsecurities.csv
-    │       ├── invalidsecurities.json
-    │       ├── overview_portfolio.rda
-    │       ├── portfolio_weights.json
-    │       └── total_portfolio.rda
-    ├── 40_Results
-    │   └── TestPortfolio_Input
-    │       ├── Bonds_results_company.rda
-    │       ├── Bonds_results_map.rda
-    │       ├── Bonds_results_portfolio.rda
-    │       ├── Equity_results_company.rda
-    │       ├── Equity_results_map.rda
-    │       └── Equity_results_portfolio.rda
-    └── 50_Outputs
-        └── TestPortfolio_Input
 
-11 directories, 22 files
+0 directories, 0 files
 ```
-
 
 </details>
 
@@ -214,8 +179,8 @@ services:
       - ${PACTA_OUTPUT}:/output
 ```
 
-This is the tree of input/ and output/ after running the application:
-
+The tree of the input/ and output/ directories after running the application
+should be similar to this:
 
 ```bash
 ./bin/tree-io
@@ -261,12 +226,6 @@ This is the tree of input/ and output/ after running the application:
         └── TestPortfolio_Input
 
 11 directories, 22 files
-```
-
-You may remove the input/ and output/ directories and start again.
-
-```bash
-sudo rm ../input ../output -ri
 ```
 
 </details>
