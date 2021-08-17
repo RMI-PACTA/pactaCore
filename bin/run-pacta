@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-Rscript --vanilla -e "source('/bound/R/run_pacta.R'); run_pacta()"
