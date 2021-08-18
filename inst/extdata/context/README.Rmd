@@ -38,8 +38,6 @@ cd pactaCore
 
 ### 2. Setup
 
-Setup  directories for inputs and outputs (io):
-
 * Create input/ and output/ directories, as siblings of your working directory.
 
 * Populate the input directory with portfolio files like
