@@ -10,8 +10,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of pactaCore is to to help you run the core of [PACTA
-methodology](https://2degrees-investing.org/resource/pacta/)
-reproducibly and with a single command.
+methodology](https://2degrees-investing.org/resource/pacta/) in a
+reproducible way and with a single command.
 
 ## Installation
 
