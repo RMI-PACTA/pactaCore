@@ -11,7 +11,11 @@
 #' @examples
 #' if (interactive()) {
 #'   run_pacta_core()
+#'
+#'   run_pacta_core_with_env_file()
 #' }
+#'
+#'
 run_pacta_core <- function(output = NULL, input = NULL, data = NULL) {
   data <- data %||% fs::path_wd("pacta-data")
   input <- input %||% fs::path_wd("input")
@@ -27,11 +31,20 @@ run_pacta_core <- function(output = NULL, input = NULL, data = NULL) {
     con = env_file
   )
 
+  run_pacta_core_with_env_file(env_file)
+
+  invisible(output)
+}
+
+#' @rdname run_pacta_core
+run_pacta_core_with_env_file <- function(env_file = NULL) {
+  env_file <- env_file %||% fs::path_wd(".env")
+
   withr::local_dir(context_path())
   command <- glue("docker-compose --env-file {env_file} up")
   system(command)
 
-  invisible(output)
+  invisible(env_file)
 }
 
 #' Help create paths into the build context of the Docker image
