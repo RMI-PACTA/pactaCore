@@ -4,10 +4,16 @@
 \alias{run_pacta_core}
 \title{Run PACTA on Docker}
 \usage{
-run_pacta_core()
+run_pacta_core(output = NULL, input = NULL, data = NULL)
+}
+\arguments{
+\item{output, input, data}{Strings. Path to the directories for output
+(results), input (portfolio and parameter files), and private data (the
+pacta-data' repository). Defaults to the paths of the directories output/,
+input/, and pacta-data/, under the working directory.}
 }
 \value{
-Called for its side effects.
+Called for its side effects. Returns the first argument invisibly.
 }
 \description{
 Run PACTA on Docker
