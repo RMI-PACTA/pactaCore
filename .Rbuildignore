@@ -60,3 +60,5 @@
 ^Dockerfile$
 ^docker-compose\.yml$
 ^docker-compose\.override\.yml$
+^\.env$
+^pacta_core\.R$

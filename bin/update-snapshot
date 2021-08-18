@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Update the snapshot of the IO tree
+source .env
+export PACTA_INPUT PACTA_OUTPUT
+echo "Udating tree of $PACTA_INPUT and $PACTA_OUTPUT"
+./bin/tree-io > tests/bash/snapshots/results-tree.txt
