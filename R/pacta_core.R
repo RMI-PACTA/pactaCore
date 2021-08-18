@@ -10,13 +10,13 @@
 #' @export
 #' @examples
 #' if (interactive()) {
-#'   pacta_core_with_env()
+#'   pacta_core()
 #'
-#'   pacta_core_with_env_with_env()
+#'   pacta_core_with_env()
 #' }
 #'
 #'
-pacta_core_with_env <- function(output = NULL, input = NULL, data = NULL) {
+pacta_core <- function(output = NULL, input = NULL, data = NULL) {
   data <- data %||% fs::path_wd("pacta-data")
   input <- input %||% fs::path_wd("input")
   output <- output %||% fs::path_wd("output")
@@ -31,14 +31,14 @@ pacta_core_with_env <- function(output = NULL, input = NULL, data = NULL) {
     con = env
   )
 
-  pacta_core_with_env_with_env(env)
+  pacta_core_with_env(env)
 
   invisible(output)
 }
 
-#' @rdname pacta_core_with_env
+#' @rdname pacta_core
 #' @export
-pacta_core_with_env_with_env <- function(env = NULL) {
+pacta_core_with_env <- function(env = NULL) {
   env <- env %||% fs::path_wd(".env")
 
   withr::local_dir(context_path())
