@@ -1,16 +1,37 @@
 #' Run PACTA on Docker
 #'
-#' @return Called for its side effects.
-#' @export
+#' @param output,input,data Strings. Path to the directories for output
+#'   (results), input (portfolio and parameter files), and private data (the
+#'   pacta-data' repository). Defaults to the paths of the directories output/,
+#'   input/, and pacta-data/, under the working directory.
 #'
+#' @return Called for its side effects. Returns the first argument invisibly.
+#'
+#' @export
 #' @examples
 #' if (interactive()) {
 #'   run_pacta_core()
 #' }
-run_pacta_core <- function() {
+run_pacta_core <- function(output = NULL, input = NULL, data = NULL) {
+  data <- data %||% fs::path_wd("pacta-data")
+  input <- input %||% fs::path_wd("input")
+  output <- output %||% fs::path_wd("output")
+
+  env_file <- tempfile()
+  writeLines(
+    c(
+      glue::glue("PACTA_DATA={data}"),
+      glue::glue("PACTA_INPUT={input}"),
+      glue::glue("PACTA_OUTPUT={output}")
+    ),
+    con = env_file
+  )
+
   withr::local_dir(context_path())
-  system("docker-compose up")
-  invisible()
+  command <- glue("docker-compose --env-file {env_file} up")
+  system(command)
+
+  invisible(output)
 }
 
 #' Help create paths into the build context of the Docker image
@@ -25,3 +46,4 @@ run_pacta_core <- function() {
 context_path <- function(...) {
   fs::path(system.file("extdata", "context", package = "pactaCore"), ...)
 }
+

@@ -3,8 +3,6 @@ services:
   app:
     image: pacta_core:0.0.0.9000
     working_dir: /bound
-    env_file:
-      - .env
     volumes:
       - ${PACTA_DATA}:/pacta-data:ro
       - ${PACTA_INPUT}:/input:ro

@@ -1,3 +1,4 @@
 ^pactaCore\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^\.env$
