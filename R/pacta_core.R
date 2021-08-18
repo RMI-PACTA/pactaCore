@@ -26,11 +26,9 @@
 #'   )
 #'   fs::dir_tree(output)
 #'
-#'   fs::file_exists(".env")  # expect TRUE
+#'   fs::file_exists(".env") # expect TRUE
 #'   pacta_core_with_env()
 #' }
-#'
-#'
 pacta_core <- function(output = NULL, input = NULL, data = NULL) {
   env <- write_env(
     output %||% fs::path_wd("output"),
@@ -78,4 +76,3 @@ pacta_core_with_env <- function(env = NULL) {
 context_path <- function(...) {
   fs::path(system.file("extdata", "context", package = "pactaCore"), ...)
 }
-
