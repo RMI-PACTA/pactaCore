@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Help empty the directory set to $PACTA_OUTPUT
+source .env && export PACTA_OUTPUT && sudo rm -rf /home/mauro/tmp/pacta/output

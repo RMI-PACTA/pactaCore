@@ -12,24 +12,30 @@ green () {
     printf "\033[32m${1}\033[0m\n"
 }
 
+yellow "* Using environmental variables"
+source .env
+export PACTA_DATA PACTA_INPUT PACTA_OUTPUT
+echo "PACTA_DATA: $PACTA_DATA"
+echo "PACTA_INPUT: $PACTA_INPUT"
+echo "PACTA_OUTPUT: $PACTA_OUTPUT"
+
 yellow "* Setting up fresh test input/ and output/ directories"
-rm -rf ../output ../input
-bash bin/setup-io
+rm -rf $PACTA_OUTPUT $PACTA_INPUT
+bash bin/setup-test-io
 
 yellow "* Ensuring working_dir/ has the expected file-system structure"
 bash bin/mkdir-working_dir
 
 yellow "* IO tree at the start"
-tree ../input ../output
+./bin/tree-io
 echo
+
 docker-compose up --build
 echo
 
 yellow "* IO tree at the end"
 actual=$(tempfile)
-tree ../input ../output > "$actual"
-
-cat "$actual"
+./bin/tree-io > "$actual"
 echo
 
 difference=$(diff "$actual" tests/bash/snapshots/results-tree.txt)

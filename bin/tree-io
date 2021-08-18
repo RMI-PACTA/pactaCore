@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+source .env
+export PACTA_INPUT PACTA_OUTPUT
+
+echo "(input)" 
+./bin/tree-child $PACTA_INPUT
+echo
+
+echo "(output)"
+./bin/tree-child $PACTA_OUTPUT 

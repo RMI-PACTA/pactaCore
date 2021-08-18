@@ -1,7 +1,10 @@
 version: "3.2"
-services: 
+services:
   app:
+    working_dir: /bound 
+    env_file:
+      - .env
     volumes:
-      - ../pacta-data:/pacta-data:ro
-      - ../input:/input:ro
-      - ../output:/output
+      - ${PACTA_DATA}:/pacta-data:ro
+      - ${PACTA_INPUT}:/input:ro
+      - ${PACTA_OUTPUT}:/output
