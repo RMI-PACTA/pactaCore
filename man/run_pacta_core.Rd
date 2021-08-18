@@ -2,9 +2,12 @@
 % Please edit documentation in R/run_pacta_core.R
 \name{run_pacta_core}
 \alias{run_pacta_core}
+\alias{run_pacta_core_with_env_file}
 \title{Run PACTA on Docker}
 \usage{
 run_pacta_core(output = NULL, input = NULL, data = NULL)
+
+run_pacta_core_with_env_file(env_file = NULL)
 }
 \arguments{
 \item{output, input, data}{Strings. Path to the directories for output
@@ -21,5 +24,9 @@ Run PACTA on Docker
 \examples{
 if (interactive()) {
   run_pacta_core()
+
+  run_pacta_core_with_env_file()
 }
+
+
 }
