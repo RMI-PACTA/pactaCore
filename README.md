@@ -29,9 +29,9 @@ devtools::install_github("2DegreesInvesting/pactaCore")
 library(pactaCore)
 ```
 
--   `run_pacta_core()` takes paths to output/, input/ and pacta-data/
-    directories (see Setup below). It defaults paths under your working
-    directory:
+-   `pacta_core_with_env()` takes paths to output/, input/ and
+    pacta-data/ directories (see Setup below). It defaults paths under
+    your working directory:
 
 ``` r
 withr::local_dir("../pacta")
@@ -40,11 +40,11 @@ fs::dir_ls(regexp = "output|input|pacta-data")
 ```
 
 ``` r
-run_pacta_core()
+pacta_core_with_env()
 ```
 
--   `run_pacta_core_with_env()` takes a paths to an environment file
-    defining the paths to the output/, input/ and pacta-data/
+-   `pacta_core_with_env_with_env()` takes a paths to an environment
+    file defining the paths to the output/, input/ and pacta-data/
     directories. It defaults a file called “.env” under your working
     directory:
 
@@ -57,7 +57,7 @@ readLines(".env")
 ```
 
 ``` r
-run_pacta_core_with_env()
+pacta_core_with_env_with_env()
 ```
 
 Both functions produce the same output.
@@ -138,7 +138,7 @@ $Bonds_results_portfolio.rda
 0 directories, 2 files
 ```
 
--   The tree of the output/ directory before `run_pacta_core()`:
+-   The tree of the output/ directory before `pacta_core_with_env()`:
 
 ``` bash
 (output)
@@ -146,7 +146,7 @@ $Bonds_results_portfolio.rda
 0 directories, 0 files
 ```
 
--   The tree of the output/ directory after `run_pacta_core()`:
+-   The tree of the output/ directory after `pacta_core_with_env()`:
 
 ``` bash
 output
