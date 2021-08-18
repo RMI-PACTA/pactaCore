@@ -4,6 +4,13 @@
 #'   (results), input (portfolio and parameter files), and private data (the
 #'   pacta-data' repository). Defaults to the paths of the directories output/,
 #'   input/, and pacta-data/, under the working directory.
+#' @param env String. Path to environment file giving the path to the output/,
+#' input/, and pacta-data/ directories. For example:
+#' ```bash
+#' PACTA_DATA=/home/mauro/git/pacta/pacta-data
+#' PACTA_INPUT=/home/mauro/git/pacta/input
+#' PACTA_OUTPUT=/home/mauro/git/pacta/output
+#' ````
 #'
 #' @return Called for its side effects. Returns the first argument invisibly.
 #'
@@ -12,15 +19,30 @@
 #' if (interactive()) {
 #'   pacta_core()
 #'
+#'   ouput <- pacta_core(
+#'     output = "~/git/pacta/output",
+#'     input = "~/git/pacta/input",
+#'     data = "~/git/pacta/pacta-data"
+#'   )
+#'   fs::dir_tree(output)
+#'
+#'   fs::file_exists(".env")  # expect TRUE
 #'   pacta_core_with_env()
 #' }
 #'
 #'
 pacta_core <- function(output = NULL, input = NULL, data = NULL) {
-  data <- data %||% fs::path_wd("pacta-data")
-  input <- input %||% fs::path_wd("input")
-  output <- output %||% fs::path_wd("output")
+  env <- write_env(
+    output %||% fs::path_wd("output"),
+    input %||% fs::path_wd("input"),
+    data %||% fs::path_wd("pacta-data")
+  )
+  pacta_core_with_env(env)
 
+  invisible(output)
+}
+
+write_env <- function(output, input, data) {
   env <- tempfile()
   writeLines(
     c(
@@ -30,10 +52,6 @@ pacta_core <- function(output = NULL, input = NULL, data = NULL) {
     ),
     con = env
   )
-
-  pacta_core_with_env(env)
-
-  invisible(output)
 }
 
 #' @rdname pacta_core
