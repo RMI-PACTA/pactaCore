@@ -2,16 +2,9 @@
 #' @export
 #'
 #' @examples
-#' run_pacta_core()
-#' # Same
 #' run_pacta_core(env = create_env_from_renviron())
-#'
-#' env <- create_env()
-#' run_pacta_core(env)
 #' @noRd
-run_pacta_core <- function(env = NULL) {
-  env <- env %||% create_env_from_renviron()
-
+run_pacta_core <- function(env) {
   withr::local_dir(context_path())
   command <- sprintf("docker-compose --env-file %s up", env)
   system(command)

@@ -211,3 +211,28 @@ setup_inputs <- function(env = NULL) {
 
   invisible(env)
 }
+
+#' Create the structure of pacta's working_dir/
+#'
+#' @examples
+#' dir <- create_working_dir()
+#' fs::dir_tree(fs::path(dir, "working_dir"))
+create_working_dir <- function(dir = tempdir()) {
+  subdir <- c(
+    "10_Parameter_File",
+    "00_Log_Files",
+    fs::path("00_Log_Files", "TestPortfolio_Input"),
+    "30_Processed_Inputs",
+    fs::path("30_Processed_Inputs", "TestPortfolio_Input"),
+    "40_Results",
+    fs::path("40_Results", "TestPortfolio_Input"),
+    "20_Raw_Inputs",
+    "50_Outputs",
+    fs::path("50_Outputs", "TestPortfolio_Input")
+  )
+
+  paths <- fs::path("working_dir", subdir)
+  fs::dir_create(fs::path(dir, paths))
+
+  invisible(dir)
+}
