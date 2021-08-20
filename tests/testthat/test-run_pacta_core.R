@@ -8,9 +8,6 @@ test_that("creates working_dir", {
 
   run_pacta_core(env)
 
-
-  path_env("PACTA_OUTPUT", env)
-  fs::dir_tree(fs::path(dir, "output"))
-
+  # FIXME: Where does the output/ go?
   expect_true(fs::dir_exists(fs::path(dir, "output", "working_dir")))
 })
