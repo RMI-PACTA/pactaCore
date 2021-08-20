@@ -238,3 +238,8 @@ working_dir_paths <- function() {
 
   fs::path("working_dir", subdir)
 }
+
+ok_working_dir <- function() {
+  paths <- extdata_path("context", working_dir_paths())
+  all(fs::dir_exists(paths))
+}
