@@ -1,14 +1,16 @@
 local_pacta <- function(dir = fs::path_temp(),
                         data = NULL,
-                        env = parent.frame()) {
-  dir <- create_pacta(dir = dir, data = data, env = env)
-  withr::defer(fs::dir_delete(dir), envir = env)
+                        envir = parent.frame()) {
+  dir <- create_pacta(dir = dir, data = data)
+  withr::defer(fs::dir_delete(dir), envir = envir)
   invisible(dir)
 }
 
-create_pacta <- function(dir = fs::path_temp(),
-                         data = NULL,
-                         env = parent.frame()) {
+create_pacta <- function(dir = fs::path_temp(), data = NULL) {
+  if (!fs::dir_exists(dir)) {
+    fs::dir_create(dir)
+  }
+
   .env <- create_env(
     path = fs::path_abs(fs::path(dir, ".env")),
     input = fs::path_abs(fs::path(dir, "input")),
@@ -36,14 +38,6 @@ getenv_data <- function() {
   out
 }
 
-local_env_io <- function(path = fs::path_temp(".env"), ..., env = parent.frame()) {
-  env <- create_env(path, ...)
-  withr::defer(fs::file_delete(path), envir = env)
-
-  create_io(env)
-  withr::defer(fs::dir_delete(path), envir = env)
-}
-
 #' Help create an ephemeral environment file.
 #'
 #' See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
@@ -63,9 +57,9 @@ local_env_io <- function(path = fs::path_temp(".env"), ..., env = parent.frame()
 #' # Gone
 #' fs::file_exists(env)
 #' @noRd
-local_env <- function(path = fs::path_temp(".env"), ..., env = parent.frame()) {
+local_env <- function(path = fs::path_temp(".env"), ..., envir = parent.frame()) {
   create_env(path, ...)
-  withr::defer(fs::file_delete(path), envir = env)
+  withr::defer(fs::file_delete(path), envir = envir)
   invisible(path)
 }
 
@@ -95,6 +89,11 @@ create_env <- function(path = fs::path_temp(".env"),
                        data = getenv_data()) {
   envvars <- pacta_envvar("output", "input", "data")
   dirs <- c(output, input, data)
+
+  parent_exists <- fs::dir_exists(fs::path_dir(path))
+  stopifnot(parent_exists)
+  fs::file_exists(path)
+
   writeLines(sprintf("%s=%s", envvars, dirs), con = path)
 
   invisible(path)
