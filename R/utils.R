@@ -218,7 +218,12 @@ setup_inputs <- function(env = NULL) {
 #' dir <- create_working_dir()
 #' fs::dir_tree(fs::path(dir, "working_dir"))
 create_working_dir <- function(dir = tempdir()) {
-  subdir <- c(
+  fs::dir_create(fs::path(dir, working_dir_paths()))
+  invisible(dir)
+}
+
+working_dir_paths <- function() {
+    subdir <- c(
     "10_Parameter_File",
     "00_Log_Files",
     fs::path("00_Log_Files", "TestPortfolio_Input"),
@@ -231,8 +236,5 @@ create_working_dir <- function(dir = tempdir()) {
     fs::path("50_Outputs", "TestPortfolio_Input")
   )
 
-  paths <- fs::path("working_dir", subdir)
-  fs::dir_create(fs::path(dir, paths))
-
-  invisible(dir)
+  fs::path("working_dir", subdir)
 }

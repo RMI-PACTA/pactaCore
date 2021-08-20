@@ -6,6 +6,16 @@
 #' @noRd
 run_pacta_core <- function(env) {
   withr::local_dir(context_path())
+
+  bad_working_dir <- !all(fs::dir_exists(working_dir_paths()))
+  if (bad_working_dir) {
+    stop(
+      "All working_dir directories must exist.\n",
+      "Do you need to `create_working_dir()` and maybe update the image?",
+      call. = FALSE
+    )
+  }
+
   command <- sprintf("docker-compose --env-file %s up", env)
   system(command)
 
