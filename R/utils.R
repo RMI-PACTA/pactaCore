@@ -6,7 +6,7 @@ local_pacta <- function(dir = fs::path_temp(),
   invisible(dir)
 }
 
-create_pacta <- function(dir = fs::path_temp(), data = NULL) {
+create_pacta <- function(dir = tempdir(), data = NULL) {
   if (!fs::dir_exists(dir)) {
     fs::dir_create(dir)
   }
