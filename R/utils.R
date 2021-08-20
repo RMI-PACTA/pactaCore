@@ -1,0 +1,225 @@
+local_pacta <- function(dir = fs::path_temp(),
+                        data = NULL,
+                        env = parent.frame()) {
+  dir <- create_pacta(dir = dir, data = data, env = env)
+  withr::defer(fs::dir_delete(dir), envir = env)
+  invisible(dir)
+}
+
+create_pacta <- function(dir = fs::path_temp(),
+                         data = NULL,
+                         env = parent.frame()) {
+  .env <- create_env(
+    path = fs::path_abs(fs::path(dir, ".env")),
+    input = fs::path_abs(fs::path(dir, "input")),
+    output = fs::path_abs(fs::path(dir, "output")),
+    data = data %||% getenv_data()
+  )
+  create_io(.env)
+  setup_inputs(.env)
+
+  invisible(dir)
+}
+
+getenv_data <- function() {
+  out <- Sys.getenv("PACTA_DATA", unset = "")
+
+  unset <- identical(out, "")
+  if (unset) {
+    stop(
+      "The environment PACTA_DATA must be set.\n",
+      "Do you need to set it in .Renviron? (see `?usethis::edit_r_environ()`",
+      call. = FALSE
+    )
+  }
+
+  out
+}
+
+local_env_io <- function(path = fs::path_temp(".env"), ..., env = parent.frame()) {
+  env <- create_env(path, ...)
+  withr::defer(fs::file_delete(path), envir = env)
+
+  create_io(env)
+  withr::defer(fs::dir_delete(path), envir = env)
+}
+
+#' Help create an ephemeral environment file.
+#'
+#' See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
+#'
+#' @param path String. Path to the environment file you want to create.
+#' @param ... Passed on to `create_env()`.
+#' @param env Must be passed on to `withr::dever()`.
+#'
+#' @examples
+#' # This local context is usually a call to test_that()
+#' local({
+#'   env <- local_env()
+#'   fs::file_exists(env)
+#'   readLines(env)
+#' })
+#'
+#' # Gone
+#' fs::file_exists(env)
+#' @noRd
+local_env <- function(path = fs::path_temp(".env"), ..., env = parent.frame()) {
+  create_env(path, ...)
+  withr::defer(fs::file_delete(path), envir = env)
+  invisible(path)
+}
+
+#' Help create an environment file from variables set in .Renviron
+#' @examples
+#' env <- create_env_from_renviron()
+#' readLines(env)
+#' @noRd
+create_env_from_renviron <- function(path = fs::path_temp(".env")) {
+  create_env(
+    path,
+    output = Sys.getenv("PACTA_OUTPUT"),
+    input = Sys.getenv("PACTA_INPUT"),
+    data = Sys.getenv("PACTA_DATA")
+  )
+}
+
+#' Create an environment file with required variables
+#' @examples
+#' env <- create_env(output = "a", input = "b", data = "c")
+#' env
+#' writeLines(readLines(env))
+#' @noRd
+create_env <- function(path = fs::path_temp(".env"),
+                       output = fs::path_temp("output"),
+                       input = fs::path_temp("input"),
+                       data = getenv_data()) {
+  envvars <- pacta_envvar("output", "input", "data")
+  dirs <- c(output, input, data)
+  writeLines(sprintf("%s=%s", envvars, dirs), con = path)
+
+  invisible(path)
+}
+
+#' Create input/ and output/ directories set in an environment file
+#' @examples
+#' env <- create_env()
+#' create_io(env)
+#' fs::dir_ls(tempdir(), all = TRUE, regexp = ".env|input|output")
+#' @noRd
+create_io <- function(env = NULL) {
+  io <- path_env(pacta_envvar("input", "output"), env = env)
+  fs::dir_create(io)
+}
+
+path_env <- function(envvar = pacta_envvar(), env = NULL) {
+  unlist(lapply(envvar, path_env_once, env = env))
+}
+
+path_env_once <- function(envvar = pacta_envvar(), env = NULL) {
+  env <- env %||% fs::path_wd(".env")
+
+  envvar <- paste0("^", envvar, "=")
+  var_path <- grep(envvar, readLines(env), value = TRUE)
+  sub(envvar, "", var_path)
+}
+
+#' Get enviroment variables succinctly and in a specific order
+#' @examples
+#' pacta_envvar()
+#' pacta_envvar("out", "in")
+#' pacta_envvar("in", "out")
+#' @noRd
+pacta_envvar <- function(...) {
+  patterns <- list(...)
+  if (identical(patterns, list())) {
+    patterns <- ""
+  }
+  unlist(lapply(patterns, function(x) pacta_envvar_once(x)))
+}
+
+pacta_envvar_once <- function(pattern = "") {
+  envvars <- paste0("PACTA_", c("DATA", "INPUT", "OUTPUT"))
+  grep(pattern, envvars, value = TRUE, ignore.case = TRUE)
+}
+
+# Run run_pacta() with test portolio and parameters
+run_test <- function(env = NULL) {
+  create_io(env)
+  setup_inputs(env)
+
+  run_pacta(env)
+
+  tree_io()
+
+  invisible(env)
+}
+
+test_input_files <- function() {
+  c("TestPortfolio_Input.csv", "TestPortfolio_Input_PortfolioParameters.yml")
+}
+
+# Empty the output/ directory set in an environment file
+empty_output <- function(env = NULL) {
+  output <- path_env("PACTA_OUTPUT", env = env)
+  walk_(output, fs::dir_delete)
+}
+
+#' Path to installed files
+#' @examples
+#' extdata_path()
+#'
+#' try(extdata_path("context", "invalid"))
+#'
+#' extdata_path("context", "working_dir")
+#'
+#' extdata_path(c(
+#'   "TestPortfolio_Input.csv",
+#'   "TestPortfolio_Input_PortfolioParameters.yml"
+#' ))
+#' @noRd
+extdata_path <- function(...) {
+  system.file("extdata", ..., package = "pactaCore", mustWork = TRUE)
+}
+
+#' Tree of directories set in an environment file
+#'
+#' @examples
+#' file.exists(".env")
+#'
+#' tree_io()
+#' # Same
+#' tree_envvar(pacta_envvar("input", "output"))
+#'
+#' tree_envvar()
+#' @noRd
+tree_io <- function(env = NULL) {
+  tree_envvar(pacta_envvar("input", "output"), env = env)
+}
+
+tree_envvar <- function(envvar = pacta_envvar(), env = NULL) {
+  walk_(envvar, function(.x) fs::dir_tree(path_env(.x, env = env)))
+  invisible(envvar)
+}
+
+# Like purrr::walk
+walk_ <- function(.x, .f, ...) {
+  lapply(.x, .f, ...)
+  invisible(.x)
+}
+
+`%||%` <- function(x, y) {
+  if (is.null(x)) {
+    y
+  } else {
+    x
+  }
+}
+
+# Populate the input/ directory set in an environment file
+setup_inputs <- function(env = NULL) {
+  paths <- extdata_path(test_input_files())
+  input <- path_env("PACTA_INPUT", env = env)
+  walk_(paths, function(x) fs::file_copy(x, input, overwrite = TRUE))
+
+  invisible(env)
+}
