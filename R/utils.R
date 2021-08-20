@@ -142,18 +142,6 @@ pacta_envvar_once <- function(pattern = "") {
   grep(pattern, envvars, value = TRUE, ignore.case = TRUE)
 }
 
-# Run run_pacta() with test portolio and parameters
-run_test <- function(env = NULL) {
-  create_io(env)
-  setup_inputs(env)
-
-  run_pacta(env)
-
-  tree_io()
-
-  invisible(env)
-}
-
 test_input_files <- function() {
   c("TestPortfolio_Input.csv", "TestPortfolio_Input_PortfolioParameters.yml")
 }
