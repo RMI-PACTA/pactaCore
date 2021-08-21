@@ -3,3 +3,4 @@
 ^LICENSE\.md$
 ^\.env$
 ^README\.Rmd$
+^\.Renviron$
