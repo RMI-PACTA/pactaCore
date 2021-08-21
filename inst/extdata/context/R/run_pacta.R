@@ -52,6 +52,9 @@ setup_output <- function(wd, output) {
     overwrite = TRUE
   )
 
+  files <- fs::dir_ls(output, recurse = TRUE)
+  fs::file_chmod(files, "a+rwx")
+
   invisible(wd)
 }
 
