@@ -5,5 +5,5 @@ services:
     working_dir: /bound
     volumes:
       - ${PACTA_DATA}:/pacta-data:ro
-      - ${PACTA_INPUT}:/input:ro
+      - ${PACTA_INPUT}:/input
       - ${PACTA_OUTPUT}:/output

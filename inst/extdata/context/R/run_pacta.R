@@ -43,6 +43,9 @@ setup_input <- function(source, input) {
     overwrite = TRUE
   )
 
+  files <- fs::dir_ls(input, recurse = TRUE)
+  fs::file_chmod(files, "a+rwx")
+
   invisible(source)
 }
 
