@@ -7,7 +7,6 @@ test_that("with a pacta project in ../pacta creates working_dir", {
   expect_false(fs::dir_exists(results))
 
   run_pacta_core(env)
-  # FIXME: Change ownership to user
   expect_true(fs::dir_exists(results))
 })
 
