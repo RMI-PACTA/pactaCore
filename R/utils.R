@@ -7,6 +7,8 @@ local_pacta <- function(dir = fs::path_temp(),
 }
 
 create_pacta <- function(dir = tempdir(), data = NULL) {
+  dir <- fs::path_abs(dir)
+
   if (!fs::dir_exists(dir)) {
     fs::dir_create(dir)
   }
@@ -88,7 +90,7 @@ create_env <- function(path = fs::path_temp(".env"),
                        input = fs::path_temp("input"),
                        data = getenv_data()) {
   envvars <- pacta_envvar("output", "input", "data")
-  dirs <- c(input, output, data)
+  dirs <- c(output, input, data)
 
   parent_exists <- fs::dir_exists(fs::path_dir(path))
   stopifnot(parent_exists)
