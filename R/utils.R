@@ -88,7 +88,7 @@ create_env <- function(path = fs::path_temp(".env"),
                        input = fs::path_temp("input"),
                        data = getenv_data()) {
   envvars <- pacta_envvar("output", "input", "data")
-  dirs <- c(output, input, data)
+  dirs <- c(input, output, data)
 
   parent_exists <- fs::dir_exists(fs::path_dir(path))
   stopifnot(parent_exists)
@@ -248,24 +248,25 @@ skipping_slow_tests <- function() {
 }
 
 enable_slow_tests <- function() {
-  path <- here::here(".Renviron")
+  path <- ".Renviron"
   out <- sub(
     "PACTA_SKIP_SLOW_TESTS=TRUE",
     "PACTA_SKIP_SLOW_TESTS=FALSE",
     readLines(path)
   )
   writeLines(out, path)
+
+  message("* Restart R and load all.")
 }
 
 dissable_slow_tests <- function() {
-  path <- here::here(".Renviron")
+  path <- ".Renviron"
   out <- sub(
     "PACTA_SKIP_SLOW_TESTS=FALSE",
     "PACTA_SKIP_SLOW_TESTS=TRUE",
     readLines(path)
   )
   writeLines(out, path)
+
+  message("* Restart R and load all.")
 }
-
-
-
