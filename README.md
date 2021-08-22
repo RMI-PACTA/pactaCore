@@ -25,84 +25,45 @@ devtools::install_github("2DegreesInvesting/pactaCore")
 
 ## Setup
 
-Create an environment file defining the paths to the output/, input/ and
-pacta-data/ directories. Here’s mine:
+A good setup for a pacta project looks like this:
 
-    PACTA_OUTPUT=/home/mauro/git/pacta/input
-    PACTA_INPUT=/home/mauro/git/pacta/output
+    pacta/
+    ├── .env
+    ├── input
+    │   ├── TestPortfolio_Input.csv
+    │   └── TestPortfolio_Input_PortfolioParameters.yml
+    └── output/
+
+    pacta-data/
+    |
+    ...
+
+-   The .env file defines the paths to the output/, input/ and
+    pacta-data/ directories. Here’s mine:
+
+<!-- -->
+
     PACTA_DATA=/home/mauro/git/pacta-data
-
-## Example
-
-``` r
-library(pactaCore)
-```
-
-`run_pacta_core()` takes a
-
-It defaults to using a file under your working directory called “.env”.
-Here’s mine:
-
-``` r
-run_pacta_core()
-```
-
-``` r
-fs::dir_tree("../pacta")
-#> ../pacta
-#> ├── input
-#> │   ├── TestPortfolio_Input.csv
-#> │   └── TestPortfolio_Input_PortfolioParameters.yml
-#> └── output
-#>     ├── TestPortfolio_Input.csv
-#>     └── TestPortfolio_Input_PortfolioParameters.yml
-```
-
-<details>
-<summary>
-For developers
-</summary>
-
-When developing pactaCore, you may define `PACTA_*` directories in a
-project-specific `.Renviron` file (which you can edit with
-`usethis::edir_r_environ("project")`). Here is mine:
-
-``` bash
-PACTA_INPUT=/home/mauro/git/pacta/input
-PACTA_OUTPUT=/home/mauro/git/pacta/output
-PACTA_DATA=/home/mauro/git/pacta-data
-```
-
-You can then setup persistent IO directories for tests with
-`create_pacta()`. For example:
-
-``` r
-devtools::load_all()
-#> ℹ Loading pactaCore
-
-create_pacta("../pacta")
-```
-
-For tests you may instead create ephemeral IO directories with
-`local_pacta()`.
-
-</details>
-
-## Setup
-
--   The output/ directory can be empty.
+    PACTA_INPUT=/home/mauro/git/pacta/output
+    PACTA_OUTPUT=/home/mauro/git/pacta/input
 
 -   The input/ directory must contain portfolio files like
     [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
     and parameters files like
     [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
 
+-   The output/ directory can be empty.
+
 -   The pacta-data/ directory can be cloned from its private GitHub
-    repository.
+    repository (provided you have access) with:
 
 ``` bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
 ```
+
+Typically the .env file, and the input/ and output/ directories all live
+under the same parent directory (e.g. pacta/), while the pacta-data/
+directory lives elsewhere.
 
 <details>
 
@@ -154,25 +115,22 @@ $Bonds_results_portfolio.rda
 3 TestPortfolio_Input          Test
 ```
 
--   The tree of the input/ directory:
+</details>
 
-``` bash
-(input)
-├── TestPortfolio_Input.csv
-└── TestPortfolio_Input_PortfolioParameters.yml
+## Example
 
-0 directories, 2 files
+``` r
+library(pactaCore)
 ```
 
--   The tree of the output/ directory before `pacta_core()`:
+Use `run_pacta_core()` with an environment file, or default to “.env”
+under the working directory.
 
-``` bash
-(output)
-
-0 directories, 0 files
+``` r
+run_pacta_core()
 ```
 
--   The tree of the output/ directory after `pacta_core()`:
+-   The output/ directory should now look like this:
 
 ``` bash
 output
@@ -210,5 +168,29 @@ output
     └── 50_Outputs
         └── TestPortfolio_Input
 ```
+
+<details>
+<summary>
+For developers
+</summary>
+
+When developing pactaCore, you may define `PACTA_*` directories in a
+project-specific `.Renviron`. Here is mine:
+
+``` bash
+PACTA_INPUT=/home/mauro/git/pacta/input
+PACTA_OUTPUT=/home/mauro/git/pacta/output
+PACTA_DATA=/home/mauro/git/pacta-data
+```
+
+You can then setup persistent IO directories with `create_pacta()`,
+e.g.:
+
+``` r
+devtools::load_all()
+create_pacta("/home/mauro/git/pacta")
+```
+
+For ephemeral IO directories see `local_pacta()`.
 
 </details>
