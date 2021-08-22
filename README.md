@@ -9,9 +9,9 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of pactaCore is to to help you run the core of [PACTA
-methodology](https://2degrees-investing.org/resource/pacta/) in a
-reproducible way and with a single command.
+The goal of pactaCore is run the core steps of the [PACTA
+methodology](https://2degrees-investing.org/resource/pacta/) with a
+single command, in a reproducible way.
 
 ## Installation
 
@@ -23,44 +23,70 @@ You can install the development version from
 devtools::install_github("2DegreesInvesting/pactaCore")
 ```
 
+## Setup
+
+Create an environment file defining the paths to the output/, input/ and
+pacta-data/ directories. Here’s mine:
+
+    PACTA_OUTPUT=/home/mauro/git/pacta/input
+    PACTA_INPUT=/home/mauro/git/pacta/output
+    PACTA_DATA=/home/mauro/git/pacta-data
+
 ## Example
 
 ``` r
 library(pactaCore)
 ```
 
--   `pacta_core()` takes paths to output/, input/ and pacta-data/
-    directories (see Setup below). It defaults paths under your working
-    directory:
+`run_pacta_core()` takes a
+
+It defaults to using a file under your working directory called “.env”.
+Here’s mine:
 
 ``` r
-withr::local_dir("../pacta")
-fs::dir_ls(regexp = "output|input|pacta-data")
-#> input      output     pacta-data
+run_pacta_core()
 ```
 
 ``` r
-pacta_core()
+fs::dir_tree("../pacta")
+#> ../pacta
+#> ├── input
+#> │   ├── TestPortfolio_Input.csv
+#> │   └── TestPortfolio_Input_PortfolioParameters.yml
+#> └── output
+#>     ├── TestPortfolio_Input.csv
+#>     └── TestPortfolio_Input_PortfolioParameters.yml
 ```
 
--   `pacta_core_with_env()` takes a paths to an environment file
-    defining the paths to the output/, input/ and pacta-data/
-    directories. It defaults a file called “.env” under your working
-    directory:
+<details>
+<summary>
+For developers
+</summary>
+
+When developing pactaCore, you may define `PACTA_*` directories in a
+project-specific `.Renviron` file (which you can edit with
+`usethis::edir_r_environ("project")`). Here is mine:
+
+``` bash
+PACTA_INPUT=/home/mauro/git/pacta/input
+PACTA_OUTPUT=/home/mauro/git/pacta/output
+PACTA_DATA=/home/mauro/git/pacta-data
+```
+
+You can then setup persistent IO directories for tests with
+`create_pacta()`. For example:
 
 ``` r
-withr::local_dir("../pacta")
-readLines(".env")
-#> [1] "PACTA_DATA=/home/mauro/git/pacta/pacta-data"
-#> [2] "PACTA_INPUT=/home/mauro/git/pacta/input"    
-#> [3] "PACTA_OUTPUT=/home/mauro/git/pacta/output"
+devtools::load_all()
+#> ℹ Loading pactaCore
+
+create_pacta("../pacta")
 ```
 
-``` r
-pacta_core_with_env()
-```
+For tests you may instead create ephemeral IO directories with
+`local_pacta()`.
 
-Both functions produce the same output.
+</details>
 
 ## Setup
 
