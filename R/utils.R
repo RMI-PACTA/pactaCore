@@ -1,45 +1,3 @@
-local_pacta <- function(dir = fs::path_temp(),
-                        data = NULL,
-                        envir = parent.frame()) {
-  dir <- create_pacta(dir = dir, data = data)
-  withr::defer(fs::dir_delete(dir), envir = envir)
-  invisible(dir)
-}
-
-create_pacta <- function(dir = tempdir(), data = NULL) {
-  dir <- fs::path_abs(dir)
-
-  if (!fs::dir_exists(dir)) {
-    fs::dir_create(dir)
-  }
-
-  .env <- create_env(
-    path = fs::path_abs(fs::path(dir, ".env")),
-    input = fs::path_abs(fs::path(dir, "input")),
-    output = fs::path_abs(fs::path(dir, "output")),
-    data = data %||% getenv_data()
-  )
-  create_io(.env)
-  setup_inputs(.env)
-
-  invisible(dir)
-}
-
-getenv_data <- function() {
-  out <- Sys.getenv("PACTA_DATA", unset = "")
-
-  unset <- identical(out, "")
-  if (unset) {
-    stop(
-      "The environment PACTA_DATA must be set.\n",
-      "Do you need to set it in .Renviron? (see `?usethis::edit_r_environ()`",
-      call. = FALSE
-    )
-  }
-
-  out
-}
-
 #' Explore pacta paths
 #'
 #' @param env String. Path to environment file. `NULL` defaults to ".env".
@@ -70,67 +28,6 @@ ls_pacta <- function(env = NULL, ...) {
   append(env, dirs)
 }
 
-#' Help create an ephemeral environment file.
-#'
-#' See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
-#'
-#' @param path String. Path to the environment file you want to create.
-#' @param ... Passed on to `create_env()`.
-#' @param env Must be passed on to `withr::dever()`.
-#'
-#' @examples
-#' # This local context is usually a call to test_that()
-#' local({
-#'   env <- local_env()
-#'   fs::file_exists(env)
-#'   readLines(env)
-#' })
-#'
-#' # Gone
-#' fs::file_exists(env)
-#' @noRd
-local_env <- function(path = fs::path_temp(".env"), ..., envir = parent.frame()) {
-  create_env(path, ...)
-  withr::defer(fs::file_delete(path), envir = envir)
-  invisible(path)
-}
-
-#' Help create an environment file from variables set in .Renviron
-#' @examples
-#' env <- create_env_from_renviron()
-#' readLines(env)
-#' @noRd
-create_env_from_renviron <- function(path = fs::path_temp(".env")) {
-  create_env(
-    path,
-    output = Sys.getenv("PACTA_OUTPUT"),
-    input = Sys.getenv("PACTA_INPUT"),
-    data = Sys.getenv("PACTA_DATA")
-  )
-}
-
-#' Create an environment file with required variables
-#' @examples
-#' env <- create_env(output = "a", input = "b", data = "c")
-#' env
-#' writeLines(readLines(env))
-#' @noRd
-create_env <- function(path = fs::path_temp(".env"),
-                       output = fs::path_temp("output"),
-                       input = fs::path_temp("input"),
-                       data = getenv_data()) {
-  envvars <- pacta_envvar("output", "input", "data")
-  dirs <- c(output, input, data)
-
-  parent_exists <- fs::dir_exists(fs::path_dir(path))
-  stopifnot(parent_exists)
-  fs::file_exists(path)
-
-  writeLines(sprintf("%s=%s", envvars, dirs), con = path)
-
-  invisible(path)
-}
-
 #' Create input/ and output/ directories set in an environment file
 #' @examples
 #' env <- create_env()
@@ -146,7 +43,7 @@ path_env <- function(envvar = pacta_envvar(), env = NULL) {
   unlist(lapply(envvar, path_env_once, env = env))
 }
 
-path_env_once <- function(envvar = pacta_envvar(), env = NULL) {
+path_env_once <- function(envvar, env = NULL) {
   env <- env %||% fs::path_wd(".env")
 
   envvar <- paste0("^", envvar, "=")

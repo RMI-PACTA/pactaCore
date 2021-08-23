@@ -1,16 +1,16 @@
 test_that("local_pacta() creates a pacta project locally", {
-  .dir <- tempdir()
+  dir <- tempdir()
 
   local({
-    .dir <- local_pacta()
-    expect_true(fs::file_exists(fs::path(.dir, ".env")))
-    expect_true(fs::dir_exists(fs::path(.dir, "input")))
-    expect_true(fs::dir_exists(fs::path(.dir, "output")))
+    local_pacta()
+    expect_true(fs::file_exists(fs::path(dir, ".env")))
+    expect_true(fs::dir_exists(fs::path(dir, "input")))
+    expect_true(fs::dir_exists(fs::path(dir, "output")))
   })
 
-  expect_false(fs::file_exists(fs::path(.dir, ".env")))
-  expect_false(fs::dir_exists(fs::path(.dir, "input")))
-  expect_false(fs::dir_exists(fs::path(.dir, "output")))
+  expect_false(fs::file_exists(fs::path(dir, ".env")))
+  expect_false(fs::dir_exists(fs::path(dir, "input")))
+  expect_false(fs::dir_exists(fs::path(dir, "output")))
 })
 
 test_that("create_pacta() creates .env, input/, and output/", {
@@ -58,4 +58,11 @@ test_that("local_env() can create a good env file, with any name", {
 
   local_env(path = "myenv", output = "a/b/c")
   expect_equal(path_env("PACTA_OUTPUT", env = "myenv"), "a/b/c")
+})
+
+test_that("path_env() returns the expected path", {
+  env <- local_env()
+  expect_equal(fs::path_file(path_env("PACTA_INPUT", env)), "input")
+  expect_equal(fs::path_file(path_env("PACTA_OUTPUT", env)), "output")
+  expect_equal(fs::path_file(path_env("PACTA_DATA", env)), "pacta-data")
 })
