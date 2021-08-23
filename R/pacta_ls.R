@@ -11,16 +11,16 @@
 #' dir <- tempdir("pacta")
 #'
 #' withr::with_dir(dir, {
-#' fs::dir_create("pacta-data")
-#' local_pacta(dir, data = fs::path_temp("pacta-data"))
+#'   fs::dir_create("pacta-data")
+#'   local_pacta(dir, data = fs::path_temp("pacta-data"))
 #'
-#' # Inspect
-#' readLines(".env")
+#'   # Inspect
+#'   readLines(".env")
 #'
-#' pacta_ls()
-#' pacta_info()
+#'   pacta_ls()
+#'   pacta_info()
 #'
-#' pacta_permissions(recurse = TRUE)
+#'   pacta_permissions(recurse = TRUE)
 #' })
 pacta_ls <- function(env = NULL, ...) {
   env <- env %||% fs::path_wd(".env")
