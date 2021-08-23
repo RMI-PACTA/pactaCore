@@ -1,56 +1,3 @@
-#' Explore pacta paths
-#'
-#' @param env String. Path to environment file. `NULL` defaults to ".env".
-#' @param ... Passed on to `fs::dir_ls()`.
-#'
-#' @examples
-#' permissions_pacta(recurse = TRUE)
-#' info_pacta()
-#' ls_pacta()
-#' @noRd
-permissions_pacta <- function(env = NULL, ...) {
-  show_permissions <- function(x) x[c("path", "permissions", "user", "group")]
-  lapply(info_pacta(env = env, ...), show_permissions)
-}
-
-info_pacta <- function(env = NULL, ...) {
-  lapply(ls_pacta(env = env, ...), fs::file_info)
-}
-
-ls_pacta <- function(env = NULL, ...) {
-  env <- env %||% fs::path_wd(".env")
-  names(env) <- env
-
-  dirs <- path_env(pacta_envvar())
-  names(dirs) <- dirs
-  dirs <- lapply(dirs, fs::dir_ls, ...)
-
-  append(env, dirs)
-}
-
-#' Create input/ and output/ directories set in an environment file
-#' @examples
-#' env <- create_env()
-#' create_io(env)
-#' fs::dir_ls(tempdir(), all = TRUE, regexp = ".env|input|output")
-#' @noRd
-create_io <- function(env = NULL) {
-  io <- path_env(pacta_envvar("input", "output"), env = env)
-  fs::dir_create(io)
-}
-
-path_env <- function(envvar = pacta_envvar(), env = NULL) {
-  unlist(lapply(envvar, path_env_once, env = env))
-}
-
-path_env_once <- function(envvar, env = NULL) {
-  env <- env %||% fs::path_wd(".env")
-
-  envvar <- paste0("^", envvar, "=")
-  var_path <- grep(envvar, readLines(env), value = TRUE)
-  sub(envvar, "", var_path)
-}
-
 #' Get enviroment variables succinctly and in a specific order
 #' @examples
 #' pacta_envvar()
@@ -97,11 +44,6 @@ extdata_path <- function(...) {
   system.file("extdata", ..., package = "pactaCore", mustWork = TRUE)
 }
 
-tree_envvar <- function(envvar = pacta_envvar(), env = NULL) {
-  walk_(envvar, function(.x) fs::dir_tree(path_env(.x, env = env)))
-  invisible(envvar)
-}
-
 # Like purrr::walk
 walk_ <- function(.x, .f, ...) {
   lapply(.x, .f, ...)
@@ -114,15 +56,6 @@ walk_ <- function(.x, .f, ...) {
   } else {
     x
   }
-}
-
-# Populate the input/ directory set in an environment file
-setup_inputs <- function(env = NULL) {
-  paths <- extdata_path(test_input_files())
-  input <- path_env("PACTA_INPUT", env = env)
-  walk_(paths, function(x) fs::file_copy(x, input, overwrite = TRUE))
-
-  invisible(env)
 }
 
 #' Create the structure of pacta's working_dir/
