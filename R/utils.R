@@ -17,7 +17,7 @@ pacta_envvar_once <- function(pattern = "") {
   grep(pattern, envvars, value = TRUE, ignore.case = TRUE)
 }
 
-test_input_files <- function() {
+portfolio_and_parameter_files <- function() {
   c("TestPortfolio_Input.csv", "TestPortfolio_Input_PortfolioParameters.yml")
 }
 

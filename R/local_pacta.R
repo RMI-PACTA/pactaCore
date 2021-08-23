@@ -94,7 +94,7 @@ create_io <- function(env = NULL) {
 }
 
 setup_inputs <- function(env = NULL) {
-  paths <- extdata_path(test_input_files())
+  paths <- extdata_path(portfolio_and_parameter_files())
   input <- path_env("PACTA_INPUT", env = env)
   walk_(paths, function(x) fs::file_copy(x, input, overwrite = TRUE))
 
