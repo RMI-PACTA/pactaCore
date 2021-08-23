@@ -18,13 +18,14 @@ Run the core steps of the PACTA methodology
 \examples{
 if (interactive()) {
   dir <- fs::path_abs("../pacta")
-  create_pacta(dir)
+  local_pacta(dir)
 
   env <- fs::path(dir, ".env")
   readLines(env)
+  fs::dir_tree(dir, all = TRUE)
 
   run_pacta_core(env)
 
-  fs::dir_tree(dir)
+  fs::dir_tree(dir, all = TRUE)
 }
 }
