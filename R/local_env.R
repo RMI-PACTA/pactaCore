@@ -39,9 +39,10 @@ create_env <- function(path = fs::path_temp(".env"),
   envvars <- pacta_envvar("output", "input", "data")
   dirs <- c(output, input, data)
 
-  parent_exists <- fs::dir_exists(fs::path_dir(path))
-  stopifnot(parent_exists)
-  fs::file_exists(path)
+  parent <- fs::path_dir(path)
+  if (!fs::dir_exists(parent)) {
+    fs::dir_create(parent, recurse = TRUE)
+  }
 
   writeLines(sprintf("%s=%s", envvars, dirs), con = path)
 
