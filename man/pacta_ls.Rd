@@ -23,7 +23,8 @@ Explore pacta paths
 \examples{
 # Setup
 dir <- tempdir("pacta")
-withr::local_dir(dir)
+
+withr::with_dir(dir, {
 fs::dir_create("pacta-data")
 local_pacta(dir, data = fs::path_temp("pacta-data"))
 
@@ -34,5 +35,6 @@ pacta_ls()
 pacta_info()
 
 pacta_permissions(recurse = TRUE)
+})
 }
 \keyword{internal}

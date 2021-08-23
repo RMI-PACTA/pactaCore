@@ -9,7 +9,8 @@
 #' @examples
 #' # Setup
 #' dir <- tempdir("pacta")
-#' withr::local_dir(dir)
+#'
+#' withr::with_dir(dir, {
 #' fs::dir_create("pacta-data")
 #' local_pacta(dir, data = fs::path_temp("pacta-data"))
 #'
@@ -20,6 +21,7 @@
 #' pacta_info()
 #'
 #' pacta_permissions(recurse = TRUE)
+#' })
 pacta_ls <- function(env = NULL, ...) {
   env <- env %||% fs::path_wd(".env")
   names(env) <- env
