@@ -8,7 +8,7 @@
 #' @examples
 #' if (interactive()) {
 #'   dir <- fs::path_abs("../pacta")
-#'   create_pacta(dir)
+#'   local_pacta(dir)
 #'
 #'   env <- fs::path(dir, ".env")
 #'   readLines(env)
