@@ -20,5 +20,6 @@ withr::local_dir(dir)
 
 pacta_ls(env)
 pacta_info()
+
 pacta_permission(recurse = TRUE)
 }
