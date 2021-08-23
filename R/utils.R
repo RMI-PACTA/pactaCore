@@ -50,7 +50,7 @@ create_working_dir <- function(dir = tempdir()) {
 }
 
 working_dir_paths <- function() {
-    subdir <- c(
+  subdir <- c(
     "10_Parameter_File",
     "00_Log_Files",
     fs::path("00_Log_Files", "TestPortfolio_Input"),
