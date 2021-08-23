@@ -114,20 +114,13 @@ $Bonds_results_portfolio.rda
 
 </details>
 
-## Example
+## Usage
 
 ``` r
-library(pactaCore)
+pactaCore::run_pacta_core(env = ".env")
 ```
 
-Use `run_pacta_core()` with an environment file, or default to “.env”
-under the working directory.
-
-``` r
-run_pacta_core()
-```
-
--   The output/ directory should now look like this:
+The output/ directory should now look like this:
 
 ``` bash
 output
@@ -165,29 +158,3 @@ output
     └── 50_Outputs
         └── TestPortfolio_Input
 ```
-
-<details>
-<summary>
-For developers
-</summary>
-
-When developing pactaCore, you may define `PACTA_*` directories in a
-project-specific `.Renviron`. Here is mine:
-
-``` bash
-PACTA_INPUT=/home/mauro/git/pacta/input
-PACTA_OUTPUT=/home/mauro/git/pacta/output
-PACTA_DATA=/home/mauro/git/pacta-data
-```
-
-You can then setup persistent IO directories with `create_pacta()`,
-e.g.:
-
-``` r
-devtools::load_all()
-create_pacta("/home/mauro/git/pacta")
-```
-
-For ephemeral IO directories see `local_pacta()`.
-
-</details>
