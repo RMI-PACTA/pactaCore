@@ -1,13 +1,3 @@
-portfolio_and_parameter_files <- function() {
-  c("TestPortfolio_Input.csv", "TestPortfolio_Input_PortfolioParameters.yml")
-}
-
-# Empty the output/ directory set in an environment file
-empty_output <- function(env = NULL) {
-  output <- path_env("PACTA_OUTPUT", env = env)
-  walk_(output, fs::dir_delete)
-}
-
 #' Path to installed files
 #' @examples
 #' extdata_path()
@@ -39,11 +29,6 @@ walk_ <- function(.x, .f, ...) {
   }
 }
 
-#' Create the structure of pacta's working_dir/
-#'
-#' @examples
-#' dir <- create_working_dir()
-#' fs::dir_tree(fs::path(dir, "working_dir"))
 create_working_dir <- function(dir = tempdir()) {
   fs::dir_create(fs::path(dir, working_dir_paths()))
   invisible(dir)
@@ -69,4 +54,14 @@ working_dir_paths <- function() {
 ok_working_dir <- function() {
   paths <- extdata_path("context", working_dir_paths())
   all(fs::dir_exists(paths))
+}
+
+portfolio_and_parameter_files <- function() {
+  c("TestPortfolio_Input.csv", "TestPortfolio_Input_PortfolioParameters.yml")
+}
+
+# Empty the output/ directory set in an environment file
+empty_output <- function(env = NULL) {
+  output <- path_env("PACTA_OUTPUT", env = env)
+  walk_(output, fs::dir_delete)
 }

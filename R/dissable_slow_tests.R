@@ -32,6 +32,11 @@ dissable_slow_tests <- function() {
   message("* Restart R and load all.")
 }
 
+skip_slow_tests <- function() {
+  skip_on_cran()
+  skip_if(skipping_slow_tests())
+}
+
 skipping_slow_tests <- function() {
   as.logical(Sys.getenv("PACTA_SKIP_SLOW_TESTS"))
 }

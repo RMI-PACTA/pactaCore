@@ -25,9 +25,15 @@ create_env(
 See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
 }
 \examples{
-# This local context is usually a call to test_that()
+# The local context is usually a call to test_that()
+env <- tempfile("env_")
 local({
-  env <- local_env()
+  env <- local_env(
+    path = env,
+    input = "a/b",
+    output = "c/d",
+    data = "e/f/pacta-data"
+  )
   fs::file_exists(env)
   readLines(env)
 })
@@ -35,9 +41,15 @@ local({
 # Gone
 fs::file_exists(env)
 
-env <- create_env(output = "a", input = "b", data = "c")
-env
-writeLines(readLines(env))
+# Persists
+create_env(
+  path = env,
+  input = "a/b",
+  output = "c/d",
+  data = "e/f/pacta-data"
+)
+fs::file_exists(env)
+readLines(env)
 }
 \keyword{inernal}
 \keyword{internal}

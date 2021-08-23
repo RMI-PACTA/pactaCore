@@ -1,5 +1,5 @@
 test_that("with a pacta project defined in .Renviron creates working_dir", {
-  skip_if(skipping_slow_tests())
+  skip_slow_tests()
 
   parent <- fs::path_dir(Sys.getenv("PACTA_OUTPUT"))
   local_pacta(parent)
@@ -14,7 +14,7 @@ test_that("with a pacta project defined in .Renviron creates working_dir", {
 })
 
 test_that("with a pacta project in /tmp/ creates working_dir", {
-  skip_if(skipping_slow_tests())
+  skip_slow_tests()
 
   # FIXME: Something is wrong
   pacta <- local_pacta("/home/mauro/tmp/pacta")

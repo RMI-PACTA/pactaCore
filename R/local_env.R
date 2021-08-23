@@ -10,9 +10,15 @@
 #' @keywords internal
 #'
 #' @examples
-#' # This local context is usually a call to test_that()
+#' # The local context is usually a call to test_that()
+#' env <- tempfile("env_")
 #' local({
-#'   env <- local_env()
+#'   env <- local_env(
+#'     path = env,
+#'     input = "a/b",
+#'     output = "c/d",
+#'     data = "e/f/pacta-data"
+#'   )
 #'   fs::file_exists(env)
 #'   readLines(env)
 #' })
@@ -20,9 +26,15 @@
 #' # Gone
 #' fs::file_exists(env)
 #'
-#' env <- create_env(output = "a", input = "b", data = "c")
-#' env
-#' writeLines(readLines(env))
+#' # Persists
+#' create_env(
+#'   path = env,
+#'   input = "a/b",
+#'   output = "c/d",
+#'   data = "e/f/pacta-data"
+#' )
+#' fs::file_exists(env)
+#' readLines(env)
 local_env <- function(path = fs::path_temp(".env"), ..., envir = parent.frame()) {
   create_env(path, ...)
   withr::defer(fs::file_delete(path), envir = envir)
