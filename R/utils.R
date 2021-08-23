@@ -70,31 +70,3 @@ ok_working_dir <- function() {
   paths <- extdata_path("context", working_dir_paths())
   all(fs::dir_exists(paths))
 }
-
-skipping_slow_tests <- function() {
-  as.logical(Sys.getenv("PACTA_SKIP_SLOW_TESTS"))
-}
-
-enable_slow_tests <- function() {
-  path <- ".Renviron"
-  out <- sub(
-    "PACTA_SKIP_SLOW_TESTS=TRUE",
-    "PACTA_SKIP_SLOW_TESTS=FALSE",
-    readLines(path)
-  )
-  writeLines(out, path)
-
-  message("* Restart R and load all.")
-}
-
-dissable_slow_tests <- function() {
-  path <- ".Renviron"
-  out <- sub(
-    "PACTA_SKIP_SLOW_TESTS=FALSE",
-    "PACTA_SKIP_SLOW_TESTS=TRUE",
-    readLines(path)
-  )
-  writeLines(out, path)
-
-  message("* Restart R and load all.")
-}
