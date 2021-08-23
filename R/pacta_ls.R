@@ -7,8 +7,14 @@
 #' @keywords internal
 #'
 #' @examples
-#' dir <- local_pacta()
+#' # Setup
+#' dir <- tempdir("pacta")
 #' withr::local_dir(dir)
+#' fs::dir_create("pacta-data")
+#' local_pacta(dir, data = fs::path_temp("pacta-data"))
+#'
+#' # Inspect
+#' readLines(".env")
 #'
 #' pacta_ls()
 #' pacta_info()

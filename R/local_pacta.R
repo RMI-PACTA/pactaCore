@@ -13,8 +13,8 @@
 #' @export
 #'
 #' @examples
-#' withr::local_envvar(c(PACTA_DATA = "a/b/c/pacta-data"))
 #' dir <- fs::path(tempdir(), "pacta")
+#' withr::local_envvar(c(PACTA_DATA = fs::path(dir, "pacta-data")))
 #'
 #' # This local context is usually a call to test_that()
 #' local({
