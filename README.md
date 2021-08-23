@@ -25,7 +25,8 @@ devtools::install_github("2DegreesInvesting/pactaCore")
 
 ## Setup
 
-A good setup for a pacta project looks like this:
+A good setup for a pacta project looks like this (the
+directory-structure is optional):
 
     pacta/
     ├── .env
@@ -35,35 +36,31 @@ A good setup for a pacta project looks like this:
     └── output/
 
     pacta-data/
-    |
+    ├── ...
     ...
 
--   The .env file defines the paths to the output/, input/ and
-    pacta-data/ directories. Here’s mine:
+-   The .env file locates the input/, output/, and pacta-data/
+    directories, e.g.:
 
 <!-- -->
 
-    PACTA_DATA=/home/mauro/git/pacta-data
-    PACTA_INPUT=/home/mauro/git/pacta/output
     PACTA_OUTPUT=/home/mauro/git/pacta/input
+    PACTA_INPUT=/home/mauro/git/pacta/output
+    PACTA_DATA=/home/mauro/git/pacta-data
 
 -   The input/ directory must contain portfolio files like
     [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
     and parameters files like
     [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
 
--   The output/ directory can be empty.
+-   The output/ directory typically starts empty.
 
--   The pacta-data/ directory can be cloned from its private GitHub
-    repository (provided you have access) with:
+-   The pacta-data/ directory is private. With permission get if from
+    GitHub with:
 
 ``` bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
 ```
-
-Typically the .env file, and the input/ and output/ directories all live
-under the same parent directory (e.g. pacta/), while the pacta-data/
-directory lives elsewhere.
 
 <details>
 
