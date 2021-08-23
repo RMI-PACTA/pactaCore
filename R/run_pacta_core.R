@@ -2,8 +2,16 @@
 #' @export
 #'
 #' @examples
-#' run_pacta_core(env = create_env_from_renviron())
-#' @noRd
+#' if (interactive()) {
+#'   dir <- withr::local_tempdir("pacta")
+#'   withr::local_dir(dir)
+#'   local_pacta(dir)
+#'
+#'   fs::dir_tree(all = TRUE)
+#'   readLines(".env")
+#'
+#'   run_pacta_core(".env")
+#' }
 run_pacta_core <- function(env) {
   withr::local_dir(context_path())
 

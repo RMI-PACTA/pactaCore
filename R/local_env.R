@@ -4,7 +4,7 @@
 #'
 #' @param path String. Path to the environment file you want to create.
 #' @param ... Passed on to `create_env()`.
-#' @param env Must be passed on to `withr::dever()`.
+#' @param env Must be passed on to `withr::defer()`.
 #'
 #' @export
 #' @keywords internal

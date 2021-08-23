@@ -19,7 +19,7 @@ create_env(
 
 \item{...}{Passed on to \code{create_env()}.}
 
-\item{env}{Must be passed on to \code{withr::dever()}.}
+\item{env}{Must be passed on to \code{withr::defer()}.}
 }
 \description{
 See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.

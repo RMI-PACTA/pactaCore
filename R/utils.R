@@ -29,6 +29,12 @@ walk_ <- function(.x, .f, ...) {
   }
 }
 
+#' Create a working_dir/ directory with the folders structure that pacta expects
+#'
+#' @examples
+#' dir <- tempdir()
+#' create_working_dir(dir)
+#' fs::dir_tree(fs::path(dir, "working_dir"))
 create_working_dir <- function(dir = tempdir()) {
   fs::dir_create(fs::path(dir, working_dir_paths()))
   invisible(dir)
