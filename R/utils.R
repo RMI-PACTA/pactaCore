@@ -40,6 +40,33 @@ getenv_data <- function() {
   out
 }
 
+#' Explore pacta pahts
+#' @examples
+#' info_pacta()
+#' ls_pacta()
+#' permissions_pacta()
+#' @noRd
+info_pacta <- function(env = NULL) {
+  lapply(ls_pacta(env = env), fs::file_info)
+}
+
+ls_pacta <- function(env = NULL) {
+  env <- env %||% fs::path_wd(".env")
+  names(env) <- env
+
+  dirs <- path_env(pacta_envvar())
+  names(dirs) <- dirs
+  dirs <- lapply(dirs, fs::dir_ls)
+
+  append(env, dirs)
+}
+
+permissions_pacta <- function(env = NULL) {
+  show_permissions <- function(x) x[c("path", "permissions", "user", "group")]
+  lapply(info_pacta(env = env), show_permissions)
+}
+
+
 #' Help create an ephemeral environment file.
 #'
 #' See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
@@ -168,21 +195,6 @@ empty_output <- function(env = NULL) {
 #' @noRd
 extdata_path <- function(...) {
   system.file("extdata", ..., package = "pactaCore", mustWork = TRUE)
-}
-
-#' Tree of directories set in an environment file
-#'
-#' @examples
-#' file.exists(".env")
-#'
-#' tree_io()
-#' # Same
-#' tree_envvar(pacta_envvar("input", "output"))
-#'
-#' tree_envvar()
-#' @noRd
-tree_io <- function(env = NULL) {
-  tree_envvar(pacta_envvar("input", "output"), env = env)
 }
 
 tree_envvar <- function(envvar = pacta_envvar(), env = NULL) {
