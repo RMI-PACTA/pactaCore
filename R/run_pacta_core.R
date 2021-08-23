@@ -15,7 +15,7 @@
 #'   fs::dir_tree(dir, all = TRUE)
 #'
 #'   run_pacta_core(env)
-  #'
+#'
 #'   fs::dir_tree(dir, all = TRUE)
 #' }
 run_pacta_core <- function(env = ".env") {

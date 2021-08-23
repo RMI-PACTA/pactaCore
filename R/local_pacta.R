@@ -17,12 +17,12 @@
 #' dir <- fs::path(tempdir(), "pacta")
 #'
 #' # This local context is usually a call to test_that()
-#'   local({
-#'     local_pacta(dir)
-#'     fs::dir_tree(dir, all = TRUE)
-#'   })
+#' local({
+#'   local_pacta(dir)
+#'   fs::dir_tree(dir, all = TRUE)
+#' })
 #'
-#'  fs::dir_exists(dir)
+#' fs::dir_exists(dir)
 local_pacta <- function(dir = tempdir(),
                         data = getenv_data(),
                         envir = parent.frame()) {

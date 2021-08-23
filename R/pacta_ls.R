@@ -40,4 +40,3 @@ pacta_permissions <- function(env = NULL, ...) {
 pacta_info <- function(env = NULL, ...) {
   lapply(pacta_ls(env = env, ...), fs::file_info)
 }
-
