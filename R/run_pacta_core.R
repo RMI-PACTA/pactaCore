@@ -7,25 +7,27 @@
 #'
 #' @examples
 #' if (interactive()) {
-#'   dir <- "../pacta"
+#'   dir <- fs::path_abs("../pacta")
 #'   create_pacta(dir)
-#'   withr::local_dir(dir)
 #'
-#'   fs::dir_tree(all = TRUE)
-#'   readLines(".env")
+#'   env <- fs::path(dir, ".env")
+#'   readLines(env)
 #'
-#'   run_pacta_core(".env")
+#'   run_pacta_core(env)
+#'
+#'   fs::dir_tree(dir)
 #' }
 #'
 #' if (interactive()) {
-#'   dir <- withr::local_tempdir("pacta")
-#'   withr::local_dir(dir)
+#'   dir <- fs::path_abs("../pacta")
 #'   local_pacta(dir)
 #'
-#'   fs::dir_tree(all = TRUE)
-#'   readLines(".env")
+#'   env <- fs::path(dir, ".env")
+#'   readLines(env)
 #'
-#'   run_pacta_core(".env")
+#'   run_pacta_core(env)
+#'
+#'   fs::dir_tree(dir)
 #' }
 run_pacta_core <- function(env = ".env") {
   withr::local_dir(context_path())
