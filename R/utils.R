@@ -31,6 +31,11 @@ walk_ <- function(.x, .f, ...) {
 
 #' Create a working_dir/ directory with the folders structure that pacta expects
 #'
+#' @param dir String. Path to where to create a pacta project.
+#'
+#' @export
+#' @keywords internal
+#'
 #' @examples
 #' dir <- tempdir()
 #' create_working_dir(dir)

@@ -6,6 +6,9 @@
 \usage{
 create_working_dir(dir = tempdir())
 }
+\arguments{
+\item{dir}{String. Path to where to create a pacta project.}
+}
 \description{
 Create a working_dir/ directory with the folders structure that pacta expects
 }
@@ -14,3 +17,4 @@ dir <- tempdir()
 create_working_dir(dir)
 fs::dir_tree(fs::path(dir, "working_dir"))
 }
+\keyword{internal}

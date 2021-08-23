@@ -3,6 +3,7 @@
 export(create_env)
 export(create_env_from_renviron)
 export(create_pacta)
+export(create_working_dir)
 export(enable_slow_tests)
 export(getenv_data)
 export(local_env)

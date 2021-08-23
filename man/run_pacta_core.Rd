@@ -2,14 +2,31 @@
 % Please edit documentation in R/run_pacta_core.R
 \name{run_pacta_core}
 \alias{run_pacta_core}
-\title{Run pacta core}
+\title{Run the core steps of the PACTA methodology}
 \usage{
-run_pacta_core(env)
+run_pacta_core(env = ".env")
+}
+\arguments{
+\item{env}{String. Path to an environment file with pacta variables.}
+}
+\value{
+Called for its side effect. Returns the first argument inbisibly.
 }
 \description{
-Run pacta core
+Run the core steps of the PACTA methodology
 }
 \examples{
+if (interactive()) {
+  dir <- "../pacta"
+  withr::local_dir(dir)
+  local_pacta(dir)
+
+  fs::dir_tree(all = TRUE)
+  readLines(".env")
+
+  run_pacta_core(".env")
+}
+
 if (interactive()) {
   dir <- withr::local_tempdir("pacta")
   withr::local_dir(dir)
