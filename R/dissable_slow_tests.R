@@ -33,8 +33,8 @@ dissable_slow_tests <- function() {
 }
 
 skip_slow_tests <- function() {
-  skip_on_cran()
-  skip_if(skipping_slow_tests())
+  testthat::skip_on_cran()
+  testthat::skip_if(skipping_slow_tests())
 }
 
 skipping_slow_tests <- function() {

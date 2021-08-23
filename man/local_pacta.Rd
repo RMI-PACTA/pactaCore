@@ -26,25 +26,14 @@ create_pacta(dir = tempdir(), data = getenv_data())
 See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
 }
 \examples{
-# This local context is usually a call to test_that()
 dir <- fs::path(tempdir(), "pacta")
-fs::dir_exists(dir)
 
-local({
-  fs::dir_exists(dir)
-  local_pacta(dir)
-  fs::dir_exists(dir)
-})
+# This local context is usually a call to test_that()
+  local({
+    local_pacta(dir)
+    fs::dir_tree(dir, all = TRUE)
+  })
 
-# Gone
-fs::dir_exists(dir)
-
-# Persistent
-create_pacta(dir)
-fs::dir_exists(dir)
-
-# Explore
-fs::dir_tree(dir, all = TRUE)
-writeLines(readLines(fs::path(dir, ".env")))
+ fs::dir_exists(dir)
 }
 \keyword{internal}
