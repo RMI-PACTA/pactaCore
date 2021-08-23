@@ -26,6 +26,7 @@ create_pacta(dir = tempdir(), data = getenv_data())
 See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
 }
 \examples{
+withr::local_envvar(c(PACTA_DATA = "a/b/c/pacta-data"))
 dir <- fs::path(tempdir(), "pacta")
 
 # This local context is usually a call to test_that()
