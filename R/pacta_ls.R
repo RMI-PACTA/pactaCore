@@ -10,8 +10,8 @@
 #' pacta_ls(env)
 #' pacta_info()
 #'
-#' pacta_permission(recurse = TRUE)
-pacta_permission <- function(env = NULL, ...) {
+#' pacta_permissions(recurse = TRUE)
+pacta_permissions <- function(env = NULL, ...) {
   show_permissions <- function(x) x[c("path", "permissions", "user", "group")]
   out <- lapply(pacta_info(env = env, ...), show_permissions)
   Reduce(rbind, out)

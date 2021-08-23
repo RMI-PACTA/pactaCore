@@ -13,10 +13,12 @@
 run_pacta <- function(source = here::here(),
                       input = "../input",
                       output = "../output") {
+  input <- fs::path_abs(input)
+  output <- fs::path_abs(output)
+
   withr::local_dir(source)
 
   setup_input(source, input)
-
   portfolios <- portfolios(path = input)
   command <- glue::glue("Rscript --vanilla pacta_core.R {portfolios}")
   for (i in seq_along(command)) {
@@ -24,8 +26,20 @@ run_pacta <- function(source = here::here(),
     system(command[[i]])
     message("End portfolio: ", portfolios[[i]])
   }
-
   setup_output(source, output)
+
+  copy_permissions <- function(from, to) {
+    parent <- fs::path_dir(fs::path_abs(from))
+    info <- fs::dir_info(parent)
+    user <- info[info$path == from, c("user")][[1]]
+    group <- info[info$path == from, c("group")][[1]]
+
+    fs::file_chown(fs::dir_ls(to), user_id = user, group_id = group)
+  }
+
+  copy_permissions(input, output)
+
+  invisible(soruce)
 }
 
 setup_input <- function(source, input) {
