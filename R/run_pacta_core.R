@@ -17,18 +17,6 @@
 #'
 #'   fs::dir_tree(dir)
 #' }
-#'
-#' if (interactive()) {
-#'   dir <- fs::path_abs("../pacta")
-#'   local_pacta(dir)
-#'
-#'   env <- fs::path(dir, ".env")
-#'   readLines(env)
-#'
-#'   run_pacta_core(env)
-#'
-#'   fs::dir_tree(dir)
-#' }
 run_pacta_core <- function(env = ".env") {
   withr::local_dir(context_path())
 
