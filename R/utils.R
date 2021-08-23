@@ -40,32 +40,35 @@ getenv_data <- function() {
   out
 }
 
-#' Explore pacta pahts
+#' Explore pacta paths
+#'
+#' @param env String. Path to environment file. `NULL` defaults to ".env".
+#' @param ... Passed on to `fs::dir_ls()`.
+#'
 #' @examples
+#' permissions_pacta(recurse = TRUE)
 #' info_pacta()
 #' ls_pacta()
-#' permissions_pacta()
 #' @noRd
-info_pacta <- function(env = NULL) {
-  lapply(ls_pacta(env = env), fs::file_info)
+permissions_pacta <- function(env = NULL, ...) {
+  show_permissions <- function(x) x[c("path", "permissions", "user", "group")]
+  lapply(info_pacta(env = env, ...), show_permissions)
 }
 
-ls_pacta <- function(env = NULL) {
+info_pacta <- function(env = NULL, ...) {
+  lapply(ls_pacta(env = env, ...), fs::file_info)
+}
+
+ls_pacta <- function(env = NULL, ...) {
   env <- env %||% fs::path_wd(".env")
   names(env) <- env
 
   dirs <- path_env(pacta_envvar())
   names(dirs) <- dirs
-  dirs <- lapply(dirs, fs::dir_ls)
+  dirs <- lapply(dirs, fs::dir_ls, ...)
 
   append(env, dirs)
 }
-
-permissions_pacta <- function(env = NULL) {
-  show_permissions <- function(x) x[c("path", "permissions", "user", "group")]
-  lapply(info_pacta(env = env), show_permissions)
-}
-
 
 #' Help create an ephemeral environment file.
 #'
