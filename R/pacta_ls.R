@@ -10,7 +10,7 @@
 #' dir <- local_pacta()
 #' withr::local_dir(dir)
 #'
-#' pacta_ls(env)
+#' pacta_ls()
 #' pacta_info()
 #'
 #' pacta_permissions(recurse = TRUE)
