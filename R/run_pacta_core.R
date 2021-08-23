@@ -21,6 +21,7 @@
 run_pacta_core <- function(env = ".env") {
   withr::local_dir(context_path())
 
+  access <- get_permissions(path_env("PACTA_INPUT"))
 
   if (!ok_working_dir()) {
     stop(
@@ -32,6 +33,12 @@ run_pacta_core <- function(env = ".env") {
 
   command <- sprintf("docker-compose --env-file %s up", env)
   system(command)
+
+  # TODO: DRY Apply access permissions as found at the start
+  dir <- fs::dir_ls(path_env("PACTA_INPUT", env = env), recurse = TRUE)
+  fs::file_chown(dir, user_id = access[["user"]], group_id = access[["group"]])
+  dir <- fs::dir_ls(path_env("PACTA_OUTPUT", env = env), recurse = TRUE)
+  fs::file_chown(dir, user_id = access[["user"]], group_id = access[["group"]])
 
   invisible(env)
 }

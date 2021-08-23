@@ -11,6 +11,7 @@ test_that("with a pacta project defined in .Renviron creates working_dir", {
   results <- fs::path(parent, "output", "working_dir", "40_Results")
   expect_false(fs::dir_exists(results))
 
+  # FIXME: Seems to be using inst/extdata/context/.env
   run_pacta_core(env)
   expect_true(fs::dir_exists(results))
 })
