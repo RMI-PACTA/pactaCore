@@ -8,8 +8,8 @@
 #' @examples
 #' if (interactive()) {
 #'   dir <- "../pacta"
+#'   create_pacta(dir)
 #'   withr::local_dir(dir)
-#'   local_pacta(dir)
 #'
 #'   fs::dir_tree(all = TRUE)
 #'   readLines(".env")
