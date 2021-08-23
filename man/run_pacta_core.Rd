@@ -10,7 +10,7 @@ run_pacta_core(env = ".env")
 \item{env}{String. Path to an environment file with pacta variables.}
 }
 \value{
-Called for its side effect. Returns the first argument inbisibly.
+Called for its side effect. Returns the first argument invisibly.
 }
 \description{
 Run the core steps of the PACTA methodology

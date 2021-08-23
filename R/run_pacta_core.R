@@ -2,7 +2,7 @@
 #'
 #' @param env String. Path to an environment file with pacta variables.
 #'
-#' @return Called for its side effect. Returns the first argument inbisibly.
+#' @return Called for its side effect. Returns the first argument invisibly.
 #' @export
 #'
 #' @examples
