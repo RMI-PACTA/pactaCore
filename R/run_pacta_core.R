@@ -21,6 +21,7 @@
 run_pacta_core <- function(env = ".env") {
   withr::local_dir(context_path())
 
+
   if (!ok_working_dir()) {
     stop(
       "All working_dir directories must exist.\n",

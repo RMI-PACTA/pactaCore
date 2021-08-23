@@ -76,3 +76,17 @@ empty_output <- function(env = NULL) {
   output <- path_env("PACTA_OUTPUT", env = env)
   walk_(output, fs::dir_delete)
 }
+
+#' @examples
+#' get_permissions("/home")
+#' get_permissions("~")
+get_permissions <- function(path) {
+  path <- fs::path_expand(path)
+  parent <- fs::path_dir(fs::path_abs(path))
+  info <- fs::dir_info(parent)
+
+  c(
+    user = info[info$path == path, c("user")][[1]],
+    group = info[info$path == path, c("group")][[1]]
+  )
+}

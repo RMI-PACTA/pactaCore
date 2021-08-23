@@ -1,6 +1,8 @@
 test_that("with a pacta project defined in .Renviron creates working_dir", {
   skip_slow_tests()
 
+  # FIXME: Tests seem to run as root/. maybe local_pacta() should check for
+  # owner or best change it base on the owner of input/
   parent <- fs::path_dir(Sys.getenv("PACTA_OUTPUT"))
   local_pacta(parent)
 
