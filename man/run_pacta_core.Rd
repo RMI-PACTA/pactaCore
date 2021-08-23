@@ -11,7 +11,13 @@ Run pacta core
 }
 \examples{
 if (interactive()) {
-  local_pacta()
-  run_pacta_core()
+  dir <- withr::local_tempdir("pacta")
+  withr::local_dir(dir)
+  local_pacta(dir)
+
+  fs::dir_tree(all = TRUE)
+  readLines(".env")
+
+  run_pacta_core(".env")
 }
 }
