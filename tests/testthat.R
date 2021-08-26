@@ -1,4 +1,4 @@
 library(testthat)
-library(PACTA.analysis)
+library(pactaCore)
 
-test_check("PACTA.analysis")
+test_check("pactaCore")

@@ -1,112 +1,80 @@
-setup_project <- function() {
-  path <- fs::path(
-    "deduplicate",
-    "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
-  )
-  source(path)
-}
-
-use_r_packages <- function(path = packages_path()) {
-  suppressPackageStartupMessages(source(path))
-  resolve_conflicts()
-
-  invisible(path)
-}
-
-resolve_conflicts <- function() {
-  conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("lag", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("mutate", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("here", "here", quiet = TRUE)
-  conflicted::conflict_prefer("rename", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("summarise", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("arrange", "dplyr", quiet = TRUE)
-}
-
+#' Path to installed files
 #' @examples
-#' some_dockerfile <- tempfile()
-#' writeLines(create_empty_dockerfile("library(dplyr)"), some_dockerfile)
+#' extdata_path()
 #'
-#' # Before
-#' writeLines(readLines(some_dockerfile))
-#' update_dockerfile_packages(path = some_dockerfile)
-#' # After
-#' writeLines(readLines(some_dockerfile))
+#' try(extdata_path("context", "invalid"))
+#'
+#' extdata_path("context", "working_dir")
+#'
+#' extdata_path(c(
+#'   "TestPortfolio_Input.csv",
+#'   "TestPortfolio_Input_PortfolioParameters.yml"
+#' ))
 #' @noRd
-update_dockerfile_packages <- function(path = NULL) {
-  path <- path %||% path_to_empty_dockerfile()
+extdata_path <- function(...) {
+  system.file("extdata", ..., package = "pactaCore", mustWork = TRUE)
+}
 
-  old_dockerfile <- read_dockerfile(path)
-  new_dockerfile <- c(
-    dockerfile_head(old_dockerfile),
-    dockerfile_packages(packages_path()),
-    dockerfile_tail(old_dockerfile)
+# Like purrr::walk
+walk_ <- function(.x, .f, ...) {
+  lapply(.x, .f, ...)
+  invisible(.x)
+}
+
+`%||%` <- function(x, y) {
+  if (is.null(x)) {
+    y
+  } else {
+    x
+  }
+}
+
+#' Create a working_dir/ directory with the folders structure that pacta expects
+#'
+#' @param dir String. Path to where to create a pacta project.
+#'
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' dir <- tempdir()
+#' create_working_dir(dir)
+#' fs::dir_tree(fs::path(dir, "working_dir"))
+create_working_dir <- function(dir = tempdir()) {
+  fs::dir_create(fs::path(dir, working_dir_paths()))
+  invisible(dir)
+}
+
+working_dir_paths <- function() {
+  subdir <- c(
+    "10_Parameter_File",
+    "00_Log_Files",
+    fs::path("00_Log_Files", "TestPortfolio_Input"),
+    "30_Processed_Inputs",
+    fs::path("30_Processed_Inputs", "TestPortfolio_Input"),
+    "40_Results",
+    fs::path("40_Results", "TestPortfolio_Input"),
+    "20_Raw_Inputs",
+    "50_Outputs",
+    fs::path("50_Outputs", "TestPortfolio_Input")
   )
 
-  writeLines(new_dockerfile, path)
-
-  invisible(path)
+  fs::path("working_dir", subdir)
 }
 
-path_to_empty_dockerfile <- function() {
-  tmp <- tempfile()
-  writeLines(create_empty_dockerfile(), tmp)
-  tmp
+ok_working_dir <- function() {
+  paths <- extdata_path("context", working_dir_paths())
+  all(fs::dir_exists(paths))
 }
 
-create_empty_dockerfile <- function(x = "") {
-  c(mark_start(), x, mark_end())
+portfolio_and_parameter_files <- function() {
+  c("TestPortfolio_Input.csv", "TestPortfolio_Input_PortfolioParameters.yml")
 }
 
-read_dockerfile <- function(path = dockerfile_path()) {
-  readLines(path, encoding = "UTF-8")
-}
+abort_if_dir_exists <- function(dir) {
+  if (fs::dir_exists(dir)) {
+    stop("`dir` must not exist but it does:", dir, call. = FALSE)
+  }
 
-dockerfile_head <- function(dockerfile = read_dockerfile()) {
-  dockerfile[1:start_of_packages_on_dockerfile(dockerfile)]
-}
-
-dockerfile_tail <- function(dockerfile = read_dockerfile()) {
-  dockerfile[end_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
-}
-
-dockerfile_packages <- function(path = packages_path()) {
-  raw <- readLines(path, encoding = "UTF-8")
-  pkg <- sub("library\\((.*)\\)", "\\1", raw)
-
-  c(
-    '    && Rscript -e "install.packages( \\',
-    paste0('             ', format_as_vector(pkg), ' \\'),
-    '           )" \\'
-  )
-}
-
-format_as_vector <- function(string) {
-  x <- glue("'{string}',")
-  x[length(x)] <- sub(",$", "", x[length(x)])
-  c('c(', glue("  {x}"), ')' )
-}
-
-packages_path <- function() {
-  file.path("deduplicate", "load-and-attach-r-packages.R")
-}
-
-dockerfile_path <- function() {
-  file.path("docker", "2diirunner-with-packages", "Dockerfile")
-}
-
-end_of_packages_on_dockerfile <- function(lines) {
-  grep(mark_end(), lines)
-}
-
-start_of_packages_on_dockerfile <- function(lines) {
-  grep(mark_start(), lines)
-}
-
-mark_start <- function() {
-  "# update-dockerfile-packages-start"
-}
-
-mark_end <- function() {
-  "# update-dockerfile-packages-end"
+  invisible(dir)
 }
