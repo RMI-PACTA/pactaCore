@@ -1,10 +1,9 @@
 version: "3.2"
 services:
   app:
-    working_dir: /bound 
-    env_file:
-      - .env
+    image: pacta_core:0.0.0.9000
+    working_dir: /bound
     volumes:
       - ${PACTA_DATA}:/pacta-data:ro
-      - ${PACTA_INPUT}:/input:ro
+      - ${PACTA_INPUT}:/input
       - ${PACTA_OUTPUT}:/output

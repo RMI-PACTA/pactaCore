@@ -10,13 +10,14 @@
 #' @examples
 #' run_pacta()
 #' @noRd
-run_pacta <- function(source = here::here(),
-                      input = "../input",
-                      output = "../output") {
+run_pacta <- function(source = ".", input = "../input", output = "../output") {
+  source <- fs::path_abs(source)
+  input <- fs::path_abs(input)
+  output <- fs::path_abs(output)
+
   withr::local_dir(source)
 
   setup_input(source, input)
-
   portfolios <- portfolios(path = input)
   command <- glue::glue("Rscript --vanilla pacta_core.R {portfolios}")
   for (i in seq_along(command)) {
@@ -26,10 +27,15 @@ run_pacta <- function(source = here::here(),
   }
 
   setup_output(source, output)
+
+  access <- get_permissions(input)
+  purrr::walk(c(input, output), apply_permissions, access)
+
+  invisible(source)
 }
 
 setup_input <- function(source, input) {
-  # FIXME: Should we also support ".yaml" (with an "a")?
+  # TODO: Should we also support ".yaml" (with an "a")?
   yml <- fs::dir_ls(input, regexp = "[.]yml$")
   fs::file_copy(
     yml,
@@ -52,7 +58,42 @@ setup_output <- function(wd, output) {
     overwrite = TRUE
   )
 
+  files <- fs::dir_ls(output, recurse = TRUE)
+  fs::file_chmod(files, "a+rwx")
+
   invisible(wd)
+}
+
+apply_permissions <- function(dir, access) {
+  files <- fs::dir_ls(dir, recurse = TRUE)
+  fs::file_chown(files, user_id = access[["user"]], group_id = access[["group"]])
+
+  invisible(dir)
+}
+
+get_permissions <- function(path) {
+  path <- fs::path_expand(path)
+  parent <- fs::path_dir(fs::path_abs(path))
+  info <- fs::dir_info(parent)
+
+  c(
+    user = info[info$path == path, c("user")][[1]],
+    group = info[info$path == path, c("group")][[1]]
+  )
+}
+
+#' @examples
+#' get_permissions("/home")
+#' get_permissions("~")
+get_permissions <- function(path) {
+  path <- fs::path_expand(path)
+  parent <- fs::path_dir(fs::path_abs(path))
+  info <- fs::dir_info(parent)
+
+  c(
+    user = info[info$path == path, c("user")][[1]],
+    group = info[info$path == path, c("group")][[1]]
+  )
 }
 
 # Get the name of the portfolios, assuming /input is a sibling of /bound inside
