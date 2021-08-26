@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# Help create the file-system (fs) structure that pacta needs
-#
-# Examples
-# mkdir-working_dir
-cat bin/fs-working_dir.txt | xargs mkdir -p

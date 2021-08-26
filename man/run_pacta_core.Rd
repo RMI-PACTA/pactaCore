@@ -17,17 +17,22 @@ Run the core steps of the PACTA methodology
 }
 \examples{
 if (interactive()) {
-dir <- fs::path_home("pacta_tmp")
-local({
-  # Setup
-  local_pacta(dir)
-  withr::local_dir(dir)
+  local({
+    # Create a toy, temporary pacta project
+    pacta <- fs::path_home("pacta_tmp")
+    local_pacta(pacta)
 
-  fs::dir_tree(all = TRUE)
-  readLines(".env")
+    # Work from the pacta project for convenicenc
+    withr::local_dir(pacta)
 
-  run_pacta_core()
-  fs::dir_tree(all = TRUE)
-})
+    # The ".env" file specifies the setup for input/ output/ and private data
+    readLines(".env")
+
+    # Before
+    fs::dir_tree()
+    run_pacta_core()
+    # After
+    fs::dir_tree()
+  })
 }
 }
