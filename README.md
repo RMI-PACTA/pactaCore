@@ -158,3 +158,5 @@ output
     └── 50_Outputs
         └── TestPortfolio_Input
 ```
+
+[Demo](https://asciinema.org/a/FQ71imA5PYv7kXMLdV2wF1PhO).
