@@ -38,7 +38,9 @@ run_pacta_core <- function(env = ".env") {
   ')"
 
   withr::local_dir(context_path())
-  abort_corrupt_working_dir()
+
+  local_working_dir()
+
   system(sprintf(
     "docker run --rm -v %s:/input -v %s:/output -v %s:/pacta-data:ro %s %s",
     input, output, data, image_tag, command_arg
@@ -47,23 +49,15 @@ run_pacta_core <- function(env = ".env") {
   invisible(env)
 }
 
-abort_corrupt_working_dir <- function() {
-  if (!ok_working_dir()) {
-    stop(
-      "All working_dir directories must exist.\n",
-      "Do you need to `create_working_dir()` and maybe update the image?",
-      call. = FALSE
-    )
-  }
-}
-
-abort_if_empty_dir <- function(dir) {
-  is_empty <- identical(unname(unclass(fs::dir_ls(dir))), character(0))
-  if (is_empty) {
-    stop("This directory is unexpectedly empty:\n", dir, call. = FALSE)
+local_working_dir <- function(envir = parent.frame()) {
+  if (fs::dir_exists(context_path("working_dir"))) {
+    stop("working_dir/ already exists.", call. = FALSE)
   }
 
-  invisible(dir)
+  create_working_dir(context_path())
+  withr::defer(fs::dir_delete(context_path("working_dir")), envir = envir)
+
+  invisible(envir)
 }
 
 #' Help create paths into the build context of the Docker image
