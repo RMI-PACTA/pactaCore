@@ -13,6 +13,8 @@ The goal of pactaCore is run the core steps of the [PACTA
 methodology](https://2degrees-investing.org/resource/pacta/) with a
 single command, in a reproducible way.
 
+[Demo](https://asciinema.org/a/FQ71imA5PYv7kXMLdV2wF1PhO).
+
 ## Installation
 
 You can install the development version from
@@ -158,5 +160,3 @@ output
     └── 50_Outputs
         └── TestPortfolio_Input
 ```
-
-[Demo](https://asciinema.org/a/FQ71imA5PYv7kXMLdV2wF1PhO).
