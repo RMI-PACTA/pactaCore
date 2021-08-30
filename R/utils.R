@@ -87,8 +87,12 @@ portfolio_pattern <- function() {
 }
 
 skip_slow_tests <- function() {
+  testthat::skip_on_ci()
   testthat::skip_on_cran()
-  skipping_slow_tests <- as.logical(Sys.getenv("PACTA_SKIP_SLOW_TESTS"))
+
+  skipping_slow_tests <- as.logical(
+    Sys.getenv("PACTA_SKIP_SLOW_TESTS", unset = "TRUE")
+  )
   testthat::skip_if(skipping_slow_tests)
 }
 
