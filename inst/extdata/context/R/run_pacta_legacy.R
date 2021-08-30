@@ -8,9 +8,9 @@
 #'   docker container
 #'
 #' @examples
-#' run_pacta()
+#' run_pacta_legacy()
 #' @noRd
-run_pacta <- function(source = ".", input = "../input", output = "../output") {
+run_pacta_legacy <- function(source = ".", input = "../input", output = "../output") {
   source <- fs::path_abs(source)
   input <- fs::path_abs(input)
   output <- fs::path_abs(output)
@@ -18,8 +18,8 @@ run_pacta <- function(source = ".", input = "../input", output = "../output") {
   withr::local_dir(source)
 
   setup_input(source, input)
-  portfolios <- portfolios(path = input)
-  command <- glue::glue("Rscript --vanilla pacta_core.R {portfolios}")
+  portfolios <- portfolio_names(input, regexp = "_Input[.]csv")
+  command <- glue::glue("Rscript --vanilla pacta_legacy.R {portfolios}")
   for (i in seq_along(command)) {
     message("Start portfolio: ", portfolios[[i]])
     system(command[[i]])
@@ -96,9 +96,7 @@ get_permissions <- function(path) {
   )
 }
 
-# Get the name of the portfolios, assuming /input is a sibling of /bound inside
-# a docker container from the image created by Dockerfile in this repo
-portfolios <- function(path = "../input", regexp = "_Input[.]csv") {
-  csv <- fs::dir_ls(path, regexp = regexp)
+portfolio_names <- function(dir, regexp) {
+  csv <- fs::dir_ls(dir, regexp = regexp)
   fs::path_ext_remove(fs::path_file(csv))
 }

@@ -2,3 +2,5 @@
 .env
 .Rhistory
 .Renviron
+README_cache/
+cache
