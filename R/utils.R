@@ -162,6 +162,11 @@ create_env <- function(path = path_temp(".env"),
   invisible(path)
 }
 
+#' Update inst/extdata/context/pacta_legacy.R with scripts from PACTA_analysis
+#'
+#' @examples
+#' update_pacta_legacy()
+#' @noRd
 update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
   scripts <- paste0(
     "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/master/",
