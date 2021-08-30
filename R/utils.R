@@ -1,11 +1,3 @@
-extdata_path <- function(..., mustWork = TRUE) {
-  system.file("extdata", ..., package = "pactaCore", mustWork = mustWork)
-}
-
-context_path <- function(..., mustWork = FALSE) {
-  extdata_path("context", ..., mustWork = mustWork)
-}
-
 # Like purrr::walk
 walk <- function(.x, .f, ...) {
   lapply(.x, .f, ...)
@@ -46,6 +38,14 @@ abort_if_dir_exists <- function(dir) {
 portfolio_names <- function(dir, regexp) {
   csv <- fs::dir_ls(dir, regexp = regexp)
   fs::path_ext_remove(fs::path_file(csv))
+}
+
+extdata_path <- function(..., mustWork = TRUE) {
+  system.file("extdata", ..., package = "pactaCore", mustWork = mustWork)
+}
+
+context_path <- function(..., mustWork = FALSE) {
+  extdata_path("context", ..., mustWork = mustWork)
 }
 
 results_path <- function(parent, ..., regexp = portfolio_pattern()) {
