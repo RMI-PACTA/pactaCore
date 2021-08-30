@@ -5,12 +5,12 @@
 \alias{create_env}
 \title{Help create an ephemeral environment file}
 \usage{
-local_env(path = fs::path_temp(".env"), ..., envir = parent.frame())
+local_env(path = path_temp(".env"), ..., envir = parent.frame())
 
 create_env(
-  path = fs::path_temp(".env"),
-  output = fs::path_temp("output"),
-  input = fs::path_temp("input"),
+  path = path_temp(".env"),
+  output = path_temp("output"),
+  input = path_temp("input"),
   data = getenv_data()
 )
 }
@@ -34,12 +34,12 @@ local({
     output = "c/d",
     data = "e/f/pacta-data"
   )
-  fs::file_exists(env)
+  file_exists(env)
   readLines(env)
 })
 
 # Gone
-fs::file_exists(env)
+file_exists(env)
 
 # Persists
 create_env(
@@ -48,7 +48,7 @@ create_env(
   output = "c/d",
   data = "e/f/pacta-data"
 )
-fs::file_exists(env)
+file_exists(env)
 readLines(env)
 }
 \keyword{inernal}

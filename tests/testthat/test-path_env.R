@@ -1,8 +1,8 @@
 test_that("returns the expected path", {
   env <- local_env()
-  expect_equal(fs::path_file(path_env("PACTA_INPUT", env)), "input")
-  expect_equal(fs::path_file(path_env("PACTA_OUTPUT", env)), "output")
-  expect_equal(fs::path_file(path_env("PACTA_DATA", env)), "pacta-data")
+  expect_equal(path_file(path_env("PACTA_INPUT", env)), "input")
+  expect_equal(path_file(path_env("PACTA_OUTPUT", env)), "output")
+  expect_equal(path_file(path_env("PACTA_DATA", env)), "pacta-data")
 })
 
 test_that("reads default '.env' file implicitely", {

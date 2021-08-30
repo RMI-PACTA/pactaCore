@@ -5,6 +5,6 @@ test_that("outputs the expected named list", {
   out <- pacta_ls()
 
   expect_type(out, "list")
-  names <- sort(fs::path_file(names(out)))
+  names <- sort(path_file(names(out)))
   expect_equal(names, c(".env", "input", "output", "pacta-data"))
 })

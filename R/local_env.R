@@ -19,12 +19,12 @@
 #'     output = "c/d",
 #'     data = "e/f/pacta-data"
 #'   )
-#'   fs::file_exists(env)
+#'   file_exists(env)
 #'   readLines(env)
 #' })
 #'
 #' # Gone
-#' fs::file_exists(env)
+#' file_exists(env)
 #'
 #' # Persists
 #' create_env(
@@ -33,27 +33,27 @@
 #'   output = "c/d",
 #'   data = "e/f/pacta-data"
 #' )
-#' fs::file_exists(env)
+#' file_exists(env)
 #' readLines(env)
-local_env <- function(path = fs::path_temp(".env"), ..., envir = parent.frame()) {
+local_env <- function(path = path_temp(".env"), ..., envir = parent.frame()) {
   create_env(path, ...)
-  withr::defer(fs::file_delete(path), envir = envir)
+  withr::defer(file_delete(path), envir = envir)
   invisible(path)
 }
 
 #' @rdname local_env
 #' @export
 #' @keywords inernal
-create_env <- function(path = fs::path_temp(".env"),
-                       output = fs::path_temp("output"),
-                       input = fs::path_temp("input"),
+create_env <- function(path = path_temp(".env"),
+                       output = path_temp("output"),
+                       input = path_temp("input"),
                        data = getenv_data()) {
   envvars <- pacta_envvar("output", "input", "data")
   dirs <- c(output, input, data)
 
-  parent <- fs::path_dir(path)
-  if (!fs::dir_exists(parent)) {
-    fs::dir_create(parent, recurse = TRUE)
+  parent <- path_dir(path)
+  if (!dir_exists(parent)) {
+    dir_create(parent, recurse = TRUE)
   }
 
   writeLines(sprintf("%s=%s", envvars, dirs), con = path)
@@ -71,7 +71,7 @@ create_env <- function(path = fs::path_temp(".env"),
 #' @examples
 #' env <- create_env_from_renviron()
 #' readLines(env)
-create_env_from_renviron <- function(path = fs::path_temp(".env")) {
+create_env_from_renviron <- function(path = path_temp(".env")) {
   create_env(
     path,
     output = Sys.getenv("PACTA_OUTPUT"),

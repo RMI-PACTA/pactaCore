@@ -1,6 +1,6 @@
 test_that("defaults to creating an '.env' file in the tempdir()", {
   env <- local_env()
-  expect_true(fs::file_exists(fs::path_temp(".env")))
+  expect_true(file_exists(path_temp(".env")))
 })
 
 test_that("can create a good env file, with any name", {
