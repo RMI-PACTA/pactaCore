@@ -8,22 +8,21 @@ output: github_document
 knitr::opts_chunk$set(
   cache = TRUE,
   collapse = TRUE,
-  comment = "#>",
-  echo = TRUE,
+  comment = "",
+  echo = FALSE,
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
-
+# The code that uses fs is hidden to keep instructions short
 library(fs)
+library(pactaCore)
 ```
 
 # pactaCore
 
-```{r echo=FALSE}
-# <!-- badges: start -->
-# [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-# <!-- badges: end -->
-```
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
 
 The goal of pactaCore is run the core steps of the [PACTA
 methodology](https://2degrees-investing.org/resource/pacta/) with a single
@@ -40,16 +39,7 @@ devtools::install_github("2DegreesInvesting/pactaCore")
 
 ## Setup
 
-As usual, use the pactaCore package with `library()`. Here we also use the fs
-package for convenient file system operations.
-
-```{r}
-library(pactaCore)
-library(fs)
-```
-
-A good setup for a pacta project looks like this (we'll do it with
-`create_pacta()` but you may do it by hand):
+A good setup for a pacta project looks like this:
 
 ```{r}
 pacta <- path_home("pacta_tmp")
@@ -72,7 +62,7 @@ dir_tree(pacta, all = TRUE)
 
 ```{r}
 env <- path(pacta, ".env")
-readLines(env)
+writeLines(readLines(env))
 ```
 
 * The input/ directory must contain portfolio files like
@@ -91,13 +81,17 @@ git clone git@github.com:2DegreesInvesting/pacta-data.git
 
 ## Usage
 
-Use `run_pacta()` with your environment file.
+Use the pactaCore package with `library()` and `run_pacta()` with your
+environment file.
 
-```{r}
+```{r echo=TRUE, comment="#>"}
+library(pactaCore)
+
+(env <- file.path(pacta, ".env"))
 run_pacta(env)
 ```
 
-Note the output/ directory is now populated with results:
+The output/ directory is now populated with results:
 
 ```{r}
 dir_tree(pacta)
@@ -120,7 +114,7 @@ In the parameter files, whatever values you give to `portfolio_name_in` and
 * A parameter file:
 
 ```{r}
-readLines(example_inputs[[2]])
+writeLines(readLines(example_inputs[[2]]))
 ```
 
 * A few rows of some relevant output files and columns:
