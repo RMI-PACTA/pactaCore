@@ -1,4 +1,6 @@
 test_that("creates the expected results", {
+  skip_on_ci()
+  skip_on_cran()
   skip_slow_tests()
   parent <- path_home("pacta_tmp")
   local_pacta(parent)
@@ -12,6 +14,8 @@ test_that("creates the expected results", {
 })
 
 test_that("avoids overwritting output from a prevoius run", {
+  skip_on_ci()
+  skip_on_cran()
   parent <- path_home("pacta_tmp")
   local_pacta(parent)
 

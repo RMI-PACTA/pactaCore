@@ -1,4 +1,6 @@
 test_that("creates a pacta project in the tempdir() directory", {
+  skip_on_ci()
+  skip_on_cran()
   dir <- tempdir()
 
   local({
