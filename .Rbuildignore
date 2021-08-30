@@ -4,3 +4,5 @@
 ^\.env$
 ^README\.Rmd$
 ^\.Renviron$
+^README_cache$
+^cache$
