@@ -173,8 +173,7 @@ create_env <- function(path = path_temp(".env"),
 #' @noRd
 update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
   scripts <- paste0(
-    "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/d0458024b1a3becec1c165dc68ab05ae9c1e16cd/",
-    # "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/master/",
+    "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/master/",
     "web_tool_script_", 1:2, ".R"
   )
   code <- unlist(lapply(scripts, readLines))
