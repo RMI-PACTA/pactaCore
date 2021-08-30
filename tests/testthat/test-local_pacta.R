@@ -1,4 +1,6 @@
 test_that("creates a pacta project in the tempdir() directory", {
+  skip_on_ci()
+  skip_on_cran()
   dir <- tempdir()
 
   local({
@@ -14,6 +16,8 @@ test_that("creates a pacta project in the tempdir() directory", {
 })
 
 test_that("if PACTA_DATA is unset fails gracefully", {
+  skip_on_ci()
+  skip_on_cran()
   withr::local_envvar(c(PACTA_DATA = ""))
   expect_error(local_pacta(), "need to set")
 })
