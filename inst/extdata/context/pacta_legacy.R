@@ -419,4 +419,15 @@ if (file.exists(bonds_inputs_file)) {
   }
 }
 
-# pacta: end
+
+rm(port_raw_all_eq)
+rm(port_raw_all_cb)
+rm(port_raw_eq)
+rm(port_raw_cb)
+rm(ald_scen_eq)
+rm(ald_scen_cb)
+rm(company_all_eq)
+rm(company_all_cb)
+rm(port_eq)
+rm(port_cb)
+rm(company_own_eq)
