@@ -91,3 +91,73 @@ skip_slow_tests <- function() {
   skipping_slow_tests <- as.logical(Sys.getenv("PACTA_SKIP_SLOW_TESTS"))
   testthat::skip_if(skipping_slow_tests)
 }
+
+path_env <- function(envvar = pacta_envvar(), env = NULL) {
+  unlist(lapply(envvar, path_env_once, env = env))
+}
+
+path_env_once <- function(envvar, env = NULL) {
+  env <- env %||% path_wd(".env")
+
+  envvar <- paste0("^", envvar, "=")
+  var_path <- grep(envvar, readLines(env), value = TRUE)
+  sub(envvar, "", var_path)
+}
+
+#' Get enviroment variables succinctly and in a specific order
+#'
+#' ... Strings. Text to match the name of the environment variables of a pacta
+#' project.
+#'
+#' @examples
+#' pacta_envvar()
+#' pacta_envvar("out", "in")
+#' pacta_envvar("in", "out")
+#' @noRd
+pacta_envvar <- function(...) {
+  patterns <- list(...)
+  if (identical(patterns, list())) {
+    patterns <- ""
+  }
+  unlist(lapply(patterns, function(x) pacta_envvar_once(x)))
+}
+
+pacta_envvar_once <- function(pattern = "") {
+  envvars <- paste0("PACTA_", c("DATA", "INPUT", "OUTPUT"))
+  grep(pattern, envvars, value = TRUE, ignore.case = TRUE)
+}
+
+#' Create an environment file
+#'
+#' @param path String. Path to the environment file you want to create.
+#' @param ... Passed on to `create_env()`.
+#' @param envir Must be passed on to `withr::defer()`.
+#'
+#' @examples
+#' env <- withr::local_file(".env")
+#'
+#' create_env(
+#'   path = env,
+#'   input = "a/b",
+#'   output = "c/d",
+#'   data = "e/f/pacta-data"
+#' )
+#' file_exists(env)
+#' readLines(env)
+#' @noRd
+create_env <- function(path = path_temp(".env"),
+                       output = path_temp("output"),
+                       input = path_temp("input"),
+                       data = getenv_data()) {
+  envvars <- pacta_envvar("output", "input", "data")
+  dirs <- c(output, input, data)
+
+  parent <- path_dir(path)
+  if (!dir_exists(parent)) {
+    dir_create(parent, recurse = TRUE)
+  }
+
+  writeLines(sprintf("%s=%s", envvars, dirs), con = path)
+
+  invisible(path)
+}
