@@ -60,8 +60,8 @@ local_working_dir <- function(envir = parent.frame()) {
   if (dir_exists(working_dir_path)) {
     stop(
       "working_dir/ already exists:\n",
-      working_dir_path,
-      " Do you need to delete the output of a previous run?",
+      working_dir_path, "\n",
+      "Do you need to delete the output of a previous run?",
       call. = FALSE
     )
   }
