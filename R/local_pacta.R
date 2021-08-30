@@ -3,14 +3,13 @@
 #' * `create_pacta()` creates a pacta project.
 #' * `local_pacta()` creates a temporary pacta project.
 #'
-#' See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
+#' @seealso
+#'   https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
 #'
 #' @param dir String. Path where to create pacta files and directories.
+#' @param input_paths String. Path to portfolio and parameter files.
 #' @param data String. Path to the private pacta-data/ directory.
-#' @param env Must be passed on to `withr::defer()`.
-#'
-#' @keywords internal
-#' @export
+#' @param envir Must be passed on to `withr::defer()`.
 #'
 #' @examples
 #' dir <- path(tempdir(), "pacta")
@@ -23,6 +22,7 @@
 #' })
 #'
 #' dir_exists(dir)
+#' @noRd
 local_pacta <- function(dir = tempdir(),
                         input_paths = example_input_paths(),
                         data = getenv_data(),
@@ -32,9 +32,6 @@ local_pacta <- function(dir = tempdir(),
   invisible(dir)
 }
 
-#' @rdname local_pacta
-#' @export
-#' @keywords internal
 create_pacta <- function(dir = tempdir(),
                          input_paths = example_input_paths(),
                          data = getenv_data()) {
@@ -58,14 +55,12 @@ create_pacta <- function(dir = tempdir(),
 
 #' Get the environment variable "PACTA_DATA" or fail gracefully
 #'
-#' @export
-#' @keywords internal
-#'
 #' @examples
 #' getenv_data()
 #'
 #' Sys.setenv(PACTA_DATA = "")
 #' try(getenv_data())
+#' @noRd
 getenv_data <- function() {
   out <- Sys.getenv("PACTA_DATA", unset = "")
 
