@@ -9,7 +9,7 @@
 #' if (interactive()) {
 #'   local({
 #'     # Create a toy, temporary pacta project
-#'     pacta <- fs::path_home("pacta_tmp")
+#'     pacta <- path_home("pacta_tmp")
 #'     local_pacta(pacta)
 #'
 #'     # Work from the pacta project for convenicenc
@@ -19,56 +19,58 @@
 #'     readLines(".env")
 #'
 #'     # Before
-#'     fs::dir_tree()
-#'     run_pacta_core()
+#'     dir_tree()
+#'     run_pacta()
 #'     # After
-#'     fs::dir_tree()
+#'     dir_tree()
 #'   })
 #' }
-run_pacta_core <- function(env = ".env") {
+run_pacta <- function(env = ".env") {
   input <- path_env("PACTA_INPUT", env)
   output <- path_env("PACTA_OUTPUT", env)
+  abort_if_dir_exists(results_path(fs::path_dir(output)))
+
   data <- path_env("PACTA_DATA", env)
-  image_tag <- "pacta_core:0.0.0.9000"
   # r"()" was introduced in R 4.0.0
   command_arg <- r"(Rscript --vanilla -e '
     setwd("/bound")
-    source("R/run_pacta.R")
-    run_pacta()
+    source("R/run_pacta_legacy.R")
+    run_pacta_legacy()
   ')"
 
   withr::local_dir(context_path())
 
   local_working_dir()
 
-  system(sprintf(
+  image_tag <- "pacta:0.0.0.9001"
+  docker_build <- sprintf("docker build -t %s %s", image_tag, context_path())
+  system(docker_build)
+
+  docker_run <- sprintf(
     "docker run --rm -v %s:/input -v %s:/output -v %s:/pacta-data:ro %s %s",
     input, output, data, image_tag, command_arg
-  ))
+  )
+  system(docker_run)
 
   invisible(env)
 }
 
 local_working_dir <- function(envir = parent.frame()) {
-  if (fs::dir_exists(context_path("working_dir"))) {
-    stop("working_dir/ already exists.", call. = FALSE)
+  working_dir_path <- context_path("working_dir")
+  if (dir_exists(working_dir_path)) {
+    stop(
+      "working_dir/ already exists:\n",
+      working_dir_path,
+      " Do you need to delete the output of a previous run?",
+      call. = FALSE
+    )
   }
 
   create_working_dir(context_path())
-  withr::defer(fs::dir_delete(context_path("working_dir")), envir = envir)
+  withr::defer(
+    dir_delete(context_path("working_dir")),
+    envir = envir
+  )
 
   invisible(envir)
-}
-
-#' Help create paths into the build context of the Docker image
-#'
-#' @inheritParams fs::path
-#' @return A vector of class `r toString(class(context_path()))`.
-#'
-#' @examples
-#' context_path()
-#' fs::dir_ls(context_path("working_dir"))
-#' @noRd
-context_path <- function(...) {
-  fs::path(system.file("extdata", "context", package = "pactaCore"), ...)
 }
