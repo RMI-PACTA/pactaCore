@@ -1,13 +1,17 @@
 #' Enable/dissable slow tests
 #'
-#' @export
-#' @keywords internal
+#' This function helps developers run slow tests only when necessary. It assumes
+#' you have a file .Renviron (maybe at the project level) with the variable
+#' `PACTA_SKIP_SLOW_TESTS` set to either `TRUE` or `FALSE`.
+#'
+#' @seealso `usethis::edit_r_environ("project")`.
 #'
 #' @examples
 #' if (interactive()) {
 #'   enable_slow_tests()
 #'   dissable_slow_tests()
 #' }
+#' @noRd
 enable_slow_tests <- function() {
   path <- ".Renviron"
   out <- sub(
