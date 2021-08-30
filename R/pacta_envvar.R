@@ -3,13 +3,11 @@
 #' ... Strings. Text to match the name of the environment variables of a pacta
 #' project.
 #'
-#' @export
-#' @keywords internal
-#'
 #' @examples
 #' pacta_envvar()
 #' pacta_envvar("out", "in")
 #' pacta_envvar("in", "out")
+#' @noRd
 pacta_envvar <- function(...) {
   patterns <- list(...)
   if (identical(patterns, list())) {
