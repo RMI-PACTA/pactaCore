@@ -5,9 +5,18 @@
 \alias{create_pacta}
 \title{Create a pacta project}
 \usage{
-local_pacta(dir = tempdir(), data = getenv_data(), envir = parent.frame())
+local_pacta(
+  dir = tempdir(),
+  input_paths = example_input_paths(),
+  data = getenv_data(),
+  envir = parent.frame()
+)
 
-create_pacta(dir = tempdir(), data = getenv_data())
+create_pacta(
+  dir = tempdir(),
+  input_paths = example_input_paths(),
+  data = getenv_data()
+)
 }
 \arguments{
 \item{dir}{String. Path where to create pacta files and directories.}
@@ -26,15 +35,15 @@ create_pacta(dir = tempdir(), data = getenv_data())
 See https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
 }
 \examples{
-dir <- fs::path(tempdir(), "pacta")
-withr::local_envvar(c(PACTA_DATA = fs::path(dir, "pacta-data")))
+dir <- path(tempdir(), "pacta")
+withr::local_envvar(c(PACTA_DATA = path(dir, "pacta-data")))
 
 # This local context is usually a call to test_that()
 local({
   local_pacta(dir)
-  fs::dir_tree(dir, all = TRUE)
+  dir_tree(dir, all = TRUE)
 })
 
-fs::dir_exists(dir)
+dir_exists(dir)
 }
 \keyword{internal}

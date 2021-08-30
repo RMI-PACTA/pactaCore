@@ -3,7 +3,7 @@ path_env <- function(envvar = pacta_envvar(), env = NULL) {
 }
 
 path_env_once <- function(envvar, env = NULL) {
-  env <- env %||% fs::path_wd(".env")
+  env <- env %||% path_wd(".env")
 
   envvar <- paste0("^", envvar, "=")
   var_path <- grep(envvar, readLines(env), value = TRUE)

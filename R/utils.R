@@ -1,26 +1,18 @@
-#' Path to installed files
-#' @examples
-#' extdata_path()
-#'
-#' try(extdata_path("context", "invalid"))
-#'
-#' extdata_path("context", "working_dir")
-#'
-#' extdata_path(c(
-#'   "TestPortfolio_Input.csv",
-#'   "TestPortfolio_Input_PortfolioParameters.yml"
-#' ))
-#' @noRd
-extdata_path <- function(...) {
-  system.file("extdata", ..., package = "pactaCore", mustWork = TRUE)
+extdata_path <- function(..., mustWork = TRUE) {
+  system.file("extdata", ..., package = "pactaCore", mustWork = mustWork)
+}
+
+context_path <- function(..., mustWork = FALSE) {
+  extdata_path("context", ..., mustWork = mustWork)
 }
 
 # Like purrr::walk
-walk_ <- function(.x, .f, ...) {
+walk <- function(.x, .f, ...) {
   lapply(.x, .f, ...)
   invisible(.x)
 }
 
+# Like rlang::`%||%`
 `%||%` <- function(x, y) {
   if (is.null(x)) {
     y
@@ -33,48 +25,63 @@ walk_ <- function(.x, .f, ...) {
 #'
 #' @param dir String. Path to where to create a pacta project.
 #'
-#' @export
-#' @keywords internal
-#'
 #' @examples
 #' dir <- tempdir()
 #' create_working_dir(dir)
-#' fs::dir_tree(fs::path(dir, "working_dir"))
+#' dir_tree(path(dir, "working_dir"))
+#' @noRd
 create_working_dir <- function(dir = tempdir()) {
-  fs::dir_create(fs::path(dir, working_dir_paths()))
+  dir_create(path(dir, working_dir_paths()))
   invisible(dir)
-}
-
-working_dir_paths <- function() {
-  subdir <- c(
-    "10_Parameter_File",
-    "00_Log_Files",
-    fs::path("00_Log_Files", "TestPortfolio_Input"),
-    "30_Processed_Inputs",
-    fs::path("30_Processed_Inputs", "TestPortfolio_Input"),
-    "40_Results",
-    fs::path("40_Results", "TestPortfolio_Input"),
-    "20_Raw_Inputs",
-    "50_Outputs",
-    fs::path("50_Outputs", "TestPortfolio_Input")
-  )
-
-  fs::path("working_dir", subdir)
-}
-
-ok_working_dir <- function() {
-  paths <- extdata_path("context", working_dir_paths())
-  all(fs::dir_exists(paths))
-}
-
-portfolio_and_parameter_files <- function() {
-  c("TestPortfolio_Input.csv", "TestPortfolio_Input_PortfolioParameters.yml")
 }
 
 abort_if_dir_exists <- function(dir) {
-  if (fs::dir_exists(dir)) {
-    stop("`dir` must not exist but it does:", dir, call. = FALSE)
+  if (dir_exists(dir)) {
+    stop("This directory must not exist but it does:\n", dir, call. = FALSE)
   }
 
   invisible(dir)
+}
+
+portfolio_names <- function(dir, regexp) {
+  csv <- fs::dir_ls(dir, regexp = regexp)
+  fs::path_ext_remove(fs::path_file(csv))
+}
+
+results_path <- function(parent, ..., regexp = portfolio_pattern()) {
+  portfolios <- portfolio_names(path(parent, "input"), regexp = regexp)
+  path(parent, "output", "working_dir", "40_Results", portfolios, ...)
+}
+
+working_dir_paths <- function(portfolio_name = example_input_name()) {
+  subdir <- c(
+    "10_Parameter_File",
+    "00_Log_Files",
+    path("00_Log_Files", portfolio_name),
+    "30_Processed_Inputs",
+    path("30_Processed_Inputs", portfolio_name),
+    "40_Results",
+    path("40_Results", portfolio_name),
+    "20_Raw_Inputs",
+    "50_Outputs",
+    path("50_Outputs", portfolio_name)
+  )
+
+  path("working_dir", subdir)
+}
+
+example_input_paths <- function() {
+  extdata_path(
+    sprintf(c("%s.csv", "%s_PortfolioParameters.yml"), example_input_name())
+  )
+}
+
+# Abstract this low level detail
+example_input_name <- function() {
+  "TestPortfolio_Input"
+}
+
+# Abstract this low level detail
+portfolio_pattern <- function() {
+  "_Input[.]csv"
 }

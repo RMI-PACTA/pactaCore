@@ -4,7 +4,7 @@
 \alias{create_env_from_renviron}
 \title{Create a pacta environment file from pacta variables set in .Renviron}
 \usage{
-create_env_from_renviron(path = fs::path_temp(".env"))
+create_env_from_renviron(path = path_temp(".env"))
 }
 \arguments{
 \item{path}{String. Path to the environment file you want to create.}

@@ -3,14 +3,14 @@ test_that("creates a pacta project in the tempdir() directory", {
 
   local({
     local_pacta()
-    expect_true(fs::file_exists(fs::path(dir, ".env")))
-    expect_true(fs::dir_exists(fs::path(dir, "input")))
-    expect_true(fs::dir_exists(fs::path(dir, "output")))
+    expect_true(file_exists(path(dir, ".env")))
+    expect_true(dir_exists(path(dir, "input")))
+    expect_true(dir_exists(path(dir, "output")))
   })
 
-  expect_false(fs::file_exists(fs::path(dir, ".env")))
-  expect_false(fs::dir_exists(fs::path(dir, "input")))
-  expect_false(fs::dir_exists(fs::path(dir, "output")))
+  expect_false(file_exists(path(dir, ".env")))
+  expect_false(dir_exists(path(dir, "input")))
+  expect_false(dir_exists(path(dir, "output")))
 })
 
 test_that("if PACTA_DATA is unset fails gracefully", {
