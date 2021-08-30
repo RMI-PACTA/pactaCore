@@ -4,3 +4,8 @@
 ^\.env$
 ^README\.Rmd$
 ^\.Renviron$
+^README_cache$
+^cache$
+^inst/extdata/\.env$
+^inst/extdata/context/\.Rbuildignore$
+^inst/extdata/context/\.github$

@@ -13,8 +13,6 @@ The goal of pactaCore is run the core steps of the [PACTA
 methodology](https://2degrees-investing.org/resource/pacta/) with a
 single command, in a reproducible way.
 
-[Demo](https://asciinema.org/a/FQ71imA5PYv7kXMLdV2wF1PhO).
-
 ## Installation
 
 You can install the development version from
@@ -27,27 +25,28 @@ devtools::install_github("2DegreesInvesting/pactaCore")
 
 ## Setup
 
-A good setup for a pacta project looks like this (the
-directory-structure is optional):
+A good setup for a pacta project looks like this:
 
-    pacta/
+    /home/mauro/pacta_tmp
     ├── .env
     ├── input
     │   ├── TestPortfolio_Input.csv
     │   └── TestPortfolio_Input_PortfolioParameters.yml
-    └── output/
+    └── output
 
-    pacta-data/
-    ├── ...
-    ...
+``` r
+#> path/to/private/pacta-data/
+#> ├── ...
+#> ...
+```
 
 -   The .env file locates the input/, output/, and pacta-data/
     directories, e.g.:
 
 <!-- -->
 
-    PACTA_OUTPUT=/home/mauro/git/pacta/input
-    PACTA_INPUT=/home/mauro/git/pacta/output
+    PACTA_OUTPUT=/home/mauro/pacta_tmp/output
+    PACTA_INPUT=/home/mauro/pacta_tmp/input
     PACTA_DATA=/home/mauro/git/pacta-data
 
 -   The input/ directory must contain portfolio files like
@@ -61,13 +60,68 @@ directory-structure is optional):
     GitHub with:
 
 ``` bash
-git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
+# From the terminal
+git clone git@github.com:2DegreesInvesting/pacta-data.git
 ```
+
+## Usage
+
+Use the pactaCore package with `library()` and `run_pacta()` with your
+environment file.
+
+``` r
+library(pactaCore)
+
+(env <- file.path(pacta, ".env"))
+#> [1] "/home/mauro/pacta_tmp/.env"
+run_pacta(env)
+```
+
+The output/ directory is now populated with results:
+
+    /home/mauro/pacta_tmp
+    ├── input
+    │   ├── TestPortfolio_Input.csv
+    │   └── TestPortfolio_Input_PortfolioParameters.yml
+    └── output
+        └── working_dir
+            ├── 00_Log_Files
+            │   └── TestPortfolio_Input
+            ├── 10_Parameter_File
+            │   └── TestPortfolio_Input_PortfolioParameters.yml
+            ├── 20_Raw_Inputs
+            │   └── TestPortfolio_Input.csv
+            ├── 30_Processed_Inputs
+            │   └── TestPortfolio_Input
+            │       ├── audit_file.csv
+            │       ├── audit_file.rda
+            │       ├── bonds_portfolio.rda
+            │       ├── coveragegraph.json
+            │       ├── coveragegraphlegend.json
+            │       ├── coveragetextvar.json
+            │       ├── emissions.rda
+            │       ├── equity_portfolio.rda
+            │       ├── fund_coverage_summary.rda
+            │       ├── invalidsecurities.csv
+            │       ├── invalidsecurities.json
+            │       ├── overview_portfolio.rda
+            │       ├── portfolio_weights.json
+            │       └── total_portfolio.rda
+            ├── 40_Results
+            │   └── TestPortfolio_Input
+            │       ├── Bonds_results_company.rda
+            │       ├── Bonds_results_map.rda
+            │       ├── Bonds_results_portfolio.rda
+            │       ├── Equity_results_company.rda
+            │       ├── Equity_results_map.rda
+            │       └── Equity_results_portfolio.rda
+            └── 50_Outputs
+                └── TestPortfolio_Input
 
 <details>
 
-Each corresponding `<pair-name>` the portfolio and parameter files must
-be named `<pair-name>_Input.csv` and
+For each corresponding `<pair-name>`, the portfolio and parameter files
+must be named `<pair-name>_Input.csv` and
 `<pair-name>_Input_PortfolioParameters.yml`, respectively. For example:
 
 -   This pair is valid: `a_Input.csv`,
@@ -82,81 +136,84 @@ and `investor_name_in` will populate the columns `portfolio_name` and
 
 -   A parameter file:
 
-``` r
-default:
-    parameters:
-        portfolio_name_in: TestPortfolio_Input
-        investor_name_in: Test
-        peer_group: pensionfund
-        language: EN
-        project_code: CHPA2020
-```
+<!-- -->
+
+    default:
+        parameters:
+            portfolio_name_in: TestPortfolio_Input
+            investor_name_in: Test
+            peer_group: pensionfund
+            language: EN
+            project_code: CHPA2020
 
 -   A few rows of some relevant output files and columns:
 
-``` r
-$Bonds_results_company.rda
-       portfolio_name investor_name
-1 TestPortfolio_Input          Test
-2 TestPortfolio_Input          Test
-3 TestPortfolio_Input          Test
+<!-- -->
 
-$Bonds_results_map.rda
-       portfolio_name investor_name
-1 TestPortfolio_Input          Test
-2 TestPortfolio_Input          Test
-3 TestPortfolio_Input          Test
+    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_company.rda`
+    # A tibble: 6 × 2
+      portfolio_name      investor_name
+      <chr>               <chr>        
+    1 TestPortfolio_Input Test         
+    2 TestPortfolio_Input Test         
+    3 TestPortfolio_Input Test         
+    4 TestPortfolio_Input Test         
+    5 TestPortfolio_Input Test         
+    6 TestPortfolio_Input Test         
 
-$Bonds_results_portfolio.rda
-       portfolio_name investor_name
-1 TestPortfolio_Input          Test
-2 TestPortfolio_Input          Test
-3 TestPortfolio_Input          Test
-```
+    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_map.rda`
+    # A tibble: 6 × 2
+      portfolio_name      investor_name
+      <chr>               <chr>        
+    1 TestPortfolio_Input Test         
+    2 TestPortfolio_Input Test         
+    3 TestPortfolio_Input Test         
+    4 TestPortfolio_Input Test         
+    5 TestPortfolio_Input Test         
+    6 TestPortfolio_Input Test         
+
+    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_portfolio.rda`
+    # A tibble: 6 × 2
+      portfolio_name      investor_name
+      <chr>               <chr>        
+    1 TestPortfolio_Input Test         
+    2 TestPortfolio_Input Test         
+    3 TestPortfolio_Input Test         
+    4 TestPortfolio_Input Test         
+    5 TestPortfolio_Input Test         
+    6 TestPortfolio_Input Test         
+
+    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_company.rda`
+    # A tibble: 6 × 2
+      portfolio_name      investor_name
+      <chr>               <chr>        
+    1 TestPortfolio_Input Test         
+    2 TestPortfolio_Input Test         
+    3 TestPortfolio_Input Test         
+    4 TestPortfolio_Input Test         
+    5 TestPortfolio_Input Test         
+    6 TestPortfolio_Input Test         
+
+    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_map.rda`
+    # A tibble: 6 × 2
+      portfolio_name      investor_name
+      <chr>               <chr>        
+    1 TestPortfolio_Input Test         
+    2 TestPortfolio_Input Test         
+    3 TestPortfolio_Input Test         
+    4 TestPortfolio_Input Test         
+    5 TestPortfolio_Input Test         
+    6 TestPortfolio_Input Test         
+
+    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_portfolio.rda`
+    # A tibble: 6 × 2
+      portfolio_name      investor_name
+      <chr>               <chr>        
+    1 TestPortfolio_Input Test         
+    2 TestPortfolio_Input Test         
+    3 TestPortfolio_Input Test         
+    4 TestPortfolio_Input Test         
+    5 TestPortfolio_Input Test         
+    6 TestPortfolio_Input Test         
 
 </details>
-
-## Usage
-
-``` r
-pactaCore::run_pacta_core(env = ".env")
-```
-
-The output/ directory should now look like this:
-
-``` bash
-output
-└── working_dir
-    ├── 00_Log_Files
-    │   └── TestPortfolio_Input
-    ├── 10_Parameter_File
-    │   └── TestPortfolio_Input_PortfolioParameters.yml
-    ├── 20_Raw_Inputs
-    │   └── TestPortfolio_Input.csv
-    ├── 30_Processed_Inputs
-    │   └── TestPortfolio_Input
-    │       ├── audit_file.csv
-    │       ├── audit_file.rda
-    │       ├── bonds_portfolio.rda
-    │       ├── coveragegraph.json
-    │       ├── coveragegraphlegend.json
-    │       ├── coveragetextvar.json
-    │       ├── emissions.rda
-    │       ├── equity_portfolio.rda
-    │       ├── fund_coverage_summary.rda
-    │       ├── invalidsecurities.csv
-    │       ├── invalidsecurities.json
-    │       ├── overview_portfolio.rda
-    │       ├── portfolio_weights.json
-    │       └── total_portfolio.rda
-    ├── 40_Results
-    │   └── TestPortfolio_Input
-    │       ├── Bonds_results_company.rda
-    │       ├── Bonds_results_map.rda
-    │       ├── Bonds_results_portfolio.rda
-    │       ├── Equity_results_company.rda
-    │       ├── Equity_results_map.rda
-    │       └── Equity_results_portfolio.rda
-    └── 50_Outputs
-        └── TestPortfolio_Input
-```
