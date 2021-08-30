@@ -85,3 +85,9 @@ example_input_name <- function() {
 portfolio_pattern <- function() {
   "_Input[.]csv"
 }
+
+skip_slow_tests <- function() {
+  testthat::skip_on_cran()
+  skipping_slow_tests <- as.logical(Sys.getenv("PACTA_SKIP_SLOW_TESTS"))
+  testthat::skip_if()
+}
