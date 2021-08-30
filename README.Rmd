@@ -47,7 +47,7 @@ example_inputs <- dir_ls(
   system.file("extdata", package = "pactaCore"),
   regexp = "Input"
 )
-create_pacta(pacta, input_paths = example)
+pactaCore:::create_pacta(pacta, input_paths = example)
 
 dir_tree(pacta, all = TRUE)
 ```

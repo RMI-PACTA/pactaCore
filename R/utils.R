@@ -161,3 +161,14 @@ create_env <- function(path = path_temp(".env"),
 
   invisible(path)
 }
+
+update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
+  scripts <- paste0(
+    "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/master/",
+    "web_tool_script_", 1:2, ".R"
+  )
+  code <- unlist(lapply(scripts, readLines))
+  writeLines(code, file)
+
+  invisible(file)
+}
