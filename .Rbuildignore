@@ -9,3 +9,4 @@
 ^inst/extdata/\.env$
 ^inst/extdata/context/\.Rbuildignore$
 ^inst/extdata/context/\.github$
+^\.github$
