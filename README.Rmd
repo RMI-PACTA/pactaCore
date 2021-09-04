@@ -67,9 +67,9 @@ writeLines(readLines(env))
 ```
 
 * The input/ directory must contain portfolio files like
-[TestPortfolio_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
+[TestPortfolio_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/inst/extdata/TestPortfolio_Input.csv),
 and parameters files like
-[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
+[TestPortfolio_Input_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/inst/extdata/TestPortfolio_Input_PortfolioParameters.yml).
 
 * The output/ directory typically starts empty.
 
