@@ -73,9 +73,7 @@ environment file.
 ``` r
 library(pactaCore)
 
-(env <- file.path(pacta, ".env"))
-#> [1] "/home/mauro/pacta_tmp/.env"
-run_pacta(env)
+run_pacta(env = "~/pacta_tmp/.env")
 ```
 
 The output/ directory is now populated with results:
