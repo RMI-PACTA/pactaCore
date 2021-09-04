@@ -9,7 +9,7 @@ test_that("creates the expected results", {
   files <- dir_ls(results_path(parent), type = "file", recurse = TRUE)
   datasets <- lapply(files, readRDS)
   names(datasets) <- path_ext_remove(path_file(names(datasets)))
-
+  datasets[] <- lapply(datasets, as.data.frame)
   expect_snapshot(datasets)
 })
 
