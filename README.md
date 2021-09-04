@@ -51,9 +51,9 @@ A good setup for a pacta project looks like this:
     PACTA_DATA=/home/mauro/git/pacta-data
 
 -   The input/ directory must contain portfolio files like
-    [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
+    [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/inst/extdata/TestPortfolio_Input.csv),
     and parameters files like
-    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
+    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/pactaCore/blob/master/inst/extdata/TestPortfolio_Input_PortfolioParameters.yml).
 
 -   The output/ directory typically starts empty.
 
