@@ -48,3 +48,13 @@ test_that("without portfolio errors gracefully", {
   fs::file_delete(path(parent, "input", "TestPortfolio_Input.csv"))
   expect_snapshot_error(run_pacta_impl(path(parent, ".env"), code = NULL))
 })
+
+test_that("without a parameter file errors gracefully", {
+  skip_on_ci()
+  skip_on_cran()
+  parent <- path_home("pacta_tmp")
+  local_pacta(parent)
+
+  fs::file_delete(path(parent, "input", "TestPortfolio_Input_PortfolioParameters.yml"))
+  expect_snapshot_error(run_pacta_impl(path(parent, ".env"), code = NULL))
+})

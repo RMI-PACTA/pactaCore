@@ -42,20 +42,7 @@ context_path <- function(..., mustWork = FALSE) {
 
 results_path <- function(parent, ..., regexp = portfolio_pattern()) {
   portfolios <- portfolio_names(path(parent, "input"), regexp = regexp)
-  abort_if_missing_portfolio(portfolios)
-
   path(parent, "output", "working_dir", "40_Results", portfolios, ...)
-}
-
-abort_if_missing_portfolio <- function(portfolios) {
-  none <- identical(portfolios, character(0))
-  if (none) {
-    stop(
-      "The input/ directory must have a porfolio file but it doesn't.\n",
-      "Is your setup as per https://github.com/2DegreesInvesting/pactaCore?",
-      call. = FALSE
-    )
-  }
 }
 
 working_dir_paths <- function(portfolio_name = example_input_name()) {
@@ -201,4 +188,22 @@ is_empty_dir <- function(path) {
 
 expect_no_error <- function(object, ...) {
   testthat::expect_error(object, regexp = NA, ...)
+}
+
+abort_if_missing_inputs <- function(path) {
+  portfolio <- dir_ls(path, regexp = "Input[.]csv")
+  parameter <- dir_ls(path, regexp = "Input_PortfolioParameters[.]yml")
+  missing_portfolio <- identical(unclass(unname(portfolio)), character(0))
+  missing_parameter <- identical(unclass(unname(parameter)), character(0))
+  if (missing_portfolio || missing_parameter) {
+    stop(
+      "The input/ directory must have at least one pair of files:\n",
+      "* A porfolio file named <pair-name>_Input.csv.\n",
+      "* A parameter file named <pair-name>_Input_PortfolioParameters.yml.\n",
+      "Is your setup as per https://github.com/2DegreesInvesting/pactaCore?",
+      call. = FALSE
+    )
+  }
+
+  invisible(path)
 }
