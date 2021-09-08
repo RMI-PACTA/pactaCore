@@ -55,6 +55,7 @@ test_that("without a parameter file errors gracefully", {
   parent <- path_home("pacta_tmp")
   local_pacta(parent)
 
-  fs::file_delete(path(parent, "input", "TestPortfolio_Input_PortfolioParameters.yml"))
+  param <- path(parent, "input", "TestPortfolio_Input_PortfolioParameters.yml")
+  fs::file_delete(param)
   expect_snapshot_error(run_pacta_impl(path(parent, ".env"), code = NULL))
 })
