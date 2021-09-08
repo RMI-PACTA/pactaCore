@@ -36,7 +36,7 @@ run_pacta_impl <- function(env = ".env",
   input <- path_env("PACTA_INPUT", env)
   output <- path_env("PACTA_OUTPUT", env)
   abort_if_missing_inputs(input)
-  abort_if_not_empty_dir(results_path(fs::path_dir(output)))
+  abort_if_not_empty_dir(results_path(path_dir(output)))
 
   data <- path_env("PACTA_DATA", env)
   # r"()" was introduced in R 4.0.0
