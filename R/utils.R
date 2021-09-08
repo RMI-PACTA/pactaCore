@@ -27,14 +27,6 @@ create_working_dir <- function(dir = tempdir()) {
   invisible(dir)
 }
 
-abort_if_dir_exists <- function(dir) {
-  if (dir_exists(dir)) {
-    stop("This directory must not exist but it does:\n", dir, call. = FALSE)
-  }
-
-  invisible(dir)
-}
-
 portfolio_names <- function(dir, regexp) {
   csv <- fs::dir_ls(dir, regexp = regexp)
   fs::path_ext_remove(fs::path_file(csv))
@@ -177,4 +169,41 @@ update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
   writeLines(code, file)
 
   invisible(file)
+}
+
+abort_if_not_empty_dir <- function(path) {
+  if (dir_exists(path) && !is_empty_dir(path)) {
+    stop(
+      "This directory must be empty but isn't:\n",
+      path,
+      call. = FALSE
+    )
+  }
+  invisible(path)
+}
+
+is_empty_dir <- function(path) {
+  identical(unname(unclass(dir_ls(path))), character(0))
+}
+
+expect_no_error <- function(object, ...) {
+  testthat::expect_error(object, regexp = NA, ...)
+}
+
+abort_if_missing_inputs <- function(path) {
+  portfolio <- dir_ls(path, regexp = "Input[.]csv")
+  parameter <- dir_ls(path, regexp = "Input_PortfolioParameters[.]yml")
+  missing_portfolio <- identical(unclass(unname(portfolio)), character(0))
+  missing_parameter <- identical(unclass(unname(parameter)), character(0))
+  if (missing_portfolio || missing_parameter) {
+    stop(
+      "The input/ directory must have at least one pair of files:\n",
+      "* A porfolio file named <pair-name>_Input.csv.\n",
+      "* A parameter file named <pair-name>_Input_PortfolioParameters.yml.\n",
+      "Is your setup as per https://github.com/2DegreesInvesting/pactaCore?",
+      call. = FALSE
+    )
+  }
+
+  invisible(path)
 }
