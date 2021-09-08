@@ -26,9 +26,16 @@
 #'   })
 #' }
 run_pacta <- function(env = ".env") {
+  run_pacta_impl(env)
+  invisible(env)
+}
+
+# `code` allows injecting test code
+run_pacta_impl <- function(env = ".env",
+                           code = expression(system(docker_run))) {
   input <- path_env("PACTA_INPUT", env)
   output <- path_env("PACTA_OUTPUT", env)
-  abort_if_dir_exists(results_path(fs::path_dir(output)))
+  abort_if_not_empty_dir(results_path(fs::path_dir(output)))
 
   data <- path_env("PACTA_DATA", env)
   # r"()" was introduced in R 4.0.0
@@ -50,7 +57,8 @@ run_pacta <- function(env = ".env") {
     "docker run --rm -v %s:/input -v %s:/output -v %s:/pacta-data:ro %s %s",
     input, output, data, image_tag, command_arg
   )
-  system(docker_run)
+
+  eval(code)
 
   invisible(env)
 }
