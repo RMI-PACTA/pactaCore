@@ -40,16 +40,13 @@ test_that("avoids overwritting output from a prevoius run", {
   expect_error(run_pacta_impl(path(parent, ".env"), NULL), "must be empty")
 })
 
-test_that("if input/ lacks portfolio and parameter files throws a warning", {
+test_that("without portfolio errors gracefully", {
   skip_on_ci()
   skip_on_cran()
   parent <- path_home("pacta_tmp")
   local_pacta(parent)
 
-  # Remove required files
   fs::file_delete(path(parent, "input", "TestPortfolio_Input.csv"))
-  fs::file_delete(path(parent, "input", "TestPortfolio_Input_PortfolioParameters.yml"))
-  expect_warning(
-    run_pacta_impl(path(parent, ".env"), code = NULL)
-  )
+
+  expect_snapshot_error(run_pacta_impl(path(parent, ".env"), code = NULL))
 })
