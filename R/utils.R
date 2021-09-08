@@ -42,17 +42,20 @@ context_path <- function(..., mustWork = FALSE) {
 
 results_path <- function(parent, ..., regexp = portfolio_pattern()) {
   portfolios <- portfolio_names(path(parent, "input"), regexp = regexp)
+  abort_if_missing_portfolio(portfolios)
+
+  path(parent, "output", "working_dir", "40_Results", portfolios, ...)
+}
+
+abort_if_missing_portfolio <- function(portfolios) {
   none <- identical(portfolios, character(0))
   if (none) {
     stop(
-      "Can't find a porfolio file matching '", regexp, "' insude input/:\n",
-      path(parent, "input"), "\n",
-      "Is your setup as in https://github.com/2DegreesInvesting/pactaCore?",
+      "The input/ directory must have a porfolio file but it doesn't.\n",
+      "Is your setup as per https://github.com/2DegreesInvesting/pactaCore?",
       call. = FALSE
     )
   }
-
-  path(parent, "output", "working_dir", "40_Results", portfolios, ...)
 }
 
 working_dir_paths <- function(portfolio_name = example_input_name()) {
