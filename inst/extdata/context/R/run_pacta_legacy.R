@@ -28,7 +28,7 @@ run_pacta_legacy <- function(source = ".", input = "../input", output = "../outp
 
   setup_output(source, output)
 
-  access <- get_permissions(input)
+    access <- get_permissions(input)
   purrr::walk(c(input, output), apply_permissions, access)
 
   invisible(source)
