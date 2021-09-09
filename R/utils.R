@@ -36,8 +36,8 @@ abort_if_dir_exists <- function(dir) {
 }
 
 portfolio_names <- function(dir, regexp) {
-  csv <- fs::dir_ls(dir, regexp = regexp)
-  fs::path_ext_remove(fs::path_file(csv))
+  csv <- dir_ls(dir, regexp = regexp)
+  path_ext_remove(path_file(csv))
 }
 
 extdata_path <- function(..., mustWork = TRUE) {
@@ -177,4 +177,25 @@ update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
   writeLines(code, file)
 
   invisible(file)
+}
+
+path_parent <- function(...) {
+  parent <- fs::path_dir(getenv_data())
+  path(parent, ...)
+}
+
+is_empty_dir <- function(path) {
+  identical(unname(unclass(fs::dir_ls(path))), character(0))
+}
+
+abort_if_not_empty_dir <- function(results) {
+  if (dir_exists(results) && !is_empty_dir(results)) {
+    stop(
+      "The results directory must be empty or not exist.\n",
+      results, "\n",
+      "i Do you need to delete it?",
+      call. = FALSE
+    )
+  }
+  invisible(results)
 }
