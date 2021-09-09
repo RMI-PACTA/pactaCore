@@ -4,3 +4,4 @@
 .Renviron
 README_cache/
 cache
+tests/testthat/_snaps
