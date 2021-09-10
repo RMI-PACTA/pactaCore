@@ -4,4 +4,7 @@
 .Renviron
 README_cache/
 cache
-tests/testthat/_snaps
+
+# Ignore private snapshots with suffix "_private". For example:
+# Create a private snapshot of `f()` in test-f_private.R
+tests/testthat/_snaps/*_private.md
