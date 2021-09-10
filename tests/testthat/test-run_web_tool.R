@@ -3,6 +3,10 @@ test_that("without siblings errors gracefully", {
 })
 
 test_that("with scripts 1:2 produces output", {
+  skip_on_ci()
+  skip_on_cran()
+  skip_slow_tests()
+
   results <- parent_path("PACTA_analysis", "working_dir", "40_Results")
   if (dir_exists(results)) dir_delete(results)
   dir_create(results)
