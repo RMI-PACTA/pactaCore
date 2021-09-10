@@ -5,7 +5,10 @@ run_web_tool <- function(pacta_analysis = parent_path("PACTA_analysis"),
 
   withr::local_dir(pacta_analysis)
   source(path("R", "source_web_tool_scripts.R"))
+  source_web_tool_scripts <- NULL
   source_web_tool_scripts(x)
+
+  invisible(pacta_analysis)
 }
 
 abort_if_missing_sibling <- function(parent) {
