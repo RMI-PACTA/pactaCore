@@ -10,3 +10,4 @@
 ^inst/extdata/context/\.Rbuildignore$
 ^inst/extdata/context/\.github$
 ^\.github$
+^\.gitattributes$

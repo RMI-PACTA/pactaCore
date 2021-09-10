@@ -1,0 +1,2 @@
+tests/testthat/_snaps/** filter=git-crypt diff=git-crypt
+
