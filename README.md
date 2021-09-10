@@ -14,6 +14,10 @@ The goal of pactaCore is run the core steps of the [PACTA
 methodology](https://2degrees-investing.org/resource/pacta/) with a
 single command, in a reproducible way.
 
+## System requirements
+
+[Docker](https://docs.docker.com/get-docker/).
+
 ## Installation
 
 You can install the development version from
@@ -92,28 +96,8 @@ The output/ directory is now populated with results:
             │   └── TestPortfolio_Input.csv
             ├── 30_Processed_Inputs
             │   └── TestPortfolio_Input
-            │       ├── audit_file.csv
-            │       ├── audit_file.rda
-            │       ├── bonds_portfolio.rda
-            │       ├── coveragegraph.json
-            │       ├── coveragegraphlegend.json
-            │       ├── coveragetextvar.json
-            │       ├── emissions.rda
-            │       ├── equity_portfolio.rda
-            │       ├── fund_coverage_summary.rda
-            │       ├── invalidsecurities.csv
-            │       ├── invalidsecurities.json
-            │       ├── overview_portfolio.rda
-            │       ├── portfolio_weights.json
-            │       └── total_portfolio.rda
             ├── 40_Results
             │   └── TestPortfolio_Input
-            │       ├── Bonds_results_company.rda
-            │       ├── Bonds_results_map.rda
-            │       ├── Bonds_results_portfolio.rda
-            │       ├── Equity_results_company.rda
-            │       ├── Equity_results_map.rda
-            │       └── Equity_results_portfolio.rda
             └── 50_Outputs
                 └── TestPortfolio_Input
 
@@ -149,70 +133,6 @@ and `investor_name_in` will populate the columns `portfolio_name` and
 
 <!-- -->
 
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_company.rda`
-    # A tibble: 6 × 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_map.rda`
-    # A tibble: 6 × 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_portfolio.rda`
-    # A tibble: 6 × 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_company.rda`
-    # A tibble: 6 × 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_map.rda`
-    # A tibble: 6 × 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_portfolio.rda`
-    # A tibble: 6 × 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
+    named list()
 
 </details>
