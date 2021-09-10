@@ -1,7 +1,7 @@
 
-This document helps you develop or contribute to pactaCore. It document
-the few things that make this project different form a standard R
-package.
+This document guides contributors. It extends
+[README](https://github.com/2DegreesInvesting/pactaCore/blob/main/README.md)
+focusing on how this R package differs form a standard one.
 
 -   Some environment variables are convenient or required. A good place
     to set them is in a project-specific .Renviron file, e.g.:
