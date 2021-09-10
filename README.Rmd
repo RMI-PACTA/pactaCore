@@ -29,6 +29,10 @@ The goal of pactaCore is run the core steps of the [PACTA
 methodology](https://2degrees-investing.org/resource/pacta/) with a single
 command, in a reproducible way.
 
+## System requirements
+
+[Docker](https://docs.docker.com/get-docker/).
+
 ## Installation
 
 You can install the development version from [GitHub](https://github.com/) with:
