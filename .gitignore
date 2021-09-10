@@ -12,3 +12,4 @@ tests/testthat/_snaps/**
 
 # Re-include safe snapshots
 !tests/testthat/_snaps/run_pacta.md
+!tests/testthat/_snaps/run_web_tool.md

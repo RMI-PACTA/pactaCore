@@ -207,3 +207,12 @@ abort_if_missing_inputs <- function(path) {
 
   invisible(path)
 }
+
+# Like here::here() and devtools::package_path() but without those dependencies
+root_path <- function(...) {
+  path(path_dir(path_dir(path_abs(testthat::test_path()))), ...)
+}
+
+parent_path <- function(...) {
+  path(path_dir(root_path()), ...)
+}
