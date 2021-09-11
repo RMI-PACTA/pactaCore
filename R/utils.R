@@ -231,3 +231,9 @@ enlist_dataframes <- function(dir) {
   names(datasets) <- path_ext_remove(path_file(names(datasets)))
   datasets
 }
+
+compare <- function(x, y, ...) {
+  for (i in seq_along(old)) {
+    print(waldo::compare(old[[i]], new[[i]], ...))
+  }
+}
