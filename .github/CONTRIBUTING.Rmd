@@ -34,3 +34,9 @@ writeLines(grep("testthat/_snaps", lines, value = TRUE))
 
 * Git ignores the directory tests/testthat/private/. Use it to store regression
 references or other private data.
+
+```{r}
+fs::dir_tree(here::here("tests", "testthat", "private"))
+```
+
+You may compare two lists of reference datasets with the internal function `compare_references()`.

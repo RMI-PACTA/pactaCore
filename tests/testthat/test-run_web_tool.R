@@ -12,7 +12,7 @@ test_that("with scripts 1:2 produces output", {
   reference <- private_path("web_tool")
   dir_copy(results, reference, overwrite = TRUE)
 
-  datasets <- enlist_dataframes(reference)
+  datasets <- enlist_rds(reference)
   dimensions <- lapply(datasets, dim)
   expect_snapshot(dimensions)
   classes <- classes(datasets)

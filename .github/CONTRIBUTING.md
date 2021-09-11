@@ -8,7 +8,7 @@ focusing on how this R package differs form a standard one.
 
 <!-- -->
 
-    PACTA_SKIP_SLOW_TESTS=TRUE
+    PACTA_SKIP_SLOW_TESTS=FALSE
     PACTA_DATA=/home/mauro/git/siblings/pacta-data
 
 -   Git ignores all files under the directory tests/testthat/\_snaps/ to
@@ -23,3 +23,26 @@ focusing on how this R package differs form a standard one.
 
 -   Git ignores the directory tests/testthat/private/. Use it to store
     regression references or other private data.
+
+<!-- -->
+
+    /home/mauro/git/siblings/pactaCore/tests/testthat/private
+    ├── pacta_core
+    │   └── TestPortfolio_Input
+    │       ├── Bonds_results_company.rda
+    │       ├── Bonds_results_map.rda
+    │       ├── Bonds_results_portfolio.rda
+    │       ├── Equity_results_company.rda
+    │       ├── Equity_results_map.rda
+    │       └── Equity_results_portfolio.rda
+    └── web_tool
+        └── TestPortfolio_Input
+            ├── Bonds_results_company.rda
+            ├── Bonds_results_map.rda
+            ├── Bonds_results_portfolio.rda
+            ├── Equity_results_company.rda
+            ├── Equity_results_map.rda
+            └── Equity_results_portfolio.rda
+
+You may compare two lists of reference datasets with the internal
+function `compare_references()`.

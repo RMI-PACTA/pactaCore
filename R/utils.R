@@ -225,15 +225,26 @@ classes <- function(datasets) {
   lapply(datasets, function(x) unlist(lapply(x, class)))
 }
 
-enlist_dataframes <- function(dir) {
+# Read .rds files from a directory into a list
+enlist_rds <- function(dir) {
   files <- dir_ls(dir, type = "file", recurse = TRUE)
   datasets <- lapply(files, readRDS)
   names(datasets) <- path_ext_remove(path_file(names(datasets)))
   datasets
 }
 
-compare <- function(x, y, ...) {
+# For each pair of .rds files in two directories, compare differences if any
+compare_references <- function(dir_new = private_path("pacta_core"),
+                               dir_old = private_path("web_tool")) {
+  results <- lapply(list(dir_new, dir_old), enlist_rds)
+  names(results) <- c("new", "old")
+
+  compare(results$pacta_core, results$web_tool)
+}
+
+compare <- function(old, new, ...) {
   for (i in seq_along(old)) {
     print(waldo::compare(old[[i]], new[[i]], ...))
   }
 }
+

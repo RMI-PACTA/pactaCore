@@ -11,7 +11,7 @@ test_that("creates the expected results", {
   reference <- private_path("pacta_core")
   dir_copy(results, reference, overwrite = TRUE)
 
-  datasets <- enlist_dataframes(results)
+  datasets <- enlist_rds(results)
   dimensions <- lapply(datasets, dim)
   expect_snapshot(dimensions)
   classes <- classes(datasets)
