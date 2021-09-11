@@ -216,3 +216,7 @@ root_path <- function(...) {
 parent_path <- function(...) {
   path(path_dir(root_path()), ...)
 }
+
+private_path <- function(...) {
+  testthat::test_path("private", ...)
+}
