@@ -8,12 +8,18 @@ focusing on how this R package differs form a standard one.
 
 <!-- -->
 
-    PACTA_SKIP_SLOW_TESTS=FALSE
-    PACTA_DATA=/home/mauro/git/pacta-data
+    PACTA_SKIP_SLOW_TESTS=TRUE
+    PACTA_DATA=/home/mauro/git/siblings/pacta-data
 
--   Snapshots are ignored to avoid leaking private data. Re-include
-    public snapshots in .gitignore, e.g.:
+-   Git ignores all files under the directory tests/testthat/\_snaps/ to
+    avoid leaking private data. Re-include public snapshots in
+    .gitignore with a negation pattern (!), e.g.:
 
 <!-- -->
 
+    tests/testthat/_snaps/**
     !tests/testthat/_snaps/run_pacta.md
+    !tests/testthat/_snaps/run_web_tool.md
+
+-   Git ignores the directory tests/testthat/private/. Use it to store
+    regression references or other private data.

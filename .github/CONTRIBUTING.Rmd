@@ -23,10 +23,14 @@ them is in a project-specific .Renviron file, e.g.:
 writeLines(readLines(here::here(".Renviron")))
 ```
 
-* Snapshots are ignored to avoid leaking private data. Re-include public
-snapshots in .gitignore, e.g.:
+* Git ignores all files under the directory tests/testthat/_snaps/ to avoid
+leaking private data. Re-include public snapshots in .gitignore with a negation
+pattern (!), e.g.:
 
 ```{r}
 lines <- readLines(here::here(".gitignore"))
-writeLines(grep("^!tests", lines, value = TRUE))
+writeLines(grep("testthat/_snaps", lines, value = TRUE))
 ```
+
+* Git ignores the directory tests/testthat/private/. Use it to store regression
+references or other private data.
