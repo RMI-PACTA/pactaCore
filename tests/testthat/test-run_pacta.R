@@ -7,7 +7,7 @@ test_that("creates the expected results", {
 
   run_pacta(path(parent, ".env"))
 
-  results <- results_path(parent)
+  results <- path_dir(results_path(parent))
   reference <- private_path("pacta_core")
   dir_copy(results, reference, overwrite = TRUE)
 
