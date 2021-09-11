@@ -1,13 +1,3 @@
-# without siblings errors gracefully
-
-    Each directory must exist at /bad:
-    *  create_interactive_report
-    *  PACTA_analysis
-    *  pacta-data
-    *  pactaCore
-    *  r2dii.climate.stress.test
-    *  r2dii.stress.test.data
-
 # with scripts 1:2 produces output
 
     Code
@@ -157,4 +147,14 @@
            trajectory_deviation      trajectory_alignment 
                       "numeric"                 "numeric" 
       
+
+# without siblings errors gracefully
+
+    Each directory must exist at /bad:
+    *  create_interactive_report
+    *  PACTA_analysis
+    *  pacta-data
+    *  pactaCore
+    *  r2dii.climate.stress.test
+    *  r2dii.stress.test.data
 

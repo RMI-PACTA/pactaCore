@@ -1,3 +1,23 @@
+test_that("creates the expected results", {
+  skip_on_ci()
+  skip_on_cran()
+  skip_slow_tests()
+  parent <- path_home("pacta_tmp")
+  local_pacta(parent)
+
+  run_pacta(path(parent, ".env"))
+
+  results <- results_path(parent)
+  reference <- private_path("pacta_core")
+  dir_copy(results, reference, overwrite = TRUE)
+
+  datasets <- enlist_dataframes(results)
+  dimensions <- lapply(datasets, dim)
+  expect_snapshot(dimensions)
+  classes <- classes(datasets)
+  expect_snapshot(classes)
+})
+
 test_that("doesn't fail if output exists but is empty", {
   skip_on_ci()
   skip_on_cran()
