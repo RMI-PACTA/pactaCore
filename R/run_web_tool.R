@@ -1,14 +1,14 @@
-run_web_tool <- function(pacta_analysis = parent_path("PACTA_analysis"),
-                         x = 1:3) {
-  parent <- path_dir(pacta_analysis)
-  abort_if_missing_sibling(parent)
+# path: Path to source code, e.g. /path/to/PACTA_analysis
+# x: Script(s) number web_tool_script_{1:3}.R
+run_web_tool <- function(path = parent_path("PACTA_analysis"), x = 1:3) {
+  abort_if_missing_sibling(path_dir(path))
+  withr::local_dir(path)
 
-  withr::local_dir(pacta_analysis)
-  source(path("R", "source_web_tool_scripts.R"))
   source_web_tool_scripts <- NULL
+  source(path("R", "source_web_tool_scripts.R"))
   source_web_tool_scripts(x)
 
-  invisible(pacta_analysis)
+  invisible(path)
 }
 
 abort_if_missing_sibling <- function(parent) {
