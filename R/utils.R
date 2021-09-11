@@ -247,4 +247,3 @@ compare <- function(old, new, ...) {
     print(waldo::compare(old[[i]], new[[i]], ...))
   }
 }
-
