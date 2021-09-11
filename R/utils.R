@@ -220,3 +220,14 @@ parent_path <- function(...) {
 private_path <- function(...) {
   testthat::test_path("private", ...)
 }
+
+classes <- function(datasets) {
+  lapply(datasets, function(x) unlist(lapply(x, class)))
+}
+
+enlist_dataframes <- function(dir) {
+  files <- dir_ls(dir, type = "file", recurse = TRUE)
+  datasets <- lapply(files, readRDS)
+  names(datasets) <- path_ext_remove(path_file(names(datasets)))
+  datasets
+}
