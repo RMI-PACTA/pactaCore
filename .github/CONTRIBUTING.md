@@ -45,4 +45,4 @@ focusing on how this R package differs form a standard one.
             └── Equity_results_portfolio.rda
 
 You may compare two lists of reference datasets with the internal
-function `compare_references()`.
+function `compare()`.

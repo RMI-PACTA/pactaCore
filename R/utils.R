@@ -1,3 +1,30 @@
+# For each pair of .rds files in two directories, compare differences if any
+
+#' Compare two lists in parallel
+#'
+#' Defaults to comparing private results between the web tool and this package.
+#'
+#' @param new,old A list of dataframes.
+#' @param ... Passed to `waldos::compare()`
+#'
+#' @return Called for its side effect. Prints differences.
+#'
+#' @examples
+#' new <- list(x = data.frame(a = 9, b = 1), x = data.frame(a = 1, b = 9))
+#' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
+#' compare(new, old)
+#' compare(new, new)
+#' @noRd
+compare <- function(new = enlist_rds(private_path("pacta_core")),
+                    old = enlist_rds(private_path("web_tool")),
+                    ...) {
+  for (i in seq_along(old)) {
+    out <- waldo::compare(old[[i]], new[[i]], ...)
+  }
+
+  out
+}
+
 # Like purrr::walk
 walk <- function(.x, .f, ...) {
   lapply(.x, .f, ...)
@@ -231,19 +258,4 @@ enlist_rds <- function(dir) {
   datasets <- lapply(files, readRDS)
   names(datasets) <- path_ext_remove(path_file(names(datasets)))
   datasets
-}
-
-# For each pair of .rds files in two directories, compare differences if any
-compare_references <- function(dir_new = private_path("pacta_core"),
-                               dir_old = private_path("web_tool")) {
-  results <- lapply(list(dir_new, dir_old), enlist_rds)
-  names(results) <- c("new", "old")
-
-  compare(results$pacta_core, results$web_tool)
-}
-
-compare <- function(old, new, ...) {
-  for (i in seq_along(old)) {
-    print(waldo::compare(old[[i]], new[[i]], ...))
-  }
 }
