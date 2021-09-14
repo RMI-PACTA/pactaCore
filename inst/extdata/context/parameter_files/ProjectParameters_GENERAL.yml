@@ -1,9 +1,9 @@
 default:
 
     reporting:
-        project_report_name: swiss
-        display_currency: CHF
-        currency_exchange_value: 1.03
+        project_report_name: general
+        display_currency: USD
+        currency_exchange_value: 1
 
     parameters:
         timestamp: 2019Q4
@@ -32,7 +32,6 @@ default:
             - Oil&Gas
             - Coal
         pacta_sectors_not_analysed:
-            - Shipping
             - Steel
             - Aviation
             - Cement
@@ -86,6 +85,5 @@ default:
 
     stress_test:
         shock_year: 2030
-        price_data_version: 2020Q4
-
+        price_data_version: 2021Q1
 
