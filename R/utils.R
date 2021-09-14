@@ -16,8 +16,8 @@
 #' compare_results(new, new)
 #' @noRd
 compare_results <- function(new = enlist_rds(private_path("pacta_core")),
-                    old = enlist_rds(private_path("web_tool")),
-                    ...) {
+                            old = enlist_rds(private_path("web_tool")),
+                            ...) {
   for (i in seq_along(old)) {
     out <- waldo::compare(old[[i]], new[[i]], ...)
   }
