@@ -40,3 +40,12 @@ fs::dir_tree(here::here("tests", "testthat", "private"))
 ```
 
 You may compare two lists of reference datasets with the internal function `compare()`.
+
+* Regression tests require this pactaCore to be a sibling of a number of
+repositories. Clone them from 2DII's GitHub organization and ensure your local
+clones are up to date with the repos on GitHub.
+
+```{r}
+pactaCore:::siblings()
+```
+
