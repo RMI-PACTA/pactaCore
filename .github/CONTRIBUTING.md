@@ -11,6 +11,19 @@ focusing on how this R package differs form a standard one.
     PACTA_SKIP_SLOW_TESTS=FALSE
     PACTA_DATA=/home/mauro/git/siblings/pacta-data
 
+-   pactaCore must be a sibling of a number of repositories. Clone them
+    from 2DII’s GitHub organization and ensure your local clones are up
+    to date with the repos on GitHub.
+
+<!-- -->
+
+    git clone git@github.com:2DegreesInvesting/create_interactive_report.git
+    git clone git@github.com:2DegreesInvesting/PACTA_analysis.git
+    git clone git@github.com:2DegreesInvesting/pacta-data.git
+    git clone git@github.com:2DegreesInvesting/pactaCore.git
+    git clone git@github.com:2DegreesInvesting/r2dii.climate.stress.test.git
+    git clone git@github.com:2DegreesInvesting/r2dii.stress.test.data.git
+
 -   Git ignores all files under the directory tests/testthat/\_snaps/ to
     avoid leaking private data. Re-include public snapshots in
     .gitignore with a negation pattern (!), e.g.:
@@ -46,13 +59,3 @@ focusing on how this R package differs form a standard one.
 
 You may compare two lists of reference datasets with the internal
 function `compare()`.
-
--   Regression tests require this pactaCore to be a sibling of a number
-    of repositories. Clone them from 2DII’s GitHub organization and
-    ensure your local clones are up to date with the repos on GitHub.
-
-<!-- -->
-
-    [1] "create_interactive_report" "PACTA_analysis"           
-    [3] "pacta-data"                "pactaCore"                
-    [5] "r2dii.climate.stress.test" "r2dii.stress.test.data"   
