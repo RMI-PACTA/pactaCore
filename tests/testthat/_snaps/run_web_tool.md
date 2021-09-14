@@ -1,4 +1,4 @@
-# creates the expected results
+# with scripts 1:2 produces output
 
     Code
       dimensions
@@ -148,17 +148,13 @@
                       "numeric"                 "numeric" 
       
 
-# without portfolio errors gracefully
+# without siblings errors gracefully
 
-    The input/ directory must have at least one pair of files:
-    * A porfolio file named <pair-name>_Input.csv.
-    * A parameter file named <pair-name>_Input_PortfolioParameters.yml.
-    Is your setup as per https://github.com/2DegreesInvesting/pactaCore?
-
-# without a parameter file errors gracefully
-
-    The input/ directory must have at least one pair of files:
-    * A porfolio file named <pair-name>_Input.csv.
-    * A parameter file named <pair-name>_Input_PortfolioParameters.yml.
-    Is your setup as per https://github.com/2DegreesInvesting/pactaCore?
+    Each directory must exist at /bad:
+    *  create_interactive_report
+    *  PACTA_analysis
+    *  pacta-data
+    *  pactaCore
+    *  r2dii.climate.stress.test
+    *  r2dii.stress.test.data
 

@@ -23,10 +23,32 @@ them is in a project-specific .Renviron file, e.g.:
 writeLines(readLines(here::here(".Renviron")))
 ```
 
-* Snapshots are ignored to avoid leaking private data. Re-include public
-snapshots in .gitignore, e.g.:
+* pactaCore must be a sibling of a number of repositories. Clone them from
+2DII's GitHub organization and ensure your local clones are up to date with the
+repos on GitHub (to manage all siblings at once see `pacta-pull-origin-master`
+in [`pacta-cli`](https://github.com/2DegreesInvesting/pacta-cli)).
+
+```{r}
+writeLines(paste0(
+    "git clone git@github.com:2DegreesInvesting/", pactaCore:::siblings(), ".git"
+))
+```
+
+* Git ignores all files under the directory tests/testthat/_snaps/ to avoid
+leaking private data. Re-include public snapshots in .gitignore with a negation
+pattern (!), e.g.:
 
 ```{r}
 lines <- readLines(here::here(".gitignore"))
-writeLines(grep("^!tests", lines, value = TRUE))
+writeLines(grep("testthat/_snaps", lines, value = TRUE))
 ```
+
+* Git ignores the directory tests/testthat/private/. Use it to store regression
+references or other private data.
+
+```{r}
+fs::dir_tree(here::here("tests", "testthat", "private"))
+```
+
+You may compare two lists of reference datasets with the internal function
+`compare_results()`.

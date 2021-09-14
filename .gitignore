@@ -5,6 +5,8 @@
 README_cache/
 cache
 
+tests/testthat/private/
+
 # Ignore all snapshots. From https://git-scm.com/docs/gitignore:
 # > It is not possible to re-include a file if a parent directory of
 # > that file is excluded ... "/**" matches everything inside.
@@ -12,3 +14,5 @@ tests/testthat/_snaps/**
 
 # Re-include safe snapshots
 !tests/testthat/_snaps/run_pacta.md
+!tests/testthat/_snaps/run_web_tool.md
+

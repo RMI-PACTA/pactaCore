@@ -1,3 +1,30 @@
+# A vectorized version of waldo::compare()
+
+#' Compare two lists in parallel
+#'
+#' Defaults to comparing private results between the web tool and this package.
+#'
+#' @param new,old A list of dataframes.
+#' @param ... Passed to `waldos::compare()`
+#'
+#' @return Called for its side effect. Prints differences.
+#'
+#' @examples
+#' new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
+#' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
+#' compare_results(new, old)
+#' compare_results(new, new)
+#' @noRd
+compare_results <- function(new = enlist_rds(private_path("pacta_core")),
+                            old = enlist_rds(private_path("web_tool")),
+                            ...) {
+  for (i in seq_along(old)) {
+    out <- waldo::compare(old[[i]], new[[i]], ...)
+  }
+
+  out
+}
+
 # Like purrr::walk
 walk <- function(.x, .f, ...) {
   lapply(.x, .f, ...)
@@ -206,4 +233,29 @@ abort_if_missing_inputs <- function(path) {
   }
 
   invisible(path)
+}
+
+# Like here::here() and devtools::package_path() but without those dependencies
+root_path <- function(...) {
+  path(path_dir(path_dir(path_abs(testthat::test_path()))), ...)
+}
+
+parent_path <- function(...) {
+  path(path_dir(root_path()), ...)
+}
+
+private_path <- function(...) {
+  testthat::test_path("private", ...)
+}
+
+classes <- function(datasets) {
+  lapply(datasets, function(x) unlist(lapply(x, class)))
+}
+
+# Read .rds files from a directory into a list
+enlist_rds <- function(dir) {
+  files <- dir_ls(dir, type = "file", recurse = TRUE)
+  datasets <- lapply(files, readRDS)
+  names(datasets) <- path_ext_remove(path_file(names(datasets)))
+  datasets
 }
