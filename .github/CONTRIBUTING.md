@@ -13,7 +13,8 @@ focusing on how this R package differs form a standard one.
 
 -   pactaCore must be a sibling of a number of repositories. Clone them
     from 2DII’s GitHub organization and ensure your local clones are up
-    to date with the repos on GitHub (see `pacta-pull-origin-master` in
+    to date with the repos on GitHub (to manage all siblings at once see
+    `pacta-pull-origin-master` in
     [`pacta-cli`](https://github.com/2DegreesInvesting/pacta-cli)).
 
 <!-- -->

@@ -50,4 +50,5 @@ references or other private data.
 fs::dir_tree(here::here("tests", "testthat", "private"))
 ```
 
-You may compare two lists of reference datasets with the internal function `compare()`.
+You may compare two lists of reference datasets with the internal function
+`compare()`.

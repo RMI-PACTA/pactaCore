@@ -1,4 +1,4 @@
-# For each pair of .rds files in two directories, compare differences if any
+# A vectorized version of waldo::compare()
 
 #' Compare two lists in parallel
 #'
