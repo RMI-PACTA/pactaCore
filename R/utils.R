@@ -12,10 +12,10 @@
 #' @examples
 #' new <- list(x = data.frame(a = 9, b = 1), x = data.frame(a = 1, b = 9))
 #' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
-#' compare(new, old)
-#' compare(new, new)
+#' compare_results(new, old)
+#' compare_results(new, new)
 #' @noRd
-compare <- function(new = enlist_rds(private_path("pacta_core")),
+compare_results <- function(new = enlist_rds(private_path("pacta_core")),
                     old = enlist_rds(private_path("web_tool")),
                     ...) {
   for (i in seq_along(old)) {

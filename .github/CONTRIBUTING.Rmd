@@ -51,4 +51,4 @@ fs::dir_tree(here::here("tests", "testthat", "private"))
 ```
 
 You may compare two lists of reference datasets with the internal function
-`compare()`.
+`compare_results()`.
