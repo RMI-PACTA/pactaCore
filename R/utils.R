@@ -10,7 +10,7 @@
 #' @return Called for its side effect. Prints differences.
 #'
 #' @examples
-#' new <- list(x = data.frame(a = 9, b = 1), x = data.frame(a = 1, b = 9))
+#' new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
 #' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
 #' compare_results(new, old)
 #' compare_results(new, new)
