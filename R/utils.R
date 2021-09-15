@@ -19,10 +19,13 @@ compare_results <- function(new = enlist_rds(private_path("pacta_core")),
                             old = enlist_rds(private_path("web_tool")),
                             ...) {
   for (i in seq_along(old)) {
-    out <- waldo::compare(old[[i]], new[[i]], ...)
+    print(paste(names(new)[[i]], "(new)", "vs.", names(old)[[i]], "(old)"))
+    try(
+      print(waldo::compare(old[[i]], new[[i]], ...))
+    )
   }
 
-  out
+  invisible(new)
 }
 
 # Like purrr::walk

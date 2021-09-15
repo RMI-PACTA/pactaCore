@@ -1,12 +1,13 @@
-# path: Path to source code, e.g. /path/to/PACTA_analysis
-# x: Script(s) number web_tool_script_{1:3}.R
+#' Run the web_tool
+#'
+#' @param path Path to source code, e.g. /path/to/PACTA_analysis
+#' @param x Script(s) number web_tool_script_{1:3}.R
+#' @noRd
 run_web_tool <- function(path = parent_path("PACTA_analysis"), x = 1:3) {
   abort_if_missing_sibling(path_dir(path))
-  withr::local_dir(path)
+  local_dir(path)
 
-  source_web_tool_scripts <- NULL
-  source(path("R", "source_web_tool_scripts.R"))
-  source_web_tool_scripts(x)
+  walk(sprintf("web_tool_script_%s.R", x), source)
 
   invisible(path)
 }

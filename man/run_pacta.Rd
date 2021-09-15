@@ -23,7 +23,7 @@ if (interactive()) {
     local_pacta(pacta)
 
     # Work from the pacta project for convenicenc
-    withr::local_dir(pacta)
+    local_dir(pacta)
 
     # The ".env" file specifies the setup for input/ output/ and private data
     readLines(".env")
