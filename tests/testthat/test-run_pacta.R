@@ -8,9 +8,9 @@ test_that("outputs datasets with the expected structure", {
   env <- fs::path(pacta, ".env")
   run_pacta(env)
 
-  results <- path_dir(results_path(pacta))
+  results <- path_dir(output_results_path(pacta))
   reference <- private_path("pacta_core")
-  dir_copy(results, reference, overwrite = TRUE)
+  dir_duplicate(results, reference)
 
   datasets <- enlist_rds(results)
   dimensions <- lapply(datasets, dim)
@@ -25,8 +25,8 @@ test_that("avoids overwritting output from a prevoius run", {
   parent <- path_home("pacta_tmp")
   local_pacta(parent)
 
-  fs::dir_create(path(results_path(parent)))
-  fs::file_create(path(results_path(parent), "some.file"))
+  fs::dir_create(path(output_results_path(parent)))
+  fs::file_create(path(output_results_path(parent), "some.file"))
   expect_error(run_pacta(path(parent, ".env")), "must be empty")
 })
 

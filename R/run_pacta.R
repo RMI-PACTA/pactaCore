@@ -26,18 +26,18 @@
 #'   })
 #' }
 run_pacta <- function(env = ".env") {
-  # TODO: Change the API? Remove .env and add input, output, data?
   input <- path_env("PACTA_INPUT", env)
   abort_if_missing_inputs(input)
   output <- path_env("PACTA_OUTPUT", env)
-  abort_if_not_empty_dir(results_path(path_dir(output)))
+  abort_if_not_empty_dir(output_results_path(path_dir(output)))
   data <- path_env("PACTA_DATA", env)
 
-  temp_dir <- setup_source_data(tempdir(), context_path(), data)
-  local_dir(path(temp_dir, "context"))
+  parent <- tempdir()
+  setup_source_data(parent, legacy_path(), data)
+  local_dir(path(parent, legacy_dirname()))
 
-  if (dir_exists("working_dir")) dir_delete("working_dir")
-  create_working_dir(".")
+  dir_destroy(wd_path())
+  create_wd(".")
 
   run_pacta_legacy(source = ".", input = input, output = output)
 
@@ -46,9 +46,8 @@ run_pacta <- function(env = ".env") {
 
 #' Run PACTA for all portfolios in an input directory
 #'
-#' @param source String. Path to pacta's source code
-#' @param input,output String. Path to directories input/ and output/ inside the
-#'   docker container
+#' @param source String. Path to PACTA's legacy source code.
+#' @param input,output String. Path to directories input/ and output/.
 #'
 #' @examples
 #' run_pacta_legacy(
@@ -58,25 +57,23 @@ run_pacta <- function(env = ".env") {
 #' )
 #' @noRd
 run_pacta_legacy <- function(source, input, output) {
-  source <- fs::path_abs(source)
-  input <- fs::path_abs(input)
-  output <- fs::path_abs(output)
+  source <- path_abs(source)
+  input <- path_abs(input)
+  output <- path_abs(output)
 
   local_dir(source)
   abort_if_missing_pacta_data(source)
 
   setup_input(source, input)
 
-  portfolios <- portfolio_names(input, regexp = "_Input[.]csv")
+  portfolios <- portfolio_names(input, portfolio_pattern())
   command <- sprintf("Rscript --vanilla pacta_legacy.R %s", portfolios)
   for (i in seq_along(command)) {
     message("Start portfolio: ", portfolios[[i]])
     system(command[[i]])
-    message("End portfolio: ", portfolios[[i]])
   }
 
   setup_output(source, output)
-
   access <- get_permissions(input)
   walk(c(input, output), apply_permissions, access)
 
@@ -88,49 +85,40 @@ abort_if_missing_pacta_data <- function(source) {
   if (!is_sibling) {
     stop("Can't find pacta-data/", call. = FALSE)
   }
+
+  invisible(source)
 }
 
 setup_input <- function(source, input) {
-  # TODO: Should we also support ".yaml" (with an "a")?
-  yml <- fs::dir_ls(input, regexp = "[.]yml$")
-  fs::file_copy(
-    yml,
-    fs::path(source, "working_dir", "10_Parameter_File", fs::path_file(yml)),
-    overwrite = TRUE
-  )
-  csv <- fs::dir_ls(input, regexp = "[.]csv$")
-  fs::file_copy(
-    csv,
-    fs::path(source, "working_dir", "20_Raw_Inputs", fs::path_file(csv)),
-    overwrite = TRUE
-  )
+  yml <- dir_ls(input, regexp = "[.]yml$")
+  file_duplicate(yml, path(source, parameter_file_path(path_file(yml))))
+
+  csv <- dir_ls(input, regexp = "[.]csv$")
+  file_duplicate(csv, path(source, raw_inputs_path(path_file(csv))))
 
   invisible(source)
 }
 
 setup_output <- function(wd, output) {
-  fs::dir_copy(
-    fs::path(wd, "working_dir"), fs::path(output, "working_dir"),
-    overwrite = TRUE
-  )
+  dir_duplicate(path(wd, wd_path()), path(output, wd_path()))
 
-  files <- fs::dir_ls(output, recurse = TRUE)
-  fs::file_chmod(files, "a+rwx")
+  files <- dir_ls(output, recurse = TRUE)
+  file_chmod(files, "a+rwx")
 
   invisible(wd)
 }
 
 apply_permissions <- function(dir, access) {
-  files <- fs::dir_ls(dir, recurse = TRUE)
-  fs::file_chown(files, user_id = access[["user"]], group_id = access[["group"]])
+  files <- dir_ls(dir, recurse = TRUE)
+  file_chown(files, user_id = access[["user"]], group_id = access[["group"]])
 
   invisible(dir)
 }
 
 get_permissions <- function(path) {
-  path <- fs::path_expand(path)
-  parent <- fs::path_dir(fs::path_abs(path))
-  info <- fs::dir_info(parent)
+  path <- path_expand(path)
+  parent <- path_dir(path_abs(path))
+  info <- dir_info(parent)
 
   c(
     user = info[info$path == path, c("user")][[1]],
@@ -141,10 +129,11 @@ get_permissions <- function(path) {
 #' @examples
 #' get_permissions("/home")
 #' get_permissions("~")
+#' @noRd
 get_permissions <- function(path) {
-  path <- fs::path_expand(path)
-  parent <- fs::path_dir(fs::path_abs(path))
-  info <- fs::dir_info(parent)
+  path <- path_expand(path)
+  parent <- path_dir(path_abs(path))
+  info <- dir_info(parent)
 
   c(
     user = info[info$path == path, c("user")][[1]],
@@ -153,6 +142,6 @@ get_permissions <- function(path) {
 }
 
 portfolio_names <- function(dir, regexp) {
-  csv <- fs::dir_ls(dir, regexp = regexp)
-  fs::path_ext_remove(fs::path_file(csv))
+  csv <- dir_ls(dir, regexp = regexp)
+  path_ext_remove(path_file(csv))
 }
