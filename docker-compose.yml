@@ -7,14 +7,12 @@ services:
     environment:
       - PASSWORD=123
     volumes:
-      - ~/.ssh:/home/rstudio/.ssh
-      - ~/.gitconfig:/home/rstudio/.gitconfig
-      - ~/.Renviron:/home/rstudio/.Renviron
-      - ~/git/siblings:/home/rstudio/siblings
+      - ~/git/siblings/pactaCore:/home/rstudio/pactaCore
+      - ~/git/siblings/PACTA_analysis:/home/rstudio/PACTA_analysis
+      - ~/git/siblings/pacta-data:/home/rstudio/pacta-data
       - packages:/usr/lib/R/library
       - packages:/usr/lib/R/site-library
       - packages:/usr/local/lib/R/site-library
-
 volumes:
   packages:
     external: true
