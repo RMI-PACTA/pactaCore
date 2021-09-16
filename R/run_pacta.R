@@ -33,9 +33,10 @@ run_pacta <- function(env = ".env") {
   abort_if_not_empty_dir(results_path(path_dir(output)))
   data <- path_env("PACTA_DATA", env)
 
-  dir_copy(context_path(), parent_path())
-  defer(dir_delete(parent_path("context")))
-  local_dir(parent_path("context"))
+  temp_dir <- setup_source_data(tempdir(), context_path(), data)
+  local_dir(path(temp_dir, "context"))
+
+  if (dir_exists("working_dir")) dir_delete("working_dir")
   create_working_dir(".")
 
   run_pacta_legacy(source = ".", input = input, output = output)
@@ -62,8 +63,13 @@ run_pacta_legacy <- function(source, input, output) {
   output <- fs::path_abs(output)
 
   local_dir(source)
+  is_sibling <- dir_exists(path(path_dir(source), "pacta-data"))
+  if (!is_sibling) {
+    stop("Can't find pacta-data/", call. = FALSE)
+  }
 
   # Pretend we're in transition monitor
+  # FIXME: Explore TRUE/FALSE as I started to get different results
   in_transitionmonitor <- function() TRUE
 
   setup_input(source, input)

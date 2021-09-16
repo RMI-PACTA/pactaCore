@@ -1,6 +1,45 @@
-# A vectorized version of waldo::compare()
+#' Basic, pair-wise comparison of each element in two lists
+#'
+#' @examples
+#' compare_basic(
+#'   list(a = data.frame(x = 1)),
+#'   list(a = data.frame(y = 1))
+#' )
+#' compare_basic()
+#' @noRd
+compare_basic <- function(new = enlist_rds(private_path("pacta_core")),
+                           old = enlist_rds(private_path("web_tool"))) {
+  for (i in seq_along(old)) {
+    print(paste(names(new)[[i]]))
 
-#' Compare two lists in parallel
+    # Leaving the duplication to preserve the name of the function so we get
+    # "Different names" -- not "Different X[[i]]"
+    compare_with(names, new[[i]], old[[i]])
+    compare_with(dim, new[[i]], old[[i]])
+    compare_with(str, new[[i]], old[[i]])
+  }
+
+  invisible(new)
+}
+
+compare_with <- function(f = dim, new, old) {
+  # Quiet printed output, e.g. of str()
+  sink(tempfile())
+  same_f <- identical(f(new), f(old))
+  sink()
+
+  if (!same_f) {
+    message(
+      "Different ", deparse(substitute(f)), ":\n",
+      "* new: ", toString(f(new)), "\n",
+      "* old: ", toString(f(old))
+    )
+  }
+
+  invisible(new)
+}
+
+#' A vectorized version of waldo::compare()
 #'
 #' Defaults to comparing private results between the web tool and this package.
 #'
@@ -12,12 +51,12 @@
 #' @examples
 #' new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
 #' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
-#' compare_results(new, old)
-#' compare_results(new, new)
+#' compare_full(new, old)
+#' compare_full(new, new)
 #' @noRd
-compare_results <- function(new = enlist_rds(private_path("pacta_core")),
-                            old = enlist_rds(private_path("web_tool")),
-                            ...) {
+compare_full <- function(new = enlist_rds(private_path("pacta_core")),
+                         old = enlist_rds(private_path("web_tool")),
+                         ...) {
   for (i in seq_along(old)) {
     print(paste(names(new)[[i]], "(new)", "vs.", names(old)[[i]], "(old)"))
     try(
@@ -201,6 +240,10 @@ update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
   invisible(file)
 }
 
+expect_no_error <- function(object, ...) {
+  testthat::expect_error(object, regexp = NA, ...)
+}
+
 abort_if_not_empty_dir <- function(path) {
   if (dir_exists(path) && !is_empty_dir(path)) {
     stop(
@@ -214,10 +257,6 @@ abort_if_not_empty_dir <- function(path) {
 
 is_empty_dir <- function(path) {
   identical(unname(unclass(dir_ls(path))), character(0))
-}
-
-expect_no_error <- function(object, ...) {
-  testthat::expect_error(object, regexp = NA, ...)
 }
 
 abort_if_missing_inputs <- function(path) {
@@ -236,6 +275,27 @@ abort_if_missing_inputs <- function(path) {
   }
 
   invisible(path)
+}
+
+abort_if_dir_exists <- function(dir) {
+  if (dir_exists(dir)) {
+    stop(
+      "This directory must not exist:\n",
+      dir, "\n",
+      "* Do you need to remove it?",
+      call. = FALSE
+    )
+  }
+
+  invisible(dir)
+}
+
+stop_on_error <- function(exit_code) {
+  if (exit_code > 0) {
+    stop("This script threw an error.", call. = FALSE)
+  }
+
+  invisible(exit_code)
 }
 
 # Like here::here() and devtools::package_path() but without those dependencies

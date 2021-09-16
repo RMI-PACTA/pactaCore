@@ -1,4 +1,4 @@
-test_that("works wothout docker", {
+test_that("outputs datasets with the expected structure", {
   skip_on_ci()
   skip_on_cran()
   skip_slow_tests()

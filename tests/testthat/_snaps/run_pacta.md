@@ -1,4 +1,4 @@
-# works wothout docker
+# outputs datasets with the expected structure
 
     Code
       dimensions
