@@ -58,4 +58,3 @@ web_tool_command <- function(portfolio = "TestPortfolio_Input") {
   )
   paste(command, portfolio)
 }
-

@@ -8,7 +8,7 @@
 #' compare_basic()
 #' @noRd
 compare_basic <- function(new = enlist_rds(private_path("pacta_core")),
-                           old = enlist_rds(private_path("web_tool"))) {
+                          old = enlist_rds(private_path("web_tool"))) {
   for (i in seq_along(old)) {
     print(paste(names(new)[[i]]))
 
