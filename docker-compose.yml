@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  rstudio:
+    image: rocker/verse:4.0.3
+    ports:
+      - 8787:8787
+    environment:
+      - PASSWORD=123
+    volumes:
+      - ~/.ssh:/home/rstudio/.ssh
+      - ~/.gitconfig:/home/rstudio/.gitconfig
+      - ~/.Renviron:/home/rstudio/.Renviron
+      - ~/git/siblings:/home/rstudio/siblings
+      - packages:/usr/lib/R/library
+      - packages:/usr/lib/R/site-library
+      - packages:/usr/local/lib/R/site-library
+
+volumes:
+  packages:
+    external: true
