@@ -63,16 +63,10 @@ run_pacta_legacy <- function(source, input, output) {
   output <- fs::path_abs(output)
 
   local_dir(source)
-  is_sibling <- dir_exists(path(path_dir(source), "pacta-data"))
-  if (!is_sibling) {
-    stop("Can't find pacta-data/", call. = FALSE)
-  }
-
-  # Pretend we're in transition monitor
-  # FIXME: Explore TRUE/FALSE as I started to get different results
-  in_transitionmonitor <- function() TRUE
+  abort_if_missing_pacta_data(source)
 
   setup_input(source, input)
+
   portfolios <- portfolio_names(input, regexp = "_Input[.]csv")
   command <- sprintf("Rscript --vanilla pacta_legacy.R %s", portfolios)
   for (i in seq_along(command)) {
@@ -87,6 +81,13 @@ run_pacta_legacy <- function(source, input, output) {
   walk(c(input, output), apply_permissions, access)
 
   invisible(source)
+}
+
+abort_if_missing_pacta_data <- function(source) {
+  is_sibling <- dir_exists(path(path_dir(source), "pacta-data"))
+  if (!is_sibling) {
+    stop("Can't find pacta-data/", call. = FALSE)
+  }
 }
 
 setup_input <- function(source, input) {
