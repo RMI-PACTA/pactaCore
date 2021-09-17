@@ -8,7 +8,10 @@ run_web_tool <- function(results = path_temp(wd_path()),
                          source = parent_path("PACTA_analysis"),
                          data = parent_path("pacta-data"),
                          x = 1:3) {
-  stopifnot(dir_exists(source), dir_exists(data))
+  stopifnot(
+    dir_exists(source), !is_empty_dir(source),
+    dir_exists(data), !is_empty_dir(data)
+  )
 
   parent <- path_dir(results)
   setup_source_data(parent, source, data)
