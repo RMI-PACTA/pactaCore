@@ -8,7 +8,8 @@ services:
     environment:
       - ROOT=true
       - PASSWORD=123
+    env_file: .env
     volumes:
-      - ~/git/siblings/pactaCore:/home/rstudio/pactaCore
-      - ~/git/siblings/PACTA_analysis:/home/rstudio/PACTA_analysis
-      - ~/git/siblings/pacta-data:/home/rstudio/pacta-data
+      - ${PACTA_CORE}:/home/rstudio/pactaCore
+      - ${PACTA_ANALYSIS}:/home/rstudio/PACTA_analysis
+      - ${PACTA_DATA}:/home/rstudio/pacta-data
