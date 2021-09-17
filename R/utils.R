@@ -360,9 +360,7 @@ file_duplicate <- function(path, new_path) {
 setup_source_data <- function(path = tempdir(), source, data) {
   dir_destroy(path)
   dir_create(path)
-
-  abort_if_dir_doesnt_exist(source)
-  abort_if_dir_doesnt_exist(data)
+  check_setup_source_data(source, data)
 
   dir_copy(source, path)
   dir_copy(data, path)
@@ -376,4 +374,17 @@ abort_if_dir_doesnt_exist <- function(path) {
   }
 
   invisible(path)
+}
+
+check_setup_source_data <- function(source, data) {
+  abort_if_dir_doesnt_exist(source)
+  tryCatch(abort_if_dir_doesnt_exist(data), error = function(e) {
+    stop(
+      conditionMessage(e), "\n",
+      "* Did you setup the path to pacta-data/ correctly?",
+      call. = FALSE
+    )
+  })
+
+  invisible(source)
 }

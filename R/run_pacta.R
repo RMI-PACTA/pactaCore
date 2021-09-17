@@ -62,7 +62,7 @@ run_pacta_legacy <- function(source, input, output) {
   output <- path_abs(output)
 
   local_dir(source)
-  abort_if_missing_pacta_data(source)
+  abort_if_pacta_data_isnt_sibling(source)
 
   setup_input(source, input)
 
@@ -80,7 +80,7 @@ run_pacta_legacy <- function(source, input, output) {
   invisible(source)
 }
 
-abort_if_missing_pacta_data <- function(source) {
+abort_if_pacta_data_isnt_sibling <- function(source) {
   is_sibling <- dir_exists(path(path_dir(source), "pacta-data"))
   if (!is_sibling) {
     stop("Can't find pacta-data/", call. = FALSE)
