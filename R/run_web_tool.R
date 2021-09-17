@@ -23,16 +23,6 @@ run_web_tool <- function(results = path_temp(wd_path()),
   invisible(results)
 }
 
-setup_source_data <- function(path = tempdir(), source, data) {
-  dir_destroy(path)
-  dir_create(path)
-
-  dir_copy(source, path)
-  dir_copy(data, path)
-
-  invisible(path)
-}
-
 setup_wd <- function(path = ".") {
   create_wd(path)
 

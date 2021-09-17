@@ -356,3 +356,24 @@ dir_duplicate <- function(path, new_path) {
 file_duplicate <- function(path, new_path) {
   file_copy(path, new_path, overwrite = TRUE)
 }
+
+setup_source_data <- function(path = tempdir(), source, data) {
+  dir_destroy(path)
+  dir_create(path)
+
+  abort_if_dir_doesnt_exist(source)
+  abort_if_dir_doesnt_exist(data)
+
+  dir_copy(source, path)
+  dir_copy(data, path)
+
+  invisible(path)
+}
+
+abort_if_dir_doesnt_exist <- function(path) {
+  if (!dir_exists(path)) {
+    stop("This directory must exist but doesn't:\n", path, call. = FALSE)
+  }
+
+  invisible(path)
+}
