@@ -1,7 +1,8 @@
 version: "3.8"
 services:
   rstudio:
-    image: rocker/verse:4.0.3
+    build:
+      context: inst/extdata/context
     ports:
       - 8787:8787
     environment:
@@ -11,9 +12,3 @@ services:
       - ~/git/siblings/pactaCore:/home/rstudio/pactaCore
       - ~/git/siblings/PACTA_analysis:/home/rstudio/PACTA_analysis
       - ~/git/siblings/pacta-data:/home/rstudio/pacta-data
-      - packages:/usr/lib/R/library
-      - packages:/usr/lib/R/site-library
-      - packages:/usr/local/lib/R/site-library
-volumes:
-  packages:
-    external: true
