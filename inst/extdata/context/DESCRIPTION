@@ -20,7 +20,8 @@ Authors@R:
       person(given = "2 Degrees Investing Initiative",
              role = c("cph", "fnd"),
              email = "contact@2degrees-investing.org"))
-Description: For more information visit <https://2degrees-investing.org/>.
+Description: For more information visit
+    <https://2degrees-investing.org/>.
 License: MIT + file LICENSE
 Depends: 
     R (>= 3.5)
@@ -28,6 +29,7 @@ Imports:
     assertthat,
     config,
     conflicted,
+    countrycode,
     dplyr,
     fs,
     fst,
@@ -37,9 +39,12 @@ Imports:
     magrittr,
     purrr,
     readr,
+    renv,
     rlang,
     tibble,
-    withr
+    withr,
+    writexl,
+    zoo
 Suggests:
     devtools,
     jsonlite,
