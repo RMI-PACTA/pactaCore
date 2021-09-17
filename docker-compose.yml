@@ -2,7 +2,7 @@ version: "3.8"
 services:
   rstudio:
     build:
-      context: . 
+      context: .
     ports:
       - 8787:8787
     environment:
@@ -10,6 +10,7 @@ services:
       - PASSWORD=123
     env_file: .env
     volumes:
-      - ${PACTA_CORE}:/home/rstudio/pactaCore
+      - .env:/home/rstudio/.env
+      - .:/home/rstudio/pactaCore
       - ${PACTA_ANALYSIS}:/home/rstudio/PACTA_analysis
       - ${PACTA_DATA}:/home/rstudio/pacta-data

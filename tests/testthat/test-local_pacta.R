@@ -4,6 +4,7 @@ test_that("creates a pacta project in the tempdir() directory", {
   dir <- tempdir()
 
   local({
+    read_env()
     local_pacta()
     expect_true(file_exists(path(dir, ".env")))
     expect_true(dir_exists(path(dir, "input")))

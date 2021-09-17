@@ -5,13 +5,12 @@
 #' @param x Script(s) number web_tool_script_{1:3}.R
 #' @noRd
 run_web_tool <- function(results = path_temp(wd_path()),
-                         source = parent_path("PACTA_analysis"),
-                         data = parent_path("pacta-data"),
+                         source = Sys.getenv("PACTA_ANALYSIS"),
+                         data = Sys.getenv("PACTA_DATA"),
                          x = 1:3) {
-  stopifnot(
-    dir_exists(source), !is_empty_dir(source),
-    dir_exists(data), !is_empty_dir(data)
-  )
+  abort_if_dir_doesnt_exist(source)
+  abort_if_dir_doesnt_exist(data)
+  stopifnot(!is_empty_dir(source), !is_empty_dir(data))
 
   parent <- path_dir(results)
   setup_source_data(parent, source, data)

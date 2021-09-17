@@ -52,7 +52,7 @@ A good setup for a pacta project looks like this:
 
     PACTA_OUTPUT=/home/rstudio/pacta_tmp/output
     PACTA_INPUT=/home/rstudio/pacta_tmp/input
-    PACTA_DATA=~/pacta-data
+    PACTA_DATA=/home/rstudio/pacta-data
 
 -   The input/ directory must contain portfolio files like
     [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/inst/extdata/TestPortfolio_Input.csv),

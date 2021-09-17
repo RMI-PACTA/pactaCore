@@ -25,8 +25,9 @@
 #' @noRd
 local_pacta <- function(dir = tempdir(),
                         input_paths = example_input_paths(),
-                        data = getenv_data(),
+                        data = Sys.getenv("PACTA_DATA"),
                         envir = parent.frame()) {
+  abort_if_unset(data)
   dir <- create_pacta(dir = dir, data = data, input_paths = input_paths)
   withr::defer(dir_delete(dir), envir = envir)
   invisible(dir)
@@ -34,7 +35,8 @@ local_pacta <- function(dir = tempdir(),
 
 create_pacta <- function(dir = tempdir(),
                          input_paths = example_input_paths(),
-                         data = getenv_data()) {
+                         data = Sys.getenv("PACTA_DATA")) {
+  abort_if_unset(data)
   dir <- path_abs(dir)
 
   if (!dir_exists(dir)) {
@@ -51,29 +53,6 @@ create_pacta <- function(dir = tempdir(),
   copy_input_paths(env, input_paths = example_input_paths())
 
   invisible(dir)
-}
-
-#' Get the environment variable "PACTA_DATA" or fail gracefully
-#'
-#' @examples
-#' getenv_data()
-#'
-#' Sys.setenv(PACTA_DATA = "")
-#' try(getenv_data())
-#' @noRd
-getenv_data <- function() {
-  out <- Sys.getenv("PACTA_DATA", unset = "")
-
-  unset <- identical(out, "")
-  if (unset) {
-    stop(
-      "The environment PACTA_DATA must be set.\n",
-      "Do you need to set it in .Renviron? (see `?usethis::edit_r_environ()`",
-      call. = FALSE
-    )
-  }
-
-  out
 }
 
 create_io <- function(env = NULL) {

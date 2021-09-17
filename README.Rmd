@@ -47,6 +47,8 @@ devtools::install_github("2DegreesInvesting/pactaCore")
 A good setup for a pacta project looks like this:
 
 ```{r}
+pactaCore:::read_env()
+
 pacta <- path_home("pacta_tmp")
 example_inputs <- dir_ls(
   system.file("extdata", package = "pactaCore"),

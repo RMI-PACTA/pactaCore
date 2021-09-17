@@ -16,22 +16,34 @@ This document guides contributors. It extends
 [README](https://github.com/2DegreesInvesting/pactaCore/blob/main/README.md)
 focusing on how this R package differs form a standard one.
 
-* Some environment variables are convenient or required. A good place to set
-them is in a project-specific .Renviron file, e.g.:
+* You may run or skip slow tests with an environment variable in .Renviron:
 
 ```{r}
 writeLines(readLines(here::here(".Renviron")))
 ```
 
-* pactaCore must be a sibling of a number of repositories. Clone them from
-2DII's GitHub organization and ensure your local clones are up to date with the
-repos on GitHub (to manage all siblings at once see `pacta-pull-origin-master`
-in [`pacta-cli`](https://github.com/2DegreesInvesting/pacta-cli)).
+* The repositories PACTA_analysis/ is required for regression tests. Clone it
+from 2DII's GitHub organization and keep it up to date with the repo on GitHub.
+
+```bash
+"git clone git@github.com:2DegreesInvesting/PACTA_analysis.git"
+```
+
+* Set the path to PACTA_analysis/ in the .env file, along with the other,
+user-facing environment variables.
 
 ```{r}
-writeLines(paste0(
-    "git clone git@github.com:2DegreesInvesting/", pactaCore:::siblings(), ".git"
-))
+writeLines(readLines(here::here(".env")))
+```
+
+* To work from docker container run `docker-compose up` and point to web browser
+to localhost:8787.
+
+* In the container, the required directories will be mounted
+under the /home/rstudio, and discovered via the file .env_rstudio:
+
+```{r}
+writeLines(readLines(here::here(".env_rstudio")))
 ```
 
 * Git ignores all files under the directory tests/testthat/_snaps/ to avoid
