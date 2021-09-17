@@ -5,6 +5,7 @@ services:
     ports:
       - 8787:8787
     environment:
+      - ROOT=true
       - PASSWORD=123
     volumes:
       - ~/git/siblings/pactaCore:/home/rstudio/pactaCore
