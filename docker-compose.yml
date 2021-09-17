@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  rstudio:
+    build:
+      context: . 
+    ports:
+      - 8787:8787
+    environment:
+      - ROOT=true
+      - PASSWORD=123
+    volumes:
+      - ~/git/siblings/pactaCore:/home/rstudio/pactaCore
+      - ~/git/siblings/PACTA_analysis:/home/rstudio/PACTA_analysis
+      - ~/git/siblings/pacta-data:/home/rstudio/pacta-data
