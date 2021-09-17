@@ -16,7 +16,7 @@
       [1] 947384     36
       
       $Equity_results_map
-      [1] 44282    15
+      [1] 43189    15
       
       $Equity_results_portfolio
       [1] 3397   29
@@ -147,14 +147,4 @@
            trajectory_deviation      trajectory_alignment 
                       "numeric"                 "numeric" 
       
-
-# without siblings errors gracefully
-
-    Each directory must exist at /bad:
-    *  create_interactive_report
-    *  PACTA_analysis
-    *  pacta-data
-    *  pactaCore
-    *  r2dii.climate.stress.test
-    *  r2dii.stress.test.data
 

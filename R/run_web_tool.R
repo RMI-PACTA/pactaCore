@@ -1,36 +1,50 @@
-# path: Path to source code, e.g. /path/to/PACTA_analysis
-# x: Script(s) number web_tool_script_{1:3}.R
-run_web_tool <- function(path = parent_path("PACTA_analysis"), x = 1:3) {
-  abort_if_missing_sibling(path_dir(path))
-  withr::local_dir(path)
+#' Run the web_tool
+#' @param results Path to where to output results.
+#' @param source Path to source code.
+#' @param data Path to private pacta-data.
+#' @param x Script(s) number web_tool_script_{1:3}.R
+#' @noRd
+run_web_tool <- function(results = path_temp(wd_path()),
+                         source = parent_path("PACTA_analysis"),
+                         data = parent_path("pacta-data"),
+                         x = 1:3) {
+  stopifnot(
+    dir_exists(source), !is_empty_dir(source),
+    dir_exists(data), !is_empty_dir(data)
+  )
 
-  source_web_tool_scripts <- NULL
-  source(path("R", "source_web_tool_scripts.R"))
-  source_web_tool_scripts(x)
+  parent <- path_dir(results)
+  setup_source_data(parent, source, data)
+  local_dir(path(parent, "PACTA_analysis"))
+
+  dir_destroy(wd_path())
+  setup_wd(".")
+
+  walk(web_tool_command()[x], function(x) stop_on_error(system(x)))
+  dir_move(results_path(), results)
+
+  invisible(results)
+}
+
+setup_wd <- function(path = ".") {
+  create_wd(path)
+
+  yml <- dir_ls(extdata_path(), regexp = "[.]yml")
+  file_copy(yml, parameter_file_path())
+
+  csv <- dir_ls(extdata_path(), regexp = "[.]csv")
+  file_copy(csv, raw_inputs_path())
 
   invisible(path)
 }
 
-abort_if_missing_sibling <- function(parent) {
-  exist <- unlist(lapply(path(parent, siblings()), dir_exists))
-  if (!all(exist)) {
-    stop(
-      "Each directory must exist at ", parent, ":\n",
-      paste("* ", siblings(), collapse = "\n"),
-      call. = FALSE
-    )
-  }
-
-  invisible(parent)
-}
-
-siblings <- function() {
-  c(
-    "create_interactive_report",
-    "PACTA_analysis",
-    "pacta-data",
-    "pactaCore",
-    "r2dii.climate.stress.test",
-    "r2dii.stress.test.data"
+# From PACTA_analysis/bin/run-r-scripts
+web_tool_command <- function(portfolio = example_input_name()) {
+  command <- c(
+    "Rscript --vanilla web_tool_script_1.R",
+    "Rscript --vanilla web_tool_script_2.R",
+    "Rscript --no-save --no-restore --no-site-file --no-environ web_tool_script_3.R"
   )
+
+  paste(command, portfolio)
 }

@@ -1,6 +1,44 @@
-# A vectorized version of waldo::compare()
+#' Use a function to pair-wise compare each element in two lists
+#'
+#' @examples
+#' compare_with(
+#'   names,
+#'   list(a = data.frame(x = 1)),
+#'   list(a = data.frame(y = 1))
+#' )
+#' @noRd
+compare_with <- function(f = dim,
+                         new = enlist_rds(private_path("pacta_core")),
+                         old = enlist_rds(private_path("web_tool"))) {
+  for (i in seq_along(old)) {
+    print(paste(names(new)[[i]]))
 
-#' Compare two lists in parallel
+    # Leaving the duplication to preserve the name of the function so we get
+    # "Different names" -- not "Different X[[i]]"
+    compare_with_once(f, new[[i]], old[[i]])
+  }
+
+  invisible(new)
+}
+
+compare_with_once <- function(f = dim, new, old) {
+  # Quiet printed output, e.g. of str()
+  sink(tempfile())
+  same_f <- identical(f(new), f(old))
+  sink()
+
+  if (!same_f) {
+    message(
+      "Different ", deparse(substitute(f)), ":\n",
+      "* new: ", toString(f(new)), "\n",
+      "* old: ", toString(f(old))
+    )
+  }
+
+  invisible(new)
+}
+
+#' A vectorized version of waldo::compare()
 #'
 #' Defaults to comparing private results between the web tool and this package.
 #'
@@ -12,17 +50,20 @@
 #' @examples
 #' new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
 #' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
-#' compare_results(new, old)
-#' compare_results(new, new)
+#' compare_full(new, old)
+#' compare_full(new, new)
 #' @noRd
-compare_results <- function(new = enlist_rds(private_path("pacta_core")),
-                            old = enlist_rds(private_path("web_tool")),
-                            ...) {
+compare_full <- function(new = enlist_rds(private_path("pacta_core")),
+                         old = enlist_rds(private_path("web_tool")),
+                         ...) {
   for (i in seq_along(old)) {
-    out <- waldo::compare(old[[i]], new[[i]], ...)
+    print(paste(names(new)[[i]], "(new)", "vs.", names(old)[[i]], "(old)"))
+    try(
+      print(waldo::compare(old[[i]], new[[i]], ...))
+    )
   }
 
-  out
+  invisible(new)
 }
 
 # Like purrr::walk
@@ -46,34 +87,43 @@ walk <- function(.x, .f, ...) {
 #'
 #' @examples
 #' dir <- tempdir()
-#' create_working_dir(dir)
-#' dir_tree(path(dir, "working_dir"))
+#' create_wd(dir)
+#' dir_tree(path(dir, wd_path()))
 #' @noRd
-create_working_dir <- function(dir = tempdir()) {
-  dir_create(path(dir, working_dir_paths()))
+create_wd <- function(dir = tempdir()) {
+  dir_create(path(dir, wd_paths()))
   invisible(dir)
 }
 
 portfolio_names <- function(dir, regexp) {
-  csv <- fs::dir_ls(dir, regexp = regexp)
-  fs::path_ext_remove(fs::path_file(csv))
+  csv <- dir_ls(dir, regexp = regexp)
+  path_ext_remove(path_file(csv))
 }
 
 extdata_path <- function(..., mustWork = TRUE) {
   system.file("extdata", ..., package = "pactaCore", mustWork = mustWork)
 }
 
-context_path <- function(..., mustWork = FALSE) {
-  extdata_path("context", ..., mustWork = mustWork)
+legacy_path <- function(..., mustWork = FALSE) {
+  extdata_path(legacy_dirname(), ..., mustWork = mustWork)
 }
 
-results_path <- function(parent, ..., regexp = portfolio_pattern()) {
+legacy_dirname <- function() {
+  "context"
+}
+
+output_results_path <- function(parent, ..., regexp = portfolio_pattern()) {
   portfolios <- portfolio_names(path(parent, "input"), regexp = regexp)
-  path(parent, "output", "working_dir", "40_Results", portfolios, ...)
+  path(parent, "output", results_path(), portfolios, ...)
 }
 
-working_dir_paths <- function(portfolio_name = example_input_name()) {
-  subdir <- c(
+# Avoid littering the code base with specific paths we want to move away from
+wd_path <- function(...) {
+  path("working_dir", ...)
+}
+
+wd_paths <- function(portfolio_name = example_input_name()) {
+  wd_path(c(
     "10_Parameter_File",
     "00_Log_Files",
     path("00_Log_Files", portfolio_name),
@@ -84,9 +134,19 @@ working_dir_paths <- function(portfolio_name = example_input_name()) {
     "20_Raw_Inputs",
     "50_Outputs",
     path("50_Outputs", portfolio_name)
-  )
+  ))
+}
 
-  path("working_dir", subdir)
+results_path <- function(...) {
+  wd_path("40_Results", ...)
+}
+
+parameter_file_path <- function(...) {
+  wd_path("10_Parameter_File", ...)
+}
+
+raw_inputs_path <- function(...) {
+  wd_path("20_Raw_Inputs", ...)
 }
 
 example_input_paths <- function() {
@@ -187,7 +247,7 @@ create_env <- function(path = path_temp(".env"),
 #' @examples
 #' update_pacta_legacy()
 #' @noRd
-update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
+update_pacta_legacy <- function(file = legacy_path("pacta_legacy.R")) {
   scripts <- paste0(
     "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/master/",
     "web_tool_script_", 1:2, ".R"
@@ -196,6 +256,10 @@ update_pacta_legacy <- function(file = context_path("pacta_legacy.R")) {
   writeLines(code, file)
 
   invisible(file)
+}
+
+expect_no_error <- function(object, ...) {
+  testthat::expect_error(object, regexp = NA, ...)
 }
 
 abort_if_not_empty_dir <- function(path) {
@@ -211,10 +275,6 @@ abort_if_not_empty_dir <- function(path) {
 
 is_empty_dir <- function(path) {
   identical(unname(unclass(dir_ls(path))), character(0))
-}
-
-expect_no_error <- function(object, ...) {
-  testthat::expect_error(object, regexp = NA, ...)
 }
 
 abort_if_missing_inputs <- function(path) {
@@ -233,6 +293,27 @@ abort_if_missing_inputs <- function(path) {
   }
 
   invisible(path)
+}
+
+abort_if_dir_exists <- function(dir) {
+  if (dir_exists(dir)) {
+    stop(
+      "This directory must not exist:\n",
+      dir, "\n",
+      "* Do you need to remove it?",
+      call. = FALSE
+    )
+  }
+
+  invisible(dir)
+}
+
+stop_on_error <- function(exit_code) {
+  if (exit_code > 0) {
+    stop("This script threw an error.", call. = FALSE)
+  }
+
+  invisible(exit_code)
 }
 
 # Like here::here() and devtools::package_path() but without those dependencies
@@ -258,4 +339,53 @@ enlist_rds <- function(dir) {
   datasets <- lapply(files, readRDS)
   names(datasets) <- path_ext_remove(path_file(names(datasets)))
   datasets
+}
+
+dir_destroy <- function(path) {
+  if (dir_exists(path)) dir_delete(path)
+  invisible(path)
+}
+
+dir_move <- function(path, new_path) {
+  system(paste("mv", path, new_path))
+}
+
+dir_duplicate <- function(path, new_path) {
+  dir_copy(path, new_path, overwrite = TRUE)
+}
+
+file_duplicate <- function(path, new_path) {
+  file_copy(path, new_path, overwrite = TRUE)
+}
+
+setup_source_data <- function(path = tempdir(), source, data) {
+  dir_destroy(path)
+  dir_create(path)
+  check_setup_source_data(source, data)
+
+  dir_copy(source, path)
+  dir_copy(data, path)
+
+  invisible(path)
+}
+
+abort_if_dir_doesnt_exist <- function(path) {
+  if (!dir_exists(path)) {
+    stop("This directory must exist but doesn't:\n", path, call. = FALSE)
+  }
+
+  invisible(path)
+}
+
+check_setup_source_data <- function(source, data) {
+  abort_if_dir_doesnt_exist(source)
+  tryCatch(abort_if_dir_doesnt_exist(data), error = function(e) {
+    stop(
+      conditionMessage(e), "\n",
+      "* Did you setup the path to pacta-data/ correctly?",
+      call. = FALSE
+    )
+  })
+
+  invisible(source)
 }

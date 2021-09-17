@@ -84,6 +84,6 @@ create_io <- function(env = NULL) {
 
 copy_input_paths <- function(env = NULL, input_paths = example_input_paths()) {
   input <- path_env("PACTA_INPUT", env = env)
-  walk(input_paths, function(x) file_copy(x, input, overwrite = TRUE))
+  walk(input_paths, file_duplicate, input)
   invisible(env)
 }

@@ -124,7 +124,7 @@ writeLines(readLines(example_inputs[[2]]))
 * A few rows of some relevant output files and columns:
 
 ```{r}
-paths <- fs::dir_ls(pactaCore:::results_path(pacta))
+paths <- fs::dir_ls(pactaCore:::output_results_path(pacta))
 datasets <- lapply(paths, readRDS)
 ```
 

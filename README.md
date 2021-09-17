@@ -32,7 +32,7 @@ devtools::install_github("2DegreesInvesting/pactaCore")
 
 A good setup for a pacta project looks like this:
 
-    /home/mauro/pacta_tmp
+    /home/rstudio/pacta_tmp
     ├── .env
     ├── input
     │   ├── TestPortfolio_Input.csv
@@ -50,9 +50,9 @@ A good setup for a pacta project looks like this:
 
 <!-- -->
 
-    PACTA_OUTPUT=/home/mauro/pacta_tmp/output
-    PACTA_INPUT=/home/mauro/pacta_tmp/input
-    PACTA_DATA=/home/mauro/git/siblings/pacta-data
+    PACTA_OUTPUT=/home/rstudio/pacta_tmp/output
+    PACTA_INPUT=/home/rstudio/pacta_tmp/input
+    PACTA_DATA=~/pacta-data
 
 -   The input/ directory must contain portfolio files like
     [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/inst/extdata/TestPortfolio_Input.csv),
@@ -78,11 +78,12 @@ environment file.
 library(pactaCore)
 
 run_pacta(env = "~/pacta_tmp/.env")
+#> Start portfolio: TestPortfolio_Input
 ```
 
 The output/ directory is now populated with results:
 
-    /home/mauro/pacta_tmp
+    /home/rstudio/pacta_tmp
     ├── input
     │   ├── TestPortfolio_Input.csv
     │   └── TestPortfolio_Input_PortfolioParameters.yml
@@ -147,14 +148,14 @@ and `investor_name_in` will populate the columns `portfolio_name` and
             investor_name_in: Test
             peer_group: pensionfund
             language: EN
-            project_code: CHPA2020
+            project_code: GENERAL
 
 -   A few rows of some relevant output files and columns:
 
 <!-- -->
 
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_company.rda`
-    # A tibble: 6 × 2
+    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_company.rda`
+    # A tibble: 6 x 2
       portfolio_name      investor_name
       <chr>               <chr>        
     1 TestPortfolio_Input Test         
@@ -164,8 +165,8 @@ and `investor_name_in` will populate the columns `portfolio_name` and
     5 TestPortfolio_Input Test         
     6 TestPortfolio_Input Test         
 
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_map.rda`
-    # A tibble: 6 × 2
+    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_map.rda`
+    # A tibble: 6 x 2
       portfolio_name      investor_name
       <chr>               <chr>        
     1 TestPortfolio_Input Test         
@@ -175,8 +176,8 @@ and `investor_name_in` will populate the columns `portfolio_name` and
     5 TestPortfolio_Input Test         
     6 TestPortfolio_Input Test         
 
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_portfolio.rda`
-    # A tibble: 6 × 2
+    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_portfolio.rda`
+    # A tibble: 6 x 2
       portfolio_name      investor_name
       <chr>               <chr>        
     1 TestPortfolio_Input Test         
@@ -186,8 +187,8 @@ and `investor_name_in` will populate the columns `portfolio_name` and
     5 TestPortfolio_Input Test         
     6 TestPortfolio_Input Test         
 
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_company.rda`
-    # A tibble: 6 × 2
+    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_company.rda`
+    # A tibble: 6 x 2
       portfolio_name      investor_name
       <chr>               <chr>        
     1 TestPortfolio_Input Test         
@@ -197,8 +198,8 @@ and `investor_name_in` will populate the columns `portfolio_name` and
     5 TestPortfolio_Input Test         
     6 TestPortfolio_Input Test         
 
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_map.rda`
-    # A tibble: 6 × 2
+    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_map.rda`
+    # A tibble: 6 x 2
       portfolio_name      investor_name
       <chr>               <chr>        
     1 TestPortfolio_Input Test         
@@ -208,8 +209,8 @@ and `investor_name_in` will populate the columns `portfolio_name` and
     5 TestPortfolio_Input Test         
     6 TestPortfolio_Input Test         
 
-    $`/home/mauro/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_portfolio.rda`
-    # A tibble: 6 × 2
+    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_portfolio.rda`
+    # A tibble: 6 x 2
       portfolio_name      investor_name
       <chr>               <chr>        
     1 TestPortfolio_Input Test         

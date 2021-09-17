@@ -1,15 +1,16 @@
-test_that("creates the expected results", {
+test_that("outputs datasets with the expected structure", {
   skip_on_ci()
   skip_on_cran()
   skip_slow_tests()
-  parent <- path_home("pacta_tmp")
-  local_pacta(parent)
 
-  run_pacta(path(parent, ".env"))
+  pacta <- "~/pacta_tmp"
+  local_pacta(pacta)
+  env <- fs::path(pacta, ".env")
+  run_pacta(env)
 
-  results <- path_dir(results_path(parent))
+  results <- path_dir(output_results_path(pacta))
   reference <- private_path("pacta_core")
-  dir_copy(results, reference, overwrite = TRUE)
+  dir_duplicate(results, reference)
 
   datasets <- enlist_rds(results)
   dimensions <- lapply(datasets, dim)
@@ -18,26 +19,15 @@ test_that("creates the expected results", {
   expect_snapshot(classes)
 })
 
-test_that("doesn't fail if output exists but is empty", {
-  skip_on_ci()
-  skip_on_cran()
-  parent <- path_home("pacta_tmp")
-  local_pacta(parent)
-
-  dir_create(results_path(parent))
-
-  expect_no_error(run_pacta_impl(path(parent, ".env"), code = NULL))
-})
-
 test_that("avoids overwritting output from a prevoius run", {
   skip_on_ci()
   skip_on_cran()
   parent <- path_home("pacta_tmp")
   local_pacta(parent)
 
-  fs::dir_create(path(results_path(parent)))
-  fs::file_create(path(results_path(parent), "some.file"))
-  expect_error(run_pacta_impl(path(parent, ".env"), NULL), "must be empty")
+  fs::dir_create(path(output_results_path(parent)))
+  fs::file_create(path(output_results_path(parent), "some.file"))
+  expect_error(run_pacta(path(parent, ".env")), "must be empty")
 })
 
 test_that("without portfolio errors gracefully", {
@@ -47,7 +37,7 @@ test_that("without portfolio errors gracefully", {
   local_pacta(parent)
 
   fs::file_delete(path(parent, "input", "TestPortfolio_Input.csv"))
-  expect_snapshot_error(run_pacta_impl(path(parent, ".env"), code = NULL))
+  expect_snapshot_error(run_pacta(path(parent, ".env")))
 })
 
 test_that("without a parameter file errors gracefully", {
@@ -58,5 +48,5 @@ test_that("without a parameter file errors gracefully", {
 
   param <- path(parent, "input", "TestPortfolio_Input_PortfolioParameters.yml")
   fs::file_delete(param)
-  expect_snapshot_error(run_pacta_impl(path(parent, ".env"), code = NULL))
+  expect_snapshot_error(run_pacta(path(parent, ".env")))
 })
