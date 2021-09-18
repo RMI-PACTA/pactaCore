@@ -51,3 +51,9 @@ test_that("without a parameter file errors gracefully", {
   file_delete(param)
   expect_snapshot_error(run_pacta(path(parent, ".env")))
 })
+
+test_that("without an .env file errors gracefully", {
+  pacta <- tempdir()
+  local_dir(pacta)
+  expect_error(run_pacta_impl(code = NULL), "env.*doesn't exist")
+})

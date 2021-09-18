@@ -26,6 +26,16 @@
 #'   })
 #' }
 run_pacta <- function(env = ".env") {
+  run_pacta_impl(env = env)
+  invisible(env)
+}
+
+run_pacta_impl <- function(env = ".env",
+                           code = expression(run_pacta_legacy(
+                             source = ".",
+                             input = input,
+                             output = output))) {
+  abort_if_missing_env(env)
   input <- path_env("PACTA_INPUT", env)
   abort_if_missing_inputs(input)
   output <- path_env("PACTA_OUTPUT", env)
@@ -39,7 +49,7 @@ run_pacta <- function(env = ".env") {
   dir_destroy(wd_path())
   create_wd(".")
 
-  run_pacta_legacy(source = ".", input = input, output = output)
+  eval(code)
 
   invisible(env)
 }

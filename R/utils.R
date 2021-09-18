@@ -421,3 +421,14 @@ abort_if_unset <- function(var) {
 
   invisible(var)
 }
+
+abort_if_missing_env <- function(env) {
+  if (!file_exists(env)) {
+    stop(
+      "This environment file doesn't exist: ", env, "\n",
+      "Is your setup as in https://github.com/2DegreesInvesting/pactaCore?",
+      call. = FALSE
+    )
+  }
+  invisible(path)
+}
