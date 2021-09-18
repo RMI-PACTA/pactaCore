@@ -7,7 +7,6 @@ services:
       - 8787:8787
     environment:
       - ROOT=true
-      - PASSWORD=123
     env_file: .env
     volumes:
       - .env:/home/rstudio/.env

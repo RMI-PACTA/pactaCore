@@ -10,56 +10,80 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+library(fs)
+library(here)
+
+show <- function(path) writeLines(readLines(here(path)))
 ```
 
 This document guides contributors. It extends
 [README](https://github.com/2DegreesInvesting/pactaCore/blob/main/README.md)
 focusing on how this R package differs form a standard one.
 
-* You may run or skip slow tests with an environment variable in .Renviron:
+## Environment variables
+
+Compared to users, developers must set two additional environment variables in
+the .env file:
+
+* `PACTA_ANALYSIS` sets the path where you cloned the PACTA_analysis/
+repository. This is used for regression Tests (see [Tests and Git]).
+
+* `PASSWORD` sets the password to login to a local RStudio server running inside
+a Docker container on your host computer (see [Docker]).
 
 ```{r}
-writeLines(readLines(here::here(".Renviron")))
+show(".env")
 ```
 
-* The repositories PACTA_analysis/ is required for regression tests. Clone it
-from 2DII's GitHub organization and keep it up to date with the repo on GitHub.
+## Docker
+
+You can access a dockerized computing environment in four steps:
+
+1. Install `docker`.
+2. Install `docker-compose`.
+3. Clone pactaCore and make it your working directory.
+4. Run `docker-compose up`.
+
+Rstudio is now available from your web browser at localhost:8787. Login with
+username "rstudio" and your password (see [Environment variables]).
+
+In the container, the required directories will be mounted under /home/rstudio,
+and discovered via the file .env_rstudio:
+
+```{r}
+show(".env_rstudio")
+```
+
+## Tests and Git
+
+You may run or skip slow tests with an environment variable in .Renviron:
+
+```{r}
+show(".Renviron")
+```
+
+The repository PACTA_analysis/ is required for regression tests. Clone it from
+2DII's GitHub organization and keep it up to date with the repo on GitHub.
 
 ```bash
-"git clone git@github.com:2DegreesInvesting/PACTA_analysis.git"
+git clone git@github.com:2DegreesInvesting/PACTA_analysis.git
 ```
 
-* Set the path to PACTA_analysis/ in the .env file, along with the other,
-user-facing environment variables.
-
-```{r}
-writeLines(readLines(here::here(".env")))
-```
-
-* To work from docker container run `docker-compose up` and point to web browser
-to localhost:8787.
-
-* In the container, the required directories will be mounted
-under the /home/rstudio, and discovered via the file .env_rstudio:
-
-```{r}
-writeLines(readLines(here::here(".env_rstudio")))
-```
-
-* Git ignores all files under the directory tests/testthat/_snaps/ to avoid
+Git ignores all files under the directory tests/testthat/_snaps/ to avoid
 leaking private data. Re-include public snapshots in .gitignore with a negation
 pattern (!), e.g.:
 
 ```{r}
-lines <- readLines(here::here(".gitignore"))
+lines <- readLines(here(".gitignore"))
 writeLines(grep("testthat/_snaps", lines, value = TRUE))
 ```
 
-* Git ignores the directory tests/testthat/private/. Use it to store regression
+Git ignores the directory tests/testthat/private/. Use it to store regression
 references or other private data.
 
 ```{r}
-fs::dir_tree(here::here("tests", "testthat", "private"))
+dir_tree(here("tests", "testthat", "private"))
 ```
 
 You may compare two lists of reference datasets with the internal function

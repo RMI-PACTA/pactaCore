@@ -3,56 +3,71 @@ This document guides contributors. It extends
 [README](https://github.com/2DegreesInvesting/pactaCore/blob/main/README.md)
 focusing on how this R package differs form a standard one.
 
--   You may run or skip slow tests with an environment variable in
-    .Renviron:
+## Environment variables
+
+Compared to users, developers must set two additional environment
+variables in the .env file:
+
+-   `PACTA_ANALYSIS` sets the path where you cloned the PACTA\_analysis/
+    repository. This is used for regression Tests (see [Tests and
+    Git](#tests-and-git)).
+
+-   `PASSWORD` sets the password to login to a local RStudio server
+    running inside a Docker container on your host computer (see
+    [Docker](#docker)).
 
 <!-- -->
+
+    PACTA_DATA=~/pacta-data
+    PACTA_ANALYSIS=~/PACTA_analysis
+    PASSWORD=yourpassword
+
+## Docker
+
+You can access a dockerized computing environment in four steps:
+
+1.  Install `docker`.
+2.  Install `docker-compose`.
+3.  Clone pactaCore and make it your working directory.
+4.  Run `docker-compose up`.
+
+Rstudio is now available from your web browser at localhost:8787. Login
+with username “rstudio” and your password (see [Environment
+variables](#environment-variables)).
+
+In the container, the required directories will be mounted under
+/home/rstudio, and discovered via the file .env\_rstudio:
+
+    PACTA_DATA=~/pacta-data
+    PACTA_ANALYSIS=~/PACTA_analysis
+
+## Tests and Git
+
+You may run or skip slow tests with an environment variable in
+.Renviron:
 
     PACTA_SKIP_SLOW_TESTS=FALSE
 
--   The repositories PACTA\_analysis/ is required for regression tests.
-    Clone it from 2DII’s GitHub organization and keep it up to date with
-    the repo on GitHub.
+The repository PACTA\_analysis/ is required for regression tests. Clone
+it from 2DII’s GitHub organization and keep it up to date with the repo
+on GitHub.
 
 ``` bash
-"git clone git@github.com:2DegreesInvesting/PACTA_analysis.git"
+git clone git@github.com:2DegreesInvesting/PACTA_analysis.git
 ```
 
--   Set the path to PACTA\_analysis/ in the .env file, along with the
-    other, user-facing environment variables.
-
-<!-- -->
-
-    PACTA_DATA=/home/mauro/pacta-data
-    PACTA_ANALYSIS=/home/mauro/PACTA_analysis
-
--   To work from docker container run `docker-compose up` and point to
-    web browser to localhost:8787.
-
--   In the container, the required directories will be mounted under the
-    /home/rstudio, and discovered via the file .env\_rstudio:
-
-<!-- -->
-
-    PACTA_DATA=/home/rstudio/pacta-data
-    PACTA_ANALYSIS=/home/rstudio/PACTA_analysis
-
--   Git ignores all files under the directory tests/testthat/\_snaps/ to
-    avoid leaking private data. Re-include public snapshots in
-    .gitignore with a negation pattern (!), e.g.:
-
-<!-- -->
+Git ignores all files under the directory tests/testthat/\_snaps/ to
+avoid leaking private data. Re-include public snapshots in .gitignore
+with a negation pattern (!), e.g.:
 
     tests/testthat/_snaps/**
     !tests/testthat/_snaps/run_pacta.md
     !tests/testthat/_snaps/run_web_tool.md
 
--   Git ignores the directory tests/testthat/private/. Use it to store
-    regression references or other private data.
+Git ignores the directory tests/testthat/private/. Use it to store
+regression references or other private data.
 
-<!-- -->
-
-    /home/rstudio/pactaCore/tests/testthat/private
+    /home/mauro/git/siblings/pactaCore/tests/testthat/private
     ├── pacta_core
     │   └── TestPortfolio_Input
     │       ├── Bonds_results_company.rda

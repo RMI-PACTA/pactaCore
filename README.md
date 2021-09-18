@@ -14,10 +14,6 @@ The goal of pactaCore is run the core steps of the [PACTA
 methodology](https://2degrees-investing.org/resource/pacta/) with a
 single command, in a reproducible way.
 
-## System requirements
-
-[Docker](https://docs.docker.com/get-docker/).
-
 ## Installation
 
 You can install the development version from
@@ -221,3 +217,8 @@ and `investor_name_in` will populate the columns `portfolio_name` and
     6 TestPortfolio_Input Test         
 
 </details>
+
+## Resources
+
+-   [CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md)
+-   [Docker](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md#docker)
