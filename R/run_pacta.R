@@ -37,6 +37,7 @@ run_pacta_impl <- function(env = ".env",
                              output = output))) {
   abort_if_missing_env(env)
   input <- path_env("PACTA_INPUT", env)
+  abort_if_dir_doesnt_exist(input)
   abort_if_missing_inputs(input)
   output <- path_env("PACTA_OUTPUT", env)
   abort_if_not_empty_dir(output_results_path(path_dir(output)))

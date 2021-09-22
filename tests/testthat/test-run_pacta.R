@@ -24,6 +24,7 @@ test_that("avoids overwritting output from a prevoius run", {
   skip_on_ci()
   skip_on_cran()
   parent <- path_home("pacta_tmp")
+  read_env()
   local_pacta(parent)
 
   dir_create(path(output_results_path(parent)))
@@ -56,4 +57,28 @@ test_that("without an .env file errors gracefully", {
   pacta <- tempdir()
   local_dir(pacta)
   expect_error(run_pacta_impl(code = NULL), "env.*doesn't exist")
+})
+
+test_that("if there is no input/ directory errors gracefully", {
+  pacta <- "~/pacta_tmp"
+  read_env()
+  local_pacta(pacta)
+  env <- path(pacta, ".env")
+
+  input <- path_env("PACTA_INPUT", env = env)
+  dir_delete(input)
+
+  expect_error(run_pacta_impl(env, code = NULL), "directory must exist")
+})
+
+test_that("if there is no input/ directory works just fine", {
+  pacta <- "~/pacta_tmp"
+  read_env()
+  local_pacta(pacta)
+  env <- path(pacta, ".env")
+
+  output <- path_env("PACTA_OUTPUT", env = env)
+  dir_delete(output)
+
+  expect_error(run_pacta(env), NA)
 })
