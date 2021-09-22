@@ -5,8 +5,8 @@
 #' @param x Script(s) number web_tool_script_{1:3}.R
 #' @noRd
 run_web_tool <- function(results = path_temp(wd_path()),
-                         source = Sys.getenv("PACTA_ANALYSIS"),
-                         data = Sys.getenv("PACTA_DATA"),
+                         source = get_env("PACTA_ANALYSIS"),
+                         data = get_env("PACTA_DATA"),
                          x = 1:3) {
   abort_if_dir_doesnt_exist(source)
   abort_if_dir_doesnt_exist(data)
