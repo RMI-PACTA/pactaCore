@@ -18,5 +18,5 @@ test_that("creates a pacta project in the tempdir() directory", {
 
 test_that("if PACTA_DATA is unset fails gracefully", {
   withr::local_envvar(c(PACTA_DATA = ""))
-  expect_error(local_pacta(), "need to set")
+  expect_error(local_pacta(), "PACTA_DATA.*must.*set")
 })

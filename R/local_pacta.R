@@ -25,9 +25,8 @@
 #' @noRd
 local_pacta <- function(dir = tempdir(),
                         input_paths = example_input_paths(),
-                        data = Sys.getenv("PACTA_DATA"),
+                        data = get_env("PACTA_DATA"),
                         envir = parent.frame()) {
-  abort_if_unset(data)
   dir <- create_pacta(dir = dir, data = data, input_paths = input_paths)
   withr::defer(dir_delete(dir), envir = envir)
   invisible(dir)
@@ -35,8 +34,7 @@ local_pacta <- function(dir = tempdir(),
 
 create_pacta <- function(dir = tempdir(),
                          input_paths = example_input_paths(),
-                         data = Sys.getenv("PACTA_DATA")) {
-  abort_if_unset(data)
+                         data = get_env("PACTA_DATA")) {
   dir <- path_abs(dir)
 
   if (!dir_exists(dir)) {

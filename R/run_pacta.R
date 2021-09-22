@@ -42,7 +42,7 @@ run_pacta_impl <- function(env = ".env",
   abort_if_not_empty_dir(output_results_path(path_dir(output)))
   data <- path_env("PACTA_DATA", env)
 
-  parent <- tempdir()
+  parent <- path(tempdir(), tempfile())
   setup_source_data(parent, legacy_path(), data)
   local_dir(path(parent, legacy_dirname()))
 

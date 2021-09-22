@@ -228,8 +228,7 @@ pacta_envvar_once <- function(pattern = "") {
 create_env <- function(path = path_temp(".env"),
                        output = path_temp("output"),
                        input = path_temp("input"),
-                       data = Sys.getenv("PACTA_DATA")) {
-  abort_if_unset(data)
+                       data = get_env("PACTA_DATA")) {
   envvars <- pacta_envvar("output", "input", "data")
   dirs <- c(output, input, data)
 
@@ -409,9 +408,10 @@ find_env <- function() {
   ifelse(user_is_rstudio, ".env_rstudio", ".env")
 }
 
-abort_if_unset <- function(var) {
-  unset <- identical(var, "")
-  if (unset) {
+get_env <- function(var) {
+  val <- Sys.getenv(var)
+
+  if (identical(val, "")) {
     stop(
       "The environment variable `", var, "` must be set but isn't.\n",
       "Do you need to set it in .Renviron or .env?",
@@ -419,7 +419,7 @@ abort_if_unset <- function(var) {
     )
   }
 
-  invisible(var)
+  val
 }
 
 abort_if_missing_env <- function(env) {
