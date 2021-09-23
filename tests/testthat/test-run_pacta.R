@@ -71,14 +71,30 @@ test_that("if there is no input/ directory errors gracefully", {
   expect_error(run_pacta_impl(env, code = NULL), "directory must exist")
 })
 
-test_that("if there is no input/ directory works just fine", {
+test_that("without PACTA_INPUT errors gracefully", {
   pacta <- "~/pacta_tmp"
   read_env()
   local_pacta(pacta)
   env <- path(pacta, ".env")
-
-  output <- path_env("PACTA_OUTPUT", env = env)
-  dir_delete(output)
-
-  expect_error(run_pacta(env), NA)
+  writeLines(gsub("^PACTA_INPUT.*", "", readLines(env)), env)
+  expect_error(run_pacta_impl(env, code = NULL), "PACTA_INPUT must be set")
 })
+
+test_that("without PACTA_OUTPUT errors gracefully", {
+  pacta <- "~/pacta_tmp"
+  read_env()
+  local_pacta(pacta)
+  env <- path(pacta, ".env")
+  writeLines(gsub("^PACTA_OUTPUT*", "", readLines(env)), env)
+  expect_error(run_pacta_impl(env, code = NULL), "PACTA_INPUT must be set")
+})
+
+test_that("without PACTA_DATA errors gracefully", {
+  pacta <- "~/pacta_tmp"
+  read_env()
+  local_pacta(pacta)
+  env <- path(pacta, ".env")
+  writeLines(gsub("^PACTA_DATA*", "", readLines(env)), env)
+  expect_error(run_pacta_impl(env, code = NULL), "PACTA_INPUT must be set")
+})
+

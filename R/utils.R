@@ -176,12 +176,27 @@ path_env <- function(envvar = pacta_envvar(), env = NULL) {
   unlist(lapply(envvar, path_env_once, env = env))
 }
 
+abort_if_unset <- function(var, env) {
+  if (identical(var, character(0))) {
+    stop(
+      "PACTA_INPUT must be set but isn't.\n",
+      "Is this environment file as you expect?: ", path_abs(env),
+      call. = FALSE
+    )
+  }
+
+  invisible(var)
+}
+
 path_env_once <- function(envvar, env = NULL) {
   env <- env %||% path_wd(".env")
 
   envvar <- paste0("^", envvar, "=")
   var_path <- grep(envvar, readLines(env), value = TRUE)
-  sub(envvar, "", var_path)
+
+  out <- sub(envvar, "", var_path)
+  abort_if_unset(out, env)
+  out
 }
 
 #' Get enviroment variables succinctly and in a specific order
