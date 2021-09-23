@@ -10,3 +10,6 @@
 ^inst/extdata/context/\.Rbuildignore$
 ^inst/extdata/context/\.github$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

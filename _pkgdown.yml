@@ -1,0 +1,47 @@
+destination: docs
+
+development:
+  mode: auto
+
+url: https://github.com/2DegreesInvesting/pactaCore/
+
+authors:
+  Mauro Lepore:
+    href: https://github.com/maurolepore/
+  Jackson Hoffart:
+    href: https://github.com/jdhoffa/
+  2 Degrees Investing Initiative:
+    href: https://2degrees-investing.org/
+
+home:
+  links:
+  - text: Learn more
+    href: https://2degrees-investing.org/
+
+navbar:
+
+  type: default
+
+  left:
+  - text: "Reference"
+    href: reference/index.html
+
+  right:
+    - text: "CONTRIBUTING"
+      href: CONTRIBUTING.html
+    - icon: fa-github
+      href: https://github.com/2DegreesInvesting/pactaCore/
+
+reference:
+
+  - title: User-oriented
+    contents:
+      - run_pacta
+
+  - title: Developer-oriented
+    contents:
+      - run_web_tool
+
+  - title: Helpers
+    contents:
+      - has_concept("helpers")
