@@ -20,34 +20,34 @@ test_that("outputs datasets with the expected structure", {
 test_that("avoids overwritting output from a prevoius run", {
   skip_on_ci()
   skip_on_cran()
-  parent <- path_home("pacta_tmp")
+  pacta <- path_home("pacta_tmp")
   read_env()
-  local_pacta(parent)
+  local_pacta(pacta)
 
-  dir_create(path(output_results_path(parent)))
-  file_create(path(output_results_path(parent), "some.file"))
-  expect_error(run_pacta(path(parent, ".env")), "must be empty")
+  dir_create(path(output_results_path(pacta)))
+  file_create(path(output_results_path(pacta), "some.file"))
+  expect_error(run_pacta(path(pacta, ".env")), "must be empty")
 })
 
 test_that("without portfolio errors gracefully", {
   skip_on_ci()
   skip_on_cran()
-  parent <- path_home("pacta_tmp")
-  local_pacta(parent)
+  pacta <- path_home("pacta_tmp")
+  local_pacta(pacta)
 
-  file_delete(path(parent, "input", "TestPortfolio_Input.csv"))
-  expect_snapshot_error(run_pacta(path(parent, ".env")))
+  file_delete(path(pacta, "input", "TestPortfolio_Input.csv"))
+  expect_snapshot_error(run_pacta(path(pacta, ".env")))
 })
 
 test_that("without a parameter file errors gracefully", {
   skip_on_ci()
   skip_on_cran()
-  parent <- path_home("pacta_tmp")
-  local_pacta(parent)
+  pacta <- path_home("pacta_tmp")
+  local_pacta(pacta)
 
-  param <- path(parent, "input", "TestPortfolio_Input_PortfolioParameters.yml")
+  param <- path(pacta, "input", "TestPortfolio_Input_PortfolioParameters.yml")
   file_delete(param)
-  expect_snapshot_error(run_pacta(path(parent, ".env")))
+  expect_snapshot_error(run_pacta(path(pacta, ".env")))
 })
 
 test_that("without an .env file errors gracefully", {

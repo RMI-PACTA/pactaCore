@@ -1,11 +1,11 @@
-test_that("creates a pacta project in the tempdir() directory", {
+test_that("creates an ephemeral pacta project", {
   skip_on_ci()
   skip_on_cran()
-  dir <- tempdir()
+  dir <- tempfile()
 
   local({
     read_env()
-    local_pacta()
+    local_pacta(dir)
     expect_true(file_exists(path(dir, ".env")))
     expect_true(dir_exists(path(dir, "input")))
     expect_true(dir_exists(path(dir, "output")))
