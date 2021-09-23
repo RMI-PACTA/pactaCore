@@ -32,7 +32,7 @@ local_pacta <- function(dir = tempfile(),
   invisible(dir)
 }
 
-create_pacta <- function(dir = tempdir(),
+create_pacta <- function(dir = tempfile(),
                          input_paths = example_input_paths(),
                          data = get_env("PACTA_DATA")) {
   dir <- path_abs(dir)
