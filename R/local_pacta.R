@@ -23,7 +23,7 @@
 #'
 #' dir_exists(dir)
 #' @noRd
-local_pacta <- function(dir = tempdir(),
+local_pacta <- function(dir = tempfile(),
                         input_paths = example_input_paths(),
                         data = get_env("PACTA_DATA"),
                         envir = parent.frame()) {
