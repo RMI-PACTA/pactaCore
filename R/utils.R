@@ -149,17 +149,6 @@ raw_inputs_path <- function(...) {
   wd_path("20_Raw_Inputs", ...)
 }
 
-example_input_paths <- function() {
-  extdata_path(
-    sprintf(c("%s.csv", "%s_PortfolioParameters.yml"), example_input_name())
-  )
-}
-
-# Abstract this low level detail
-example_input_name <- function() {
-  "TestPortfolio_Input"
-}
-
 # Abstract this low level detail
 portfolio_pattern <- function() {
   "_Input[.]csv"
@@ -421,20 +410,6 @@ read_env <- function(env = root_path(find_env())) {
 find_env <- function() {
   user_is_rstudio <- identical(Sys.info()[["user"]], "rstudio")
   ifelse(user_is_rstudio, ".env_rstudio", ".env")
-}
-
-get_env <- function(var) {
-  val <- Sys.getenv(var)
-
-  if (identical(val, "")) {
-    stop(
-      "The environment variable `", var, "` must be set but isn't.\n",
-      "Do you need to set it in .Renviron or .env?",
-      call. = FALSE
-    )
-  }
-
-  val
 }
 
 abort_if_missing_env <- function(env) {
