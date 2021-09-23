@@ -23,7 +23,7 @@
 #'
 #' dir_exists(dir)
 #' @noRd
-local_pacta <- function(dir = tempfile(),
+local_pacta <- function(dir = tempfile("pacta_"),
                         input_paths = example_input_paths(),
                         data = get_env("PACTA_DATA"),
                         envir = parent.frame()) {
@@ -32,7 +32,7 @@ local_pacta <- function(dir = tempfile(),
   invisible(dir)
 }
 
-create_pacta <- function(dir = tempfile(),
+create_pacta <- function(dir = tempfile(pattern = "pacta_"),
                          input_paths = example_input_paths(),
                          data = get_env("PACTA_DATA")) {
   dir <- path_abs(dir)
