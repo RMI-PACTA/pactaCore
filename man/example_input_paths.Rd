@@ -2,7 +2,7 @@
 % Please edit documentation in R/local_pacta.R
 \name{example_input_paths}
 \alias{example_input_paths}
-\title{Path to an example porftolio and parameter file}
+\title{Path to an example portfolio and parameter file}
 \usage{
 example_input_paths()
 }
@@ -10,7 +10,7 @@ example_input_paths()
 String. A vector of paths to example portfolio and parameter files.
 }
 \description{
-Path to an example porftolio and parameter file
+Path to an example portfolio and parameter file
 }
 \examples{
 example_input_paths()

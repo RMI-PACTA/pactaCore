@@ -1,3 +1,5 @@
+Contributing to pactaCore
+================
 
 This document guides contributors. It extends
 [README](https://github.com/2DegreesInvesting/pactaCore/blob/main/README.md)
@@ -20,7 +22,6 @@ variables in the .env file:
 
     PACTA_DATA=~/pacta-data
     PACTA_ANALYSIS=~/PACTA_analysis
-    PASSWORD=yourpassword
 
 ## Docker
 
@@ -47,6 +48,7 @@ You may run or skip slow tests with an environment variable in
 .Renviron:
 
     PACTA_SKIP_SLOW_TESTS=FALSE
+    PACTA_DATA=~/pacta-data
 
 The repository PACTA\_analysis/ is required for regression tests. Clone
 it from 2DII’s GitHub organization and keep it up to date with the repo

@@ -1,9 +1,19 @@
-#' Run the web_tool
-#' @param results Path to where to output results.
-#' @param source Path to source code.
-#' @param data Path to private pacta-data.
-#' @param x Script(s) number web_tool_script_{1:3}.R
-#' @noRd
+#' Run the web_tool for regression tests
+#'
+#' @param results String. Path where to save the results.
+#' @param source String. Path to the PACTA_analysis repo locally.
+#' @param data String. Path to the
+#' @param x Number. Vector giving the web tool script to run, e.g. `1` or `1:3`.
+#'
+#' @return Called for its side effect. Returns the first argument invisibly.
+#' @export
+#'
+#' @family developer oriented
+#'
+#' @examples
+#' \donttest{
+#'   run_web_tool()
+#' }
 run_web_tool <- function(results = path_temp(wd_path()),
                          source = get_env("PACTA_ANALYSIS"),
                          data = get_env("PACTA_DATA"),
@@ -23,6 +33,22 @@ run_web_tool <- function(results = path_temp(wd_path()),
   dir_move(results_path(), results)
 
   invisible(results)
+}
+
+#' Path based on working_dir, to hide this low level implementation detail
+#'
+#' This function avoids littering the code base with specific paths we want to
+#' move away from.
+#'
+#' @inheritDotParams fs::path
+#'
+#' @return String. A path.
+#' @export
+#'
+#' @examples
+#' wd_path()
+wd_path <- function(...) {
+  path("working_dir", ...)
 }
 
 setup_wd <- function(path = ".") {

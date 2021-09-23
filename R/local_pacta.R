@@ -69,7 +69,7 @@ local_pacta <- function(dir = tempfile("pacta_"),
   invisible(dir)
 }
 
-#' Path to an example porftolio and parameter file
+#' Path to an example portfolio and parameter file
 #'
 #' @return String. A vector of paths to example portfolio and parameter files.
 #' @export

@@ -38,34 +38,6 @@ compare_with_once <- function(f = dim, new, old) {
   invisible(new)
 }
 
-#' A vectorized version of waldo::compare()
-#'
-#' Defaults to comparing private results between the web tool and this package.
-#'
-#' @param new,old A list of dataframes.
-#' @param ... Passed to `waldos::compare()`
-#'
-#' @return Called for its side effect. Prints differences.
-#'
-#' @examples
-#' new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
-#' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
-#' compare_full(new, old)
-#' compare_full(new, new)
-#' @noRd
-compare_full <- function(new = enlist_rds(private_path("pacta_core")),
-                         old = enlist_rds(private_path("web_tool")),
-                         ...) {
-  for (i in seq_along(old)) {
-    print(paste(names(new)[[i]], "(new)", "vs.", names(old)[[i]], "(old)"))
-    try(
-      print(waldo::compare(old[[i]], new[[i]], ...))
-    )
-  }
-
-  invisible(new)
-}
-
 # Like purrr::walk
 walk <- function(.x, .f, ...) {
   lapply(.x, .f, ...)
@@ -115,11 +87,6 @@ legacy_dirname <- function() {
 output_results_path <- function(parent, ..., regexp = portfolio_pattern()) {
   portfolios <- portfolio_names(path(parent, "input"), regexp = regexp)
   path(parent, "output", results_path(), portfolios, ...)
-}
-
-# Avoid littering the code base with specific paths we want to move away from
-wd_path <- function(...) {
-  path("working_dir", ...)
 }
 
 wd_paths <- function(portfolio_name = example_input_name()) {
