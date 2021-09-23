@@ -62,4 +62,9 @@ dir_exists(pacta_ephemeral)
 }
 \seealso{
 https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
+
+Other developer oriented: 
+\code{\link{compare_full}()},
+\code{\link{run_web_tool}()}
 }
+\concept{developer oriented}

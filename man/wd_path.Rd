@@ -23,3 +23,9 @@ move away from.
 \examples{
 wd_path()
 }
+\seealso{
+Other helpers: 
+\code{\link{example_input_paths}()},
+\code{\link{get_env}()}
+}
+\concept{helpers}

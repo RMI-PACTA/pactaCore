@@ -41,7 +41,7 @@ reference:
   - title: Developer-oriented
     contents:
       - run_web_tool
-
+      - has_concept("developer oriented")
   - title: Helpers
     contents:
       - has_concept("helpers")

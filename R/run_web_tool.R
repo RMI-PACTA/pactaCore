@@ -45,6 +45,8 @@ run_web_tool <- function(results = path_temp(wd_path()),
 #' @return String. A path.
 #' @export
 #'
+#' @family helpers
+#'
 #' @examples
 #' wd_path()
 wd_path <- function(...) {

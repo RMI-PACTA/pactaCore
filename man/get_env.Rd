@@ -19,4 +19,9 @@ Get the value of an environment variable, or fail with an informative error
 get_env("SHELL")
 try(get_env("BAD"))
 }
+\seealso{
+Other helpers: 
+\code{\link{example_input_paths}()},
+\code{\link{wd_path}()}
+}
 \concept{helpers}

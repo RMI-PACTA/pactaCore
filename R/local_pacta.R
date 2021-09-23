@@ -19,7 +19,10 @@
 #'
 #' @return These functions are called for their side effect. They return the
 #'   first argument invisibly.
+#'
 #' @export
+#'
+#' @family developer oriented
 #'
 #' @examples
 #' library(fs)
@@ -74,7 +77,7 @@ local_pacta <- function(dir = tempfile("pacta_"),
 #' @return String. A vector of paths to example portfolio and parameter files.
 #' @export
 #'
-#' @keywords helpers
+#' @family helpers
 #'
 #' @examples
 #' example_input_paths()

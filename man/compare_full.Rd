@@ -29,6 +29,7 @@ compare_full(new, new)
 }
 \seealso{
 Other developer oriented: 
+\code{\link{create_pacta}()},
 \code{\link{run_web_tool}()}
 }
 \concept{developer oriented}

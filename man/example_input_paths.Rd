@@ -15,4 +15,9 @@ Path to an example portfolio and parameter file
 \examples{
 example_input_paths()
 }
-\keyword{helpers}
+\seealso{
+Other helpers: 
+\code{\link{get_env}()},
+\code{\link{wd_path}()}
+}
+\concept{helpers}
