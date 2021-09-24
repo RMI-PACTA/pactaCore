@@ -27,7 +27,7 @@ Called for its side effect. Returns the first argument invisibly.
 Run the web_tool for regression tests
 }
 \examples{
-\donttest{
+\dontrun{
   run_web_tool()
 }
 }

@@ -121,11 +121,8 @@ portfolio_pattern <- function() {
   "_Input[.]csv"
 }
 
-skip_slow_tests <- function() {
-  skipping_slow_tests <- as.logical(
-    Sys.getenv("PACTA_SKIP_SLOW_TESTS", unset = "TRUE")
-  )
-  testthat::skip_if(skipping_slow_tests)
+expect_no_error <- function(object, ...) {
+  testthat::expect_error(object, regexp = NA, ...)
 }
 
 path_env <- function(envvar = pacta_envvar(), env = NULL) {
@@ -227,10 +224,6 @@ update_pacta_legacy <- function(file = legacy_path("pacta_legacy.R")) {
   writeLines(code, file)
 
   invisible(file)
-}
-
-expect_no_error <- function(object, ...) {
-  testthat::expect_error(object, regexp = NA, ...)
 }
 
 abort_if_not_empty_dir <- function(path) {
@@ -359,19 +352,6 @@ check_setup_source_data <- function(source, data) {
   })
 
   invisible(source)
-}
-
-read_env <- function(env = root_path(find_env())) {
-  if (!file_exists(env)) {
-    stop(
-      "The environment file must exist but it doesn't:\n",
-      env, "\n",
-      "* Did you forget to set it up?",
-      call. = FALSE
-    )
-  }
-
-  readRenviron(env)
 }
 
 find_env <- function() {
