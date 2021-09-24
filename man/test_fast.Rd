@@ -24,6 +24,7 @@ Skip slow tests
 Other developer oriented: 
 \code{\link{compare_full}()},
 \code{\link{create_pacta}()},
-\code{\link{run_web_tool}()}
+\code{\link{run_web_tool}()},
+\code{\link{update_pacta_legacy}()}
 }
 \concept{developer oriented}

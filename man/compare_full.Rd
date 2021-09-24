@@ -31,6 +31,7 @@ compare_full(new, new)
 Other developer oriented: 
 \code{\link{create_pacta}()},
 \code{\link{run_web_tool}()},
-\code{\link{test_fast}()}
+\code{\link{test_fast}()},
+\code{\link{update_pacta_legacy}()}
 }
 \concept{developer oriented}
