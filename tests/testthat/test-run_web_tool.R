@@ -3,9 +3,6 @@ test_that("with scripts 1:2 produces output", {
   skip_on_cran()
   skip_if(skip_slow_test())
 
-  on_testthat <- !identical(path_file(test_path()), "testthat")
-  skip_if_not(on_testthat)
-
   results <- run_web_tool(x = 1:2)
 
   reference <- private_path("web_tool")
