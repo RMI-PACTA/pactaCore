@@ -369,3 +369,16 @@ abort_if_missing_env <- function(env) {
   }
   invisible(path)
 }
+
+read_env <- function(env = root_path(find_env())) {
+  if (!file_exists(env)) {
+    stop(
+      "The environment file must exist but it doesn't:\n",
+      env, "\n",
+      "* Did you forget to set it up?",
+      call. = FALSE
+    )
+  }
+
+  readRenviron(env)
+}
