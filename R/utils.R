@@ -210,22 +210,6 @@ create_env <- function(path = path_temp(".env"),
   invisible(path)
 }
 
-#' Update inst/extdata/context/pacta_legacy.R with scripts from PACTA_analysis
-#'
-#' @examples
-#' update_pacta_legacy()
-#' @noRd
-update_pacta_legacy <- function(file = legacy_path("pacta_legacy.R")) {
-  scripts <- paste0(
-    "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/master/",
-    "web_tool_script_", 1:2, ".R"
-  )
-  code <- unlist(lapply(scripts, readLines))
-  writeLines(code, file)
-
-  invisible(file)
-}
-
 abort_if_not_empty_dir <- function(path) {
   if (dir_exists(path) && !is_empty_dir(path)) {
     stop(
