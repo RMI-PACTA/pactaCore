@@ -65,6 +65,7 @@ https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
 
 Other developer oriented: 
 \code{\link{compare_full}()},
-\code{\link{run_web_tool}()}
+\code{\link{run_web_tool}()},
+\code{\link{test_fast}()}
 }
 \concept{developer oriented}

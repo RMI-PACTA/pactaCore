@@ -34,6 +34,7 @@ Run the web_tool for regression tests
 \seealso{
 Other developer oriented: 
 \code{\link{compare_full}()},
-\code{\link{create_pacta}()}
+\code{\link{create_pacta}()},
+\code{\link{test_fast}()}
 }
 \concept{developer oriented}
