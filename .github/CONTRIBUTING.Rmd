@@ -25,7 +25,7 @@ focusing on how this R package differs form a standard one.
 ## Environment variables
 
 Compared to users, developers must set two additional environment variables in
-the .env file:
+their .env file:
 
 * `PACTA_ANALYSIS` sets the path where you cloned the PACTA_analysis/
 repository. This is used for regression Tests (see [Tests and Git]).
@@ -58,11 +58,7 @@ show(".env_rstudio")
 
 ## Tests and Git
 
-You may run or skip slow tests with an environment variable in .Renviron:
-
-```{r}
-show(".Renviron")
-```
+Some tests are slow. You may skip them wiht `test_fast()` and `check_fast()`.
 
 The repository PACTA_analysis/ is required for regression tests. Clone it from
 2DII's GitHub organization and keep it up to date with the repo on GitHub.
@@ -87,5 +83,4 @@ references or other private data.
 dir_tree(here("tests", "testthat", "private"))
 ```
 
-You may compare two lists of reference datasets with the internal function
-`compare_full()`.
+You may compare two lists of reference datasets with `compare_full()`.

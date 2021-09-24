@@ -8,7 +8,7 @@ focusing on how this R package differs form a standard one.
 ## Environment variables
 
 Compared to users, developers must set two additional environment
-variables in the .env file:
+variables in their .env file:
 
 -   `PACTA_ANALYSIS` sets the path where you cloned the PACTA\_analysis/
     repository. This is used for regression Tests (see [Tests and
@@ -22,6 +22,7 @@ variables in the .env file:
 
     PACTA_DATA=~/pacta-data
     PACTA_ANALYSIS=~/PACTA_analysis
+    PASSWORD=yourpassword
 
 ## Docker
 
@@ -44,11 +45,8 @@ In the container, the required directories will be mounted under
 
 ## Tests and Git
 
-You may run or skip slow tests with an environment variable in
-.Renviron:
-
-    PACTA_SKIP_SLOW_TESTS=FALSE
-    PACTA_DATA=~/pacta-data
+Some tests are slow. You may skip them wiht `test_fast()` and
+`check_fast()`.
 
 The repository PACTA\_analysis/ is required for regression tests. Clone
 it from 2DII’s GitHub organization and keep it up to date with the repo
@@ -87,5 +85,4 @@ regression references or other private data.
             ├── Equity_results_map.rda
             └── Equity_results_portfolio.rda
 
-You may compare two lists of reference datasets with the internal
-function `compare_full()`.
+You may compare two lists of reference datasets with `compare_full()`.
