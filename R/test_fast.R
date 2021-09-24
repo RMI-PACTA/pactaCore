@@ -1,3 +1,16 @@
+#' Skip slow tests
+#'
+#' @param ... Arguments passed to `devtools::test()` and `devtools::check()`.
+#'
+#' @return Called for their side effect.
+#' @export
+#'
+#' @family developer oriented
+#'
+#' @examples
+#' \dontrun{
+#'   test_fa
+#' }
 test_fast <- function(...) {
   withr::local_envvar(c(PACTA_SKIP_SLOW_TEST="TRUE"))
   devtools::test(...)
