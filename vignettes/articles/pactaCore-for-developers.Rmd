@@ -1,0 +1,108 @@
+---
+title: "pactaCore for developers"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The goal of this article is to show you how to use pactaCore for software
+development. It assumes you already know how to use pactaCore for data analysis
+(see README), and how to setup your development environment (see
+[CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md)).
+
+## Setup
+
+README provides a gentle explanation of the setup. Here we do it quickly:
+
+* Use pactaCore and other optional but convenient packages.
+
+```{r}
+library(pactaCore)
+library(fs)
+```
+
+* Setup a pacta project with a fake portfolio and parameter files at a temporary
+directory.
+
+```{r}
+pacta <- create_pacta(dir = tempfile("pacta"), data = "~/pacta-data")
+
+dir_tree(pacta, all = TRUE)
+```
+
+## Using pactaCore to test and refactor PACTA_analysis
+
+As a developer, you may use pactaCore to test and refactor PACTA_analysis --
+specifically web_tool scripts 1 and 2:
+
+* Ensure your ".env" file includes the variable `PACTA_ANALYSIS`, giving the
+path to the local copy of PACTA_analysis you want to use as a reference -- e.g.
+because its `HEAD` points to the latest commit on `master`.
+
+```{r}
+env <- path(pacta, ".env")
+lines <- unique(c(readLines(env), "PACTA_ANALYSIS=~/PACTA_analysis"))
+writeLines(lines, env)
+
+readLines(env)
+```
+
+* Modify the web tool scripts 1 and 2 in a different local clone of
+PACTA_analysis, and create a vector giving the path to the modified scripts.
+
+```{r}
+scripts <- path("~/git/PACTA_analysis", paste0("web_tool_script_", 1:2, ".R"))
+scripts
+```
+
+* Working from pactaCore, run `update_pacta_legacy()`.
+
+```{r}
+here::here()
+
+update_pacta_legacy(scripts)
+```
+
+* Run `devtools::test()`. If the changes you made to the web tool scripts 
+changed the structure of the resulting datasets, then you may already get a
+failing test.
+
+```r
+devtools::test()
+```
+
+* If the previous tests passed, run `compare_full()` to test for more subtle
+differences.
+
+```r
+compare_full()
+```
+
+## Using pactaCore to fail fast
+
+When something goes wrong, pactaCore attempts to let you know as soon and
+clearly as possible.
+
+```{r}
+# Setup
+bad_pacta <- create_pacta(dir = tempfile("bad_pacta"), data = "~/pacta-data")
+env <- path(bad_pacta, ".env")
+# Degrade .env to show how we handle errors
+writeLines(sub("^PACTA_INPUT.*", "", readLines(env)), env)
+readLines(env)
+
+try(run_pacta(env))
+
+# Set the environment variable but incorrectly
+writeLines("PACTA_INPUT=/bad/path", env)
+
+try(run_pacta(env))
+```
+
+## Using pactaCore to access a dockerized computing environment
+
+See [Docker in CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md#docker).
