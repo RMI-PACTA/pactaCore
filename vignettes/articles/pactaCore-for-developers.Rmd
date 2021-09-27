@@ -9,38 +9,28 @@ knitr::opts_chunk$set(
 )
 ```
 
-This article aims software developers. Its gosl is to advertise aspects of
-pactaCore that may be valuable but not obvious. It assumes you already know how
-to use pactaCore for data analysis (see README), and how to setup your
-development environment (see
-[CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md)).
+This article aims software developers. Its goal is to advertise aspects of
+pactaCore that may be valuable but not obvious. For learn about installation,
+setup, and basic usage see
+[README](https://github.com/2DegreesInvesting/pactaCore).
 
-## Setup
-
-README provides a gentle explanation of the setup. Here we do it quickly:
-
-* Use pactaCore and other optional but convenient packages.
+---
 
 ```{r}
-library(pactaCore)
-library(fs)
+# Use pactaCore and other optional but convenient packages
 library(here)
+library(fs)
+library(pactaCore)
 
+# Helper
 show <- function(path) writeLines(readLines(path))
-```
 
-* Setup a pacta project with a fake portfolio and parameter files at a temporary
-directory.
-
-```{r}
+# Setup a pacta project
 pacta <- create_pacta(dir = tempfile("pacta"), data = "~/pacta-data")
-
 dir_tree(pacta, all = TRUE)
 ```
 
-## Uses
-
-### Using pactaCore to test and refactor PACTA_analysis
+## Using pactaCore to test and refactor PACTA_analysis
 
 pactaCore can help you test and refactor PACTA_analysis -- specifically web_tool
 scripts 1 and 2. Here is how:
@@ -88,13 +78,13 @@ differences.
 compare_full()
 ```
 
-### Using pactaCore to benefit from its testing infrastructure
+## Using pactaCore to benefit from its testing infrastructure
 
 Above you saw how to run regression tests against a reference PACTA_analysis
 repo. This section covers other more general uses of the testing infrastructure
 that pactaCore provides.
 
-* Some tests are slow. You may skip them wiht `test_fast()` and `check_fast()`.
+* Some tests are slow. You may skip them with `test_fast()` and `check_fast()`.
 
 * Git ignores all files under the directory tests/testthat/_snaps/ to avoid
 leaking private data. Re-include public snapshots in .gitignore with a negation
@@ -112,7 +102,7 @@ references or other private data.
 dir_tree(here("tests", "testthat", "private"))
 ```
 
-### Using pactaCore to benefit from error messages
+## Using pactaCore to benefit from error messages
 
 The required setup for pactaCore is enforced with assertions that should help
 you figure out what's wrong and how to fix it.
@@ -133,7 +123,7 @@ writeLines("PACTA_INPUT=/bad/path", env)
 try(run_pacta(env))
 ```
 
-### Using pactaCore to access a dockerized computing environment
+## Using pactaCore to access a dockerized computing environment
 
 You can access a dockerized computing environment in four steps:
 
