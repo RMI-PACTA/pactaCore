@@ -1,10 +1,10 @@
-test_that("creates a pacta project in the tempdir() directory", {
+test_that("creates an ephemeral pacta project", {
   skip_on_ci()
   skip_on_cran()
-  dir <- tempdir()
+  dir <- tempfile()
 
   local({
-    local_pacta()
+    local_pacta(dir)
     expect_true(file_exists(path(dir, ".env")))
     expect_true(dir_exists(path(dir, "input")))
     expect_true(dir_exists(path(dir, "output")))
@@ -17,5 +17,5 @@ test_that("creates a pacta project in the tempdir() directory", {
 
 test_that("if PACTA_DATA is unset fails gracefully", {
   withr::local_envvar(c(PACTA_DATA = ""))
-  expect_error(local_pacta(), "need to set")
+  expect_error(local_pacta(), "PACTA_DATA.*must.*set")
 })

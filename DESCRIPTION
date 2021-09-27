@@ -12,15 +12,37 @@ Authors@R:
              email = "contact@2degrees-investing.org"))
 Description: For more information visit <https://2degrees-investing.org/>.
 License: MIT + file LICENSE
-Imports: 
+Depends: 
+    assertthat,
+    config,
+    conflicted,
+    countrycode,
+    devtools,
+    dplyr,
     fs,
+    fst,
+    glue,
+    here,
+    janitor,
+    jsonlite,
+    magrittr,
+    purrr,
+    readr,
+    renv,
+    reshape2,
     rlang,
+    rstudioapi,
+    testthat (>= 3.0.0),
+    tibble,
+    withr,
+    writexl,
+    zoo
+Imports: 
     waldo,
     withr
 Suggests: 
-    testthat (>= 3.0.0)
+    rmarkdown
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-SystemRequirements: docker

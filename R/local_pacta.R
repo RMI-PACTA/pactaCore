@@ -1,40 +1,48 @@
-#' Create a pacta project
+#' Create a pacta projects
 #'
-#' * `create_pacta()` creates a pacta project.
-#' * `local_pacta()` creates a temporary pacta project.
-#'
-#' @seealso
-#'   https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
+#' These functions create a template for your pacta project, populated with
+#' a demo portfolio and parameter file. They differ in whether or not the project
+#' persists after you exit the local context that calls these functions:
+#' * `create_pacta()` creates a persistent pacta project. This is what you would
+#' normally use in real projects.
+#' * `local_pacta()` creates an ephemeral pacta project, that is auto-removed
+#' when you exit the local context that calls `local_pacta()`. This is what you
+#' would normally use in examples and tests.
 #'
 #' @param dir String. Path where to create pacta files and directories.
 #' @param input_paths String. Path to portfolio and parameter files.
 #' @param data String. Path to the private pacta-data/ directory.
 #' @param envir Must be passed on to `withr::defer()`.
 #'
+#' @seealso
+#' https://testthat.r-lib.org/articles/test-fixtures.html#local-helpers.
+#'
+#' @return These functions are called for their side effect. They return the
+#'   first argument invisibly.
+#'
+#' @export
+#'
+#' @family developer oriented
+#'
 #' @examples
-#' dir <- path(tempdir(), "pacta")
-#' withr::local_envvar(c(PACTA_DATA = path(dir, "pacta-data")))
+#' library(fs)
 #'
-#' # This local context is usually a call to test_that()
+#' pacta <- tempfile("somewhere")
+#' create_pacta(pacta, data = "path/to/pacta-data")
+#' dir_tree(pacta)
+#' readLines(path(pacta, ".env"))
+#'
+#' # Auto-remove the pacta project when you exit the local context
+#' pacta_ephemeral <- tempfile("somewhere")
 #' local({
-#'   local_pacta(dir)
-#'   dir_tree(dir, all = TRUE)
+#'   local_pacta(pacta_ephemeral)
+#'   dir_tree(pacta_ephemeral, all = TRUE)
+#'   dir_exists(pacta_ephemeral)
 #' })
-#'
-#' dir_exists(dir)
-#' @noRd
-local_pacta <- function(dir = tempdir(),
-                        input_paths = example_input_paths(),
-                        data = getenv_data(),
-                        envir = parent.frame()) {
-  dir <- create_pacta(dir = dir, data = data, input_paths = input_paths)
-  withr::defer(dir_delete(dir), envir = envir)
-  invisible(dir)
-}
-
-create_pacta <- function(dir = tempdir(),
+#' dir_exists(pacta_ephemeral)
+create_pacta <- function(dir = tempfile(pattern = "pacta_"),
                          input_paths = example_input_paths(),
-                         data = getenv_data()) {
+                         data = get_env("PACTA_DATA")) {
   dir <- path_abs(dir)
 
   if (!dir_exists(dir)) {
@@ -53,27 +61,61 @@ create_pacta <- function(dir = tempdir(),
   invisible(dir)
 }
 
-#' Get the environment variable "PACTA_DATA" or fail gracefully
+#' @rdname create_pacta
+#' @export
+local_pacta <- function(dir = tempfile("pacta_"),
+                        input_paths = example_input_paths(),
+                        data = get_env("PACTA_DATA"),
+                        envir = parent.frame()) {
+  dir <- create_pacta(dir = dir, data = data, input_paths = input_paths)
+  withr::defer(dir_delete(dir), envir = envir)
+  invisible(dir)
+}
+
+#' Path to an example portfolio and parameter file
+#'
+#' @return String. A vector of paths to example portfolio and parameter files.
+#' @export
+#'
+#' @family helpers
 #'
 #' @examples
-#' getenv_data()
-#'
-#' Sys.setenv(PACTA_DATA = "")
-#' try(getenv_data())
-#' @noRd
-getenv_data <- function() {
-  out <- Sys.getenv("PACTA_DATA", unset = "")
+#' example_input_paths()
+example_input_paths <- function() {
+  extdata_path(
+    sprintf(c("%s.csv", "%s_PortfolioParameters.yml"), example_input_name())
+  )
+}
 
-  unset <- identical(out, "")
-  if (unset) {
+# Abstract this low level detail
+example_input_name <- function() {
+  "TestPortfolio_Input"
+}
+
+#' Get the value of an environment variable, or fail with an informative error
+#'
+#' @param var String. The name of an environment variable, e.g. "PACTA_DATA".
+#'
+#' @return String. The value of the environment value (or an informative error).
+#' @export
+#'
+#' @family helpers
+#'
+#' @examples
+#' get_env("SHELL")
+#' try(get_env("BAD"))
+get_env <- function(var) {
+  val <- Sys.getenv(var)
+
+  if (identical(val, "")) {
     stop(
-      "The environment PACTA_DATA must be set.\n",
-      "Do you need to set it in .Renviron? (see `?usethis::edit_r_environ()`",
+      "The environment variable `", var, "` must be set but isn't.\n",
+      "Do you need to set it in your .env file?",
       call. = FALSE
     )
   }
 
-  out
+  val
 }
 
 create_io <- function(env = NULL) {
@@ -84,6 +126,6 @@ create_io <- function(env = NULL) {
 
 copy_input_paths <- function(env = NULL, input_paths = example_input_paths()) {
   input <- path_env("PACTA_INPUT", env = env)
-  walk(input_paths, function(x) file_copy(x, input, overwrite = TRUE))
+  walk(input_paths, file_duplicate, input)
   invisible(env)
 }

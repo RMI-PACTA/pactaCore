@@ -13,7 +13,7 @@
 #'     local_pacta(pacta)
 #'
 #'     # Work from the pacta project for convenicenc
-#'     withr::local_dir(pacta)
+#'     local_dir(pacta)
 #'
 #'     # The ".env" file specifies the setup for input/ output/ and private data
 #'     readLines(".env")
@@ -26,60 +26,133 @@
 #'   })
 #' }
 run_pacta <- function(env = ".env") {
-  run_pacta_impl(env)
+  run_pacta_impl(env = env)
   invisible(env)
 }
 
-# `code` allows injecting test code
 run_pacta_impl <- function(env = ".env",
-                           code = expression(system(docker_run))) {
+                           code = expression(run_pacta_legacy(
+                             source = ".",
+                             input = input,
+                             output = output))) {
+  abort_if_missing_env(env)
   input <- path_env("PACTA_INPUT", env)
-  output <- path_env("PACTA_OUTPUT", env)
+  abort_if_dir_doesnt_exist(input)
   abort_if_missing_inputs(input)
-  abort_if_not_empty_dir(results_path(path_dir(output)))
-
+  output <- path_env("PACTA_OUTPUT", env)
+  abort_if_not_empty_dir(output_results_path(path_dir(output)))
   data <- path_env("PACTA_DATA", env)
-  # r"()" was introduced in R 4.0.0
-  command_arg <- r"(Rscript --vanilla -e '
-    setwd("/bound")
-    source("R/run_pacta_legacy.R")
-    run_pacta_legacy()
-  ')"
 
-  withr::local_dir(context_path())
+  parent <- path(tempdir(), tempfile())
+  setup_source_data(parent, legacy_path(), data)
+  local_dir(path(parent, legacy_dirname()))
 
-  local_working_dir()
-
-  image_tag <- "pacta:0.0.0.9001"
-  docker_build <- sprintf("docker build -t %s %s", image_tag, context_path())
-  system(docker_build)
-
-  docker_run <- sprintf(
-    "docker run --rm -v %s:/input -v %s:/output -v %s:/pacta-data:ro %s %s",
-    input, output, data, image_tag, command_arg
-  )
+  dir_destroy(wd_path())
+  create_wd(".")
 
   eval(code)
 
   invisible(env)
 }
 
-local_working_dir <- function(envir = parent.frame()) {
-  working_dir_path <- context_path("working_dir")
-  if (dir_exists(working_dir_path)) {
-    stop(
-      "working_dir/ already exists:\n",
-      working_dir_path, "\n",
-      "Do you need to delete the output of a previous run?",
-      call. = FALSE
-    )
+#' Run PACTA for all portfolios in an input directory
+#'
+#' @param source String. Path to PACTA's legacy source code.
+#' @param input,output String. Path to directories input/ and output/.
+#'
+#' @examples
+#' run_pacta_legacy(
+#'   source = ".",
+#'   input = "~/pacta_tmp/input",
+#'   output = "~/pacta_tmp/output"
+#' )
+#' @noRd
+run_pacta_legacy <- function(source, input, output) {
+  source <- path_abs(source)
+  input <- path_abs(input)
+  output <- path_abs(output)
+
+  local_dir(source)
+  abort_if_pacta_data_isnt_sibling(source)
+
+  setup_input(source, input)
+
+  portfolios <- portfolio_names(input, portfolio_pattern())
+  command <- sprintf("Rscript --vanilla pacta_legacy.R %s", portfolios)
+  for (i in seq_along(command)) {
+    message("Start portfolio: ", portfolios[[i]])
+    system(command[[i]])
   }
 
-  create_working_dir(context_path())
-  withr::defer(
-    dir_delete(context_path("working_dir")),
-    envir = envir
-  )
+  setup_output(source, output)
+  access <- get_permissions(input)
+  walk(c(input, output), apply_permissions, access)
 
-  invisible(envir)
+  invisible(source)
+}
+
+abort_if_pacta_data_isnt_sibling <- function(source) {
+  is_sibling <- dir_exists(path(path_dir(source), "pacta-data"))
+  if (!is_sibling) {
+    stop("Can't find pacta-data/", call. = FALSE)
+  }
+
+  invisible(source)
+}
+
+setup_input <- function(source, input) {
+  yml <- dir_ls(input, regexp = "[.]yml$")
+  file_duplicate(yml, path(source, parameter_file_path(path_file(yml))))
+
+  csv <- dir_ls(input, regexp = "[.]csv$")
+  file_duplicate(csv, path(source, raw_inputs_path(path_file(csv))))
+
+  invisible(source)
+}
+
+setup_output <- function(wd, output) {
+  dir_duplicate(path(wd, wd_path()), path(output, wd_path()))
+
+  files <- dir_ls(output, recurse = TRUE)
+  file_chmod(files, "a+rwx")
+
+  invisible(wd)
+}
+
+apply_permissions <- function(dir, access) {
+  files <- dir_ls(dir, recurse = TRUE)
+  file_chown(files, user_id = access[["user"]], group_id = access[["group"]])
+
+  invisible(dir)
+}
+
+get_permissions <- function(path) {
+  path <- path_expand(path)
+  parent <- path_dir(path_abs(path))
+  info <- dir_info(parent)
+
+  c(
+    user = info[info$path == path, c("user")][[1]],
+    group = info[info$path == path, c("group")][[1]]
+  )
+}
+
+#' @examples
+#' get_permissions("/home")
+#' get_permissions("~")
+#' @noRd
+get_permissions <- function(path) {
+  path <- path_expand(path)
+  parent <- path_dir(path_abs(path))
+  info <- dir_info(parent)
+
+  c(
+    user = info[info$path == path, c("user")][[1]],
+    group = info[info$path == path, c("group")][[1]]
+  )
+}
+
+portfolio_names <- function(dir, regexp) {
+  csv <- dir_ls(dir, regexp = regexp)
+  path_ext_remove(path_file(csv))
 }
