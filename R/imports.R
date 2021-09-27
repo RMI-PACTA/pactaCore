@@ -3,5 +3,5 @@
 #' @importFrom fs path_ext_remove path_file path_home path_temp path_wd
 #' @importFrom fs file_chmod file_chown path_expand dir_info file_create
 #' @importFrom rlang %||%
-#' @importFrom withr defer local_dir
+#' @importFrom withr defer local_dir local_file
 NULL

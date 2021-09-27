@@ -121,11 +121,8 @@ portfolio_pattern <- function() {
   "_Input[.]csv"
 }
 
-skip_slow_tests <- function() {
-  skipping_slow_tests <- as.logical(
-    Sys.getenv("PACTA_SKIP_SLOW_TESTS", unset = "TRUE")
-  )
-  testthat::skip_if(skipping_slow_tests)
+expect_no_error <- function(object, ...) {
+  testthat::expect_error(object, regexp = NA, ...)
 }
 
 path_env <- function(envvar = pacta_envvar(), env = NULL) {
@@ -211,26 +208,6 @@ create_env <- function(path = path_temp(".env"),
   writeLines(sprintf("%s=%s", envvars, dirs), con = path)
 
   invisible(path)
-}
-
-#' Update inst/extdata/context/pacta_legacy.R with scripts from PACTA_analysis
-#'
-#' @examples
-#' update_pacta_legacy()
-#' @noRd
-update_pacta_legacy <- function(file = legacy_path("pacta_legacy.R")) {
-  scripts <- paste0(
-    "https://raw.githubusercontent.com/2DegreesInvesting/PACTA_analysis/master/",
-    "web_tool_script_", 1:2, ".R"
-  )
-  code <- unlist(lapply(scripts, readLines))
-  writeLines(code, file)
-
-  invisible(file)
-}
-
-expect_no_error <- function(object, ...) {
-  testthat::expect_error(object, regexp = NA, ...)
 }
 
 abort_if_not_empty_dir <- function(path) {
@@ -361,19 +338,6 @@ check_setup_source_data <- function(source, data) {
   invisible(source)
 }
 
-read_env <- function(env = root_path(find_env())) {
-  if (!file_exists(env)) {
-    stop(
-      "The environment file must exist but it doesn't:\n",
-      env, "\n",
-      "* Did you forget to set it up?",
-      call. = FALSE
-    )
-  }
-
-  readRenviron(env)
-}
-
 find_env <- function() {
   user_is_rstudio <- identical(Sys.info()[["user"]], "rstudio")
   ifelse(user_is_rstudio, ".env_rstudio", ".env")
@@ -388,4 +352,17 @@ abort_if_missing_env <- function(env) {
     )
   }
   invisible(path)
+}
+
+read_env <- function(env = root_path(find_env())) {
+  if (!file_exists(env)) {
+    stop(
+      "The environment file must exist but it doesn't:\n",
+      env, "\n",
+      "* Did you forget to set it up?",
+      call. = FALSE
+    )
+  }
+
+  readRenviron(env)
 }

@@ -11,7 +11,7 @@
 #' @family developer oriented
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'   run_web_tool()
 #' }
 run_web_tool <- function(results = path_temp(wd_path()),

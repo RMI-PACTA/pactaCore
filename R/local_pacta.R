@@ -110,7 +110,7 @@ get_env <- function(var) {
   if (identical(val, "")) {
     stop(
       "The environment variable `", var, "` must be set but isn't.\n",
-      "Do you need to set it in .Renviron or .env?",
+      "Do you need to set it in your .env file?",
       call. = FALSE
     )
   }

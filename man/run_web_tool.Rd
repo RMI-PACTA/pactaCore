@@ -27,13 +27,15 @@ Called for its side effect. Returns the first argument invisibly.
 Run the web_tool for regression tests
 }
 \examples{
-\donttest{
+\dontrun{
   run_web_tool()
 }
 }
 \seealso{
 Other developer oriented: 
 \code{\link{compare_full}()},
-\code{\link{create_pacta}()}
+\code{\link{create_pacta}()},
+\code{\link{test_fast}()},
+\code{\link{update_pacta_legacy}()}
 }
 \concept{developer oriented}

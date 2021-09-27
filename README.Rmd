@@ -8,8 +8,8 @@ output: github_document
 knitr::opts_chunk$set(
   cache = TRUE,
   collapse = TRUE,
-  comment = "",
-  echo = FALSE,
+  comment = "#>",
+  echo = TRUE,
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
@@ -38,34 +38,33 @@ You can install the development version from [GitHub](https://github.com/) with:
 devtools::install_github("2DegreesInvesting/pactaCore")
 ```
 
-## Setup
+## Using PACTA to get results for one or more portfolios
 
-A good setup for a pacta project looks like this:
+As usual, use pactaCore with `library()`. Here we also use other optional but
+convenient packages.
 
 ```{r}
-pactaCore:::read_env()
+library(pactaCore)
+library(fs)
+```
 
-pacta <- path_home("pacta_tmp")
-example_inputs <- dir_ls(
-  system.file("extdata", package = "pactaCore"),
-  regexp = "Input"
-)
-pactaCore:::create_pacta(pacta, input_paths = example)
+### Setup
+
+`create_pacta()` sets up a pacta project with a fake portfolio and parameter
+file. For a real analysys you should replace the test portfolio and parameter files
+with your own, and work not in a temporary directory but in a persistent one.
+
+```{r}
+pacta <- create_pacta(dir = tempfile("pacta"), data = "~/pacta-data")
 
 dir_tree(pacta, all = TRUE)
 ```
 
-```r
-#> path/to/private/pacta-data/
-#> ├── ...
-#> ...
-```
-
-* The .env file locates the input/, output/, and pacta-data/ directories, e.g.:
+* The .env file locates the input/, output/, and pacta-data/ directories.
 
 ```{r}
 env <- path(pacta, ".env")
-writeLines(readLines(env))
+readLines(env)
 ```
 
 * The input/ directory must contain portfolio files like
@@ -82,21 +81,18 @@ and parameters files like
 git clone git@github.com:2DegreesInvesting/pacta-data.git
 ```
 
-## Usage
+### Run PACTA
 
-Use the pactaCore package with `library()` and `run_pacta()` with your
-environment file.
+`run_pacta()` runs PACTA on the project described by your .env file.
 
-```{r echo=TRUE, comment="#>"}
-library(pactaCore)
-
-run_pacta(env = "~/pacta_tmp/.env")
+```{r}
+run_pacta(env)
 ```
 
 The output/ directory is now populated with results:
 
-```{r}
-dir_tree(pacta)
+```{r echo=TRUE, comment="#>"}
+dir_tree(path(pacta, "output"))
 ```
 
 <details> 
@@ -116,28 +112,26 @@ In the parameter files, whatever values you give to `portfolio_name_in` and
 * A parameter file:
 
 ```{r}
-writeLines(readLines(example_inputs[[2]]))
+writeLines(readLines(example_input_paths()[[2]]))
 ```
 
 * A few rows of some relevant output files and columns:
 
-```{r}
+```{r echo=FALSE}
 paths <- fs::dir_ls(pactaCore:::output_results_path(pacta))
 datasets <- lapply(paths, readRDS)
 ```
 
-```{r}
+```{r echo=FALSE}
 lapply(datasets, function(x) head(x[c("portfolio_name", "investor_name")]))
 ```
 
 </details>
 
-```{r echo=FALSE}
-dir_delete(pacta)
-```
+## Roadmap
 
-
-## Resources
-
-* [CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md)
-* [Docker](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md#docker)
+pactaCore is an experimental alternative to a part of
+[PACTA_analysis](https://github.com/2DegreesInvesting/pacta_analysis) -- which
+as of this writing continues to be the main line of development. This experiment
+may not continue, but future projects might benefit from some ideas implemented
+here (see [Articles](https://2degreesinvesting.github.io/pactaCore/articles/)).

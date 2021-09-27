@@ -1,0 +1,4 @@
+* document exported functions and website
+* run in a fresh container
+* use depends to install all packages
+* export useful functions

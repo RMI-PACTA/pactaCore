@@ -1,9 +1,8 @@
 test_that("with scripts 1:2 produces output", {
   skip_on_ci()
   skip_on_cran()
-  skip_slow_tests()
+  skip_if(skip_slow_test())
 
-  read_env()
   results <- run_web_tool(x = 1:2)
 
   reference <- private_path("web_tool")

@@ -1,10 +1,11 @@
 test_that("outputs datasets with the expected structure", {
   skip_on_ci()
   skip_on_cran()
-  skip_slow_tests()
+  skip_if(skip_slow_test())
 
   pacta <- local_pacta()
-  run_pacta(path(pacta, ".env"))
+  env <- path(pacta, ".env")
+  run_pacta(env)
 
   results <- path_dir(output_results_path(pacta))
   reference <- private_path("pacta_core")

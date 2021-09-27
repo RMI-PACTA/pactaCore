@@ -24,31 +24,45 @@ You can install the development version from
 devtools::install_github("2DegreesInvesting/pactaCore")
 ```
 
-## Setup
+## Using PACTA to get results for one or more portfolios
 
-A good setup for a pacta project looks like this:
-
-    /home/rstudio/pacta_tmp
-    ├── .env
-    ├── input
-    │   ├── TestPortfolio_Input.csv
-    │   └── TestPortfolio_Input_PortfolioParameters.yml
-    └── output
+As usual, use pactaCore with `library()`. Here we also use other
+optional but convenient packages.
 
 ``` r
-#> path/to/private/pacta-data/
-#> ├── ...
-#> ...
+library(pactaCore)
+library(fs)
+```
+
+### Setup
+
+`create_pacta()` sets up a pacta project with a fake portfolio and
+parameter file. For a real analysys you should replace the test
+portfolio and parameter files with your own, and work not in a temporary
+directory but in a persistent one.
+
+``` r
+pacta <- create_pacta(dir = tempfile("pacta"), data = "~/pacta-data")
+
+dir_tree(pacta, all = TRUE)
+#> /tmp/Rtmpg0BQ5a/pacta908b1a7a25a3
+#> ├── .env
+#> ├── input
+#> │   ├── TestPortfolio_Input.csv
+#> │   └── TestPortfolio_Input_PortfolioParameters.yml
+#> └── output
 ```
 
 -   The .env file locates the input/, output/, and pacta-data/
-    directories, e.g.:
+    directories.
 
-<!-- -->
-
-    PACTA_OUTPUT=/home/rstudio/pacta_tmp/output
-    PACTA_INPUT=/home/rstudio/pacta_tmp/input
-    PACTA_DATA=/home/rstudio/pacta-data
+``` r
+env <- path(pacta, ".env")
+readLines(env)
+#> [1] "PACTA_OUTPUT=/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output"
+#> [2] "PACTA_INPUT=/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/input"  
+#> [3] "PACTA_DATA=~/pacta-data"
+```
 
 -   The input/ directory must contain portfolio files like
     [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/pactaCore/blob/master/inst/extdata/TestPortfolio_Input.csv),
@@ -65,58 +79,54 @@ A good setup for a pacta project looks like this:
 git clone git@github.com:2DegreesInvesting/pacta-data.git
 ```
 
-## Usage
+### Run PACTA
 
-Use the pactaCore package with `library()` and `run_pacta()` with your
-environment file.
+`run_pacta()` runs PACTA on the project described by your .env file.
 
 ``` r
-library(pactaCore)
-
-run_pacta(env = "~/pacta_tmp/.env")
+run_pacta(env)
 #> Start portfolio: TestPortfolio_Input
 ```
 
 The output/ directory is now populated with results:
 
-    /home/rstudio/pacta_tmp
-    ├── input
-    │   ├── TestPortfolio_Input.csv
-    │   └── TestPortfolio_Input_PortfolioParameters.yml
-    └── output
-        └── working_dir
-            ├── 00_Log_Files
-            │   └── TestPortfolio_Input
-            ├── 10_Parameter_File
-            │   └── TestPortfolio_Input_PortfolioParameters.yml
-            ├── 20_Raw_Inputs
-            │   └── TestPortfolio_Input.csv
-            ├── 30_Processed_Inputs
-            │   └── TestPortfolio_Input
-            │       ├── audit_file.csv
-            │       ├── audit_file.rda
-            │       ├── bonds_portfolio.rda
-            │       ├── coveragegraph.json
-            │       ├── coveragegraphlegend.json
-            │       ├── coveragetextvar.json
-            │       ├── emissions.rda
-            │       ├── equity_portfolio.rda
-            │       ├── fund_coverage_summary.rda
-            │       ├── invalidsecurities.csv
-            │       ├── invalidsecurities.json
-            │       ├── overview_portfolio.rda
-            │       ├── portfolio_weights.json
-            │       └── total_portfolio.rda
-            ├── 40_Results
-            │   └── TestPortfolio_Input
-            │       ├── Bonds_results_company.rda
-            │       ├── Bonds_results_map.rda
-            │       ├── Bonds_results_portfolio.rda
-            │       ├── Equity_results_company.rda
-            │       ├── Equity_results_map.rda
-            │       └── Equity_results_portfolio.rda
-            └── 50_Outputs
-                └── TestPortfolio_Input
+``` r
+dir_tree(path(pacta, "output"))
+#> /tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output
+#> └── working_dir
+#>     ├── 00_Log_Files
+#>     │   └── TestPortfolio_Input
+#>     ├── 10_Parameter_File
+#>     │   └── TestPortfolio_Input_PortfolioParameters.yml
+#>     ├── 20_Raw_Inputs
+#>     │   └── TestPortfolio_Input.csv
+#>     ├── 30_Processed_Inputs
+#>     │   └── TestPortfolio_Input
+#>     │       ├── audit_file.csv
+#>     │       ├── audit_file.rda
+#>     │       ├── bonds_portfolio.rda
+#>     │       ├── coveragegraph.json
+#>     │       ├── coveragegraphlegend.json
+#>     │       ├── coveragetextvar.json
+#>     │       ├── emissions.rda
+#>     │       ├── equity_portfolio.rda
+#>     │       ├── fund_coverage_summary.rda
+#>     │       ├── invalidsecurities.csv
+#>     │       ├── invalidsecurities.json
+#>     │       ├── overview_portfolio.rda
+#>     │       ├── portfolio_weights.json
+#>     │       └── total_portfolio.rda
+#>     ├── 40_Results
+#>     │   └── TestPortfolio_Input
+#>     │       ├── Bonds_results_company.rda
+#>     │       ├── Bonds_results_map.rda
+#>     │       ├── Bonds_results_portfolio.rda
+#>     │       ├── Equity_results_company.rda
+#>     │       ├── Equity_results_map.rda
+#>     │       └── Equity_results_portfolio.rda
+#>     └── 50_Outputs
+#>         └── TestPortfolio_Input
+```
 
 <details>
 
@@ -136,89 +146,93 @@ and `investor_name_in` will populate the columns `portfolio_name` and
 
 -   A parameter file:
 
-<!-- -->
-
-    default:
-        parameters:
-            portfolio_name_in: TestPortfolio_Input
-            investor_name_in: Test
-            peer_group: pensionfund
-            language: EN
-            project_code: GENERAL
+``` r
+writeLines(readLines(example_input_paths()[[2]]))
+#> default:
+#>     parameters:
+#>         portfolio_name_in: TestPortfolio_Input
+#>         investor_name_in: Test
+#>         peer_group: pensionfund
+#>         language: EN
+#>         project_code: GENERAL
+```
 
 -   A few rows of some relevant output files and columns:
 
 <!-- -->
 
-    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_company.rda`
-    # A tibble: 6 x 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_map.rda`
-    # A tibble: 6 x 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_portfolio.rda`
-    # A tibble: 6 x 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_company.rda`
-    # A tibble: 6 x 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_map.rda`
-    # A tibble: 6 x 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
-
-    $`/home/rstudio/pacta_tmp/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_portfolio.rda`
-    # A tibble: 6 x 2
-      portfolio_name      investor_name
-      <chr>               <chr>        
-    1 TestPortfolio_Input Test         
-    2 TestPortfolio_Input Test         
-    3 TestPortfolio_Input Test         
-    4 TestPortfolio_Input Test         
-    5 TestPortfolio_Input Test         
-    6 TestPortfolio_Input Test         
+    #> $`/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_company.rda`
+    #> # A tibble: 6 × 2
+    #>   portfolio_name      investor_name
+    #>   <chr>               <chr>        
+    #> 1 TestPortfolio_Input Test         
+    #> 2 TestPortfolio_Input Test         
+    #> 3 TestPortfolio_Input Test         
+    #> 4 TestPortfolio_Input Test         
+    #> 5 TestPortfolio_Input Test         
+    #> 6 TestPortfolio_Input Test         
+    #> 
+    #> $`/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_map.rda`
+    #> # A tibble: 6 × 2
+    #>   portfolio_name      investor_name
+    #>   <chr>               <chr>        
+    #> 1 TestPortfolio_Input Test         
+    #> 2 TestPortfolio_Input Test         
+    #> 3 TestPortfolio_Input Test         
+    #> 4 TestPortfolio_Input Test         
+    #> 5 TestPortfolio_Input Test         
+    #> 6 TestPortfolio_Input Test         
+    #> 
+    #> $`/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output/working_dir/40_Results/TestPortfolio_Input/Bonds_results_portfolio.rda`
+    #> # A tibble: 6 × 2
+    #>   portfolio_name      investor_name
+    #>   <chr>               <chr>        
+    #> 1 TestPortfolio_Input Test         
+    #> 2 TestPortfolio_Input Test         
+    #> 3 TestPortfolio_Input Test         
+    #> 4 TestPortfolio_Input Test         
+    #> 5 TestPortfolio_Input Test         
+    #> 6 TestPortfolio_Input Test         
+    #> 
+    #> $`/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_company.rda`
+    #> # A tibble: 6 × 2
+    #>   portfolio_name      investor_name
+    #>   <chr>               <chr>        
+    #> 1 TestPortfolio_Input Test         
+    #> 2 TestPortfolio_Input Test         
+    #> 3 TestPortfolio_Input Test         
+    #> 4 TestPortfolio_Input Test         
+    #> 5 TestPortfolio_Input Test         
+    #> 6 TestPortfolio_Input Test         
+    #> 
+    #> $`/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_map.rda`
+    #> # A tibble: 6 × 2
+    #>   portfolio_name      investor_name
+    #>   <chr>               <chr>        
+    #> 1 TestPortfolio_Input Test         
+    #> 2 TestPortfolio_Input Test         
+    #> 3 TestPortfolio_Input Test         
+    #> 4 TestPortfolio_Input Test         
+    #> 5 TestPortfolio_Input Test         
+    #> 6 TestPortfolio_Input Test         
+    #> 
+    #> $`/tmp/Rtmpg0BQ5a/pacta908b1a7a25a3/output/working_dir/40_Results/TestPortfolio_Input/Equity_results_portfolio.rda`
+    #> # A tibble: 6 × 2
+    #>   portfolio_name      investor_name
+    #>   <chr>               <chr>        
+    #> 1 TestPortfolio_Input Test         
+    #> 2 TestPortfolio_Input Test         
+    #> 3 TestPortfolio_Input Test         
+    #> 4 TestPortfolio_Input Test         
+    #> 5 TestPortfolio_Input Test         
+    #> 6 TestPortfolio_Input Test
 
 </details>
 
-## Resources
+## Roadmap
 
--   [CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md)
--   [Docker](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md#docker)
+pactaCore is an experimental alternative to a part of
+[PACTA\_analysis](https://github.com/2DegreesInvesting/pacta_analysis) –
+which as of this writing continues to be the main line of development.
+This experiment may not continue, but future projects might benefit from
+some ideas implemented here (see Articles).
