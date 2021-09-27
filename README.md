@@ -229,8 +229,10 @@ writeLines(readLines(example_input_paths()[[2]]))
 
 </details>
 
-## Related projects
+## Roadmap
 
 pactaCore is an experimental alternative to a part of
 [PACTA\_analysis](https://github.com/2DegreesInvesting/pacta_analysis) –
 which as of this writing continues to be the main line of development.
+This experiment may not continue, but future projects might benefit from
+some ideas implemented here (see CONTRIBUTING and website articles).

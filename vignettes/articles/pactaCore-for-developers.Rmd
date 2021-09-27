@@ -9,9 +9,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-The goal of this article is to show you how to use pactaCore for software
-development. It assumes you already know how to use pactaCore for data analysis
-(see README), and how to setup your development environment (see
+This article aims software developers. Its gosl is to advertise aspects of
+pactaCore that may be valuable but not obvious. It assumes you already know how
+to use pactaCore for data analysis (see README), and how to setup your
+development environment (see
 [CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md)).
 
 ## Setup
@@ -23,6 +24,9 @@ README provides a gentle explanation of the setup. Here we do it quickly:
 ```{r}
 library(pactaCore)
 library(fs)
+library(here)
+
+show <- function(path) writeLines(readLines(path))
 ```
 
 * Setup a pacta project with a fake portfolio and parameter files at a temporary
@@ -34,10 +38,12 @@ pacta <- create_pacta(dir = tempfile("pacta"), data = "~/pacta-data")
 dir_tree(pacta, all = TRUE)
 ```
 
-## Using pactaCore to test and refactor PACTA_analysis
+## Uses
 
-As a developer, you may use pactaCore to test and refactor PACTA_analysis --
-specifically web_tool scripts 1 and 2:
+### Using pactaCore to test and refactor PACTA_analysis
+
+pactaCore can help you test and refactor PACTA_analysis -- specifically web_tool
+scripts 1 and 2. Here is how:
 
 * Ensure your ".env" file includes the variable `PACTA_ANALYSIS`, giving the
 path to the local copy of PACTA_analysis you want to use as a reference -- e.g.
@@ -48,7 +54,7 @@ env <- path(pacta, ".env")
 lines <- unique(c(readLines(env), "PACTA_ANALYSIS=~/PACTA_analysis"))
 writeLines(lines, env)
 
-readLines(env)
+show(env)
 ```
 
 * Modify the web tool scripts 1 and 2 in a different local clone of
@@ -82,10 +88,34 @@ differences.
 compare_full()
 ```
 
-## Using pactaCore to fail fast
+### Using pactaCore to benefit from its testing infrastructure
 
-When something goes wrong, pactaCore attempts to let you know as soon and
-clearly as possible.
+Above you saw how to run regression tests against a reference PACTA_analysis
+repo. This section covers other more general uses of the testing infrastructure
+that pactaCore provides.
+
+* Some tests are slow. You may skip them wiht `test_fast()` and `check_fast()`.
+
+* Git ignores all files under the directory tests/testthat/_snaps/ to avoid
+leaking private data. Re-include public snapshots in .gitignore with a negation
+pattern (!), e.g.:
+
+```{r}
+lines <- readLines(here(".gitignore"))
+writeLines(grep("testthat/_snaps", lines, value = TRUE))
+```
+
+* Git ignores the directory tests/testthat/private/. Use it to store regression
+references or other private data.
+
+```{r}
+dir_tree(here("tests", "testthat", "private"))
+```
+
+### Using pactaCore to benefit from error messages
+
+The required setup for pactaCore is enforced with assertions that should help
+you figure out what's wrong and how to fix it.
 
 ```{r}
 # Setup
@@ -103,6 +133,30 @@ writeLines("PACTA_INPUT=/bad/path", env)
 try(run_pacta(env))
 ```
 
-## Using pactaCore to access a dockerized computing environment
+### Using pactaCore to access a dockerized computing environment
 
-See [Docker in CONTRIBUTING](https://github.com/2DegreesInvesting/pactaCore/blob/main/.github/CONTRIBUTING.md#docker).
+You can access a dockerized computing environment in four steps:
+
+1. Install `docker`.
+
+2. Install `docker-compose`.
+
+3. Clone pactaCore and make it your working directory.
+
+4. Ensure your ".env" file sets the `PASSWORD` to login to RStudio.
+
+```{r}
+show(here(".env"))
+```
+
+5. Run `docker-compose up`.
+
+Rstudio is now available from your web browser at localhost:8787. Login with
+username "rstudio" and your password.
+
+In the container, the required directories will be mounted under /home/rstudio,
+and discovered via the file ".env_rstudio":
+
+```{r}
+show(here(".env_rstudio"))
+```
