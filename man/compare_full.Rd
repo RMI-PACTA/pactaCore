@@ -22,10 +22,12 @@ Called for its side effect. Prints differences.
 Defaults to comparing private results between the web tool and this package.
 }
 \examples{
-new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
-old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
-compare_full(new, old)
-compare_full(new, new)
+\dontrun{
+  new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
+  old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
+  compare_full(new, old)
+  compare_full(new, new)
+}
 }
 \seealso{
 Other developer oriented: 

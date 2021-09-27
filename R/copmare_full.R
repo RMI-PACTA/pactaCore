@@ -11,10 +11,12 @@
 #' @export
 #'
 #' @examples
-#' new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
-#' old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
-#' compare_full(new, old)
-#' compare_full(new, new)
+#' \dontrun{
+#'   new <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 9))
+#'   old <- list(x = data.frame(a = 1, b = 1), x = data.frame(a = 1, b = 1))
+#'   compare_full(new, old)
+#'   compare_full(new, new)
+#' }
 compare_full <- function(new = enlist_rds(private_path("pacta_core")),
                          old = enlist_rds(private_path("web_tool")),
                          ...) {
