@@ -128,7 +128,8 @@ lapply(datasets, function(x) head(x[c("portfolio_name", "investor_name")]))
 
 </details>
 
-```{r echo=FALSE}
-dir_delete(pacta)
-```
+## Related projects
 
+pactaCore is an experimental alternative to a part of
+[PACTA_analysis](https://github.com/2DegreesInvesting/pacta_analysis) -- which
+as of this writing continues to be the main line of development.
