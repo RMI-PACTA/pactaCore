@@ -3,6 +3,8 @@
 
 # pactaCore
 
+**DEPRECATED. Please see https://github.com/RMI-PACTA/workflow.pacta for the successor project.**
+
 <!-- badges: start -->
 
 [![Lifecycle:
